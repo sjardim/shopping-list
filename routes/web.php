@@ -1,5 +1,16 @@
 <?php
 
+use App\Livewire\AddItemsPage;
+use App\Livewire\ListHistoryPage;
+use App\Livewire\ShoppingListPage;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome')->name('home');
+// Public: shared list access (no auth required)
+Route::get('/list/{share_token}', ShoppingListPage::class)->name('list.shared');
+
+// Auth-protected pages
+Route::middleware('auth')->group(function () {
+    Route::get('/', ShoppingListPage::class)->name('home');
+    Route::get('/add', AddItemsPage::class)->name('add');
+    Route::get('/history', ListHistoryPage::class)->name('history');
+});

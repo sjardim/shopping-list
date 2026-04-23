@@ -1,7 +1,9 @@
 <?php
 
-test('returns a successful response', function () {
-    $response = $this->get('/');
+test('unauthenticated user is redirected to login', function () {
+    $this->get('/')->assertRedirect('/login');
+});
 
-    $response->assertOk();
+test('login page loads successfully', function () {
+    $this->get('/login')->assertOk();
 });
