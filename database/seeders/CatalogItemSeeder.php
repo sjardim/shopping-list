@@ -15,6 +15,7 @@ class CatalogItemSeeder extends Seeder
             ['name' => 'Banana', 'emoji' => '🍌', 'category' => 'fruta', 'preferred_store' => 'lidl', 'default_unit' => 'kg', 'default_quantity' => 1],
             ['name' => 'Laranja', 'emoji' => '🍊', 'category' => 'fruta', 'preferred_store' => 'mercadona', 'default_unit' => 'kg', 'default_quantity' => 1],
             ['name' => 'Pera', 'emoji' => '🍐', 'category' => 'fruta', 'preferred_store' => 'continente', 'default_unit' => 'kg', 'default_quantity' => 1],
+            ['name' => 'Lima', 'emoji' => '🍋', 'category' => 'fruta', 'preferred_store' => null, 'default_unit' => 'un', 'default_quantity' => 3],
             ['name' => 'Limão', 'emoji' => '🍋', 'category' => 'fruta', 'preferred_store' => null, 'default_unit' => 'un', 'default_quantity' => 3],
             ['name' => 'Uvas', 'emoji' => '🍇', 'category' => 'fruta', 'preferred_store' => 'aldi', 'default_unit' => 'kg', 'default_quantity' => 0.5],
             ['name' => 'Morango', 'emoji' => '🍓', 'category' => 'fruta', 'preferred_store' => 'lidl', 'default_unit' => 'kg', 'default_quantity' => 0.5],
@@ -49,6 +50,7 @@ class CatalogItemSeeder extends Seeder
             ['name' => 'Costeletas de porco', 'emoji' => '🥩', 'category' => 'carne', 'preferred_store' => 'lidl', 'default_unit' => 'kg', 'default_quantity' => 0.5],
             ['name' => 'Carne picada', 'emoji' => '🥩', 'category' => 'carne', 'preferred_store' => 'continente', 'default_unit' => 'g', 'default_quantity' => 500],
             ['name' => 'Chouriço', 'emoji' => '🌭', 'category' => 'carne', 'preferred_store' => 'continente', 'default_unit' => 'un', 'default_quantity' => 1],
+            ['name' => 'Bacon', 'emoji' => '🥓', 'category' => 'carne', 'preferred_store' => null, 'default_unit' => 'g', 'default_quantity' => 200],
             ['name' => 'Presunto', 'emoji' => '🥓', 'category' => 'carne', 'preferred_store' => 'mercadona', 'default_unit' => 'g', 'default_quantity' => 200],
             ['name' => 'Entrecosto', 'emoji' => '🥩', 'category' => 'carne', 'preferred_store' => 'continente', 'default_unit' => 'kg', 'default_quantity' => 1],
             ['name' => 'Alheira', 'emoji' => '🌭', 'category' => 'carne', 'preferred_store' => 'continente', 'default_unit' => 'un', 'default_quantity' => 2],
@@ -63,6 +65,7 @@ class CatalogItemSeeder extends Seeder
             ['name' => 'Polvo', 'emoji' => '🐙', 'category' => 'peixe', 'preferred_store' => 'continente', 'default_unit' => 'kg', 'default_quantity' => 1],
 
             // Padaria
+            ['name' => 'Pão', 'emoji' => '🍞', 'category' => 'padaria', 'preferred_store' => null, 'default_unit' => 'un', 'default_quantity' => 1],
             ['name' => 'Pão de forma', 'emoji' => '🍞', 'category' => 'padaria', 'preferred_store' => 'continente', 'default_unit' => 'un', 'default_quantity' => 1],
             ['name' => 'Baguete', 'emoji' => '🥖', 'category' => 'padaria', 'preferred_store' => null, 'default_unit' => 'un', 'default_quantity' => 2],
             ['name' => 'Papo-seco', 'emoji' => '🍞', 'category' => 'padaria', 'preferred_store' => null, 'default_unit' => 'un', 'default_quantity' => 6],
@@ -82,7 +85,11 @@ class CatalogItemSeeder extends Seeder
             // Despensa
             ['name' => 'Azeite', 'emoji' => '🫙', 'category' => 'despensa', 'preferred_store' => 'continente', 'default_unit' => 'ml', 'default_quantity' => 750],
             ['name' => 'Arroz', 'emoji' => '🍚', 'category' => 'despensa', 'preferred_store' => 'mercadona', 'default_unit' => 'kg', 'default_quantity' => 1],
+            ['name' => 'Massa', 'emoji' => '🍝', 'category' => 'despensa', 'preferred_store' => 'mercadona', 'default_unit' => 'g', 'default_quantity' => 500],
             ['name' => 'Massa esparguete', 'emoji' => '🍝', 'category' => 'despensa', 'preferred_store' => 'mercadona', 'default_unit' => 'g', 'default_quantity' => 500],
+            ['name' => 'Molho de tomate', 'emoji' => '🍅', 'category' => 'despensa', 'preferred_store' => 'mercadona', 'default_unit' => 'ml', 'default_quantity' => 400],
+            ['name' => 'Chocolate', 'emoji' => '🍫', 'category' => 'despensa', 'preferred_store' => 'lidl', 'default_unit' => 'un', 'default_quantity' => 1],
+            ['name' => 'Bolachas', 'emoji' => '🍪', 'category' => 'despensa', 'preferred_store' => 'mercadona', 'default_unit' => 'pacote', 'default_quantity' => 1],
             ['name' => 'Feijão em lata', 'emoji' => '🫘', 'category' => 'despensa', 'preferred_store' => 'mercadona', 'default_unit' => 'lata', 'default_quantity' => 2],
             ['name' => 'Grão-de-bico', 'emoji' => '🫘', 'category' => 'despensa', 'preferred_store' => 'mercadona', 'default_unit' => 'lata', 'default_quantity' => 2],
             ['name' => 'Sal', 'emoji' => '🧂', 'category' => 'despensa', 'preferred_store' => null, 'default_unit' => 'g', 'default_quantity' => 500],

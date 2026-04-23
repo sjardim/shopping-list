@@ -20,6 +20,7 @@ return [
     'trip_done' => 'Compra concluída! Nova lista criada.',
     'usually' => 'habitualmente :store',
     'link_copied' => 'Link copiado!',
+    'list_updated' => 'Lista atualizada',
 
     // Profile menu
     'language' => 'Idioma',

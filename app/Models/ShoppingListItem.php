@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\BroadcastsToOthers;
 use App\Events\ItemToggled;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ShoppingListItem extends Model
 {
-    use HasFactory;
+    use BroadcastsToOthers, HasFactory;
 
     protected $fillable = [
         'shopping_list_id',
@@ -64,6 +65,14 @@ class ShoppingListItem extends Model
             'bought_at' => $wasBought ? null : now(),
         ]);
 
-        broadcast(new ItemToggled($this))->toOthers();
+        if (! $wasBought && $this->catalog_item_id !== null) {
+            $store = $this->list->store;
+
+            if ($store !== null) {
+                $this->catalogItem->syncPreferredStore($store->value);
+            }
+        }
+
+        $this->broadcastToOthers(new ItemToggled($this));
     }
 }

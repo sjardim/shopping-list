@@ -2,9 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Concerns\BroadcastsToOthers;
 use App\Enums\Store;
 use App\Events\ItemAdded;
 use App\Events\ItemRemoved;
+use App\Models\CatalogItem;
 use App\Models\ShoppingList;
 use Flux\Flux;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +17,8 @@ use Livewire\Component;
 
 class ShoppingListPage extends Component
 {
+    use BroadcastsToOthers;
+
     public ShoppingList $list;
 
     public string $mode = 'owner';
@@ -71,6 +75,53 @@ class ShoppingListPage extends Component
         return compact('pending', 'bought');
     }
 
+    #[Computed]
+    public function catalogSuggestions(): array
+    {
+        if (strlen($this->quickAddName) < 2) {
+            return [];
+        }
+
+        $existingCatalogIds = $this->list->items()
+            ->whereNotNull('catalog_item_id')
+            ->pluck('catalog_item_id')
+            ->all();
+
+        return CatalogItem::search($this->quickAddName)
+            ->whereNotIn('id', $existingCatalogIds)
+            ->get()
+            ->toArray();
+    }
+
+    public function updatedQuickAddName(): void
+    {
+        unset($this->catalogSuggestions);
+    }
+
+    public function selectCatalogSuggestion(int $catalogItemId): void
+    {
+        if ($this->mode !== 'owner') {
+            return;
+        }
+
+        $catalogItem = CatalogItem::findOrFail($catalogItemId);
+
+        $item = $this->list->items()->create([
+            'catalog_item_id' => $catalogItem->id,
+            'name' => $catalogItem->name,
+            'emoji' => $catalogItem->emoji,
+            'category' => $catalogItem->category,
+            'quantity' => $catalogItem->default_quantity,
+            'unit' => $catalogItem->default_unit,
+            'preferred_store' => $catalogItem->preferred_store,
+        ]);
+
+        $this->broadcastToOthers(new ItemAdded($item));
+
+        $this->reset('quickAddName');
+        unset($this->catalogSuggestions, $this->itemsByCategory);
+    }
+
     public function toggleItem(int $id): void
     {
         $item = $this->list->items()->findOrFail($id);
@@ -86,7 +137,7 @@ class ShoppingListPage extends Component
         }
 
         $item = $this->list->items()->findOrFail($id);
-        broadcast(new ItemRemoved($item))->toOthers();
+        $this->broadcastToOthers(new ItemRemoved($item));
         $item->delete();
 
         unset($this->itemsByCategory);
@@ -106,7 +157,7 @@ class ShoppingListPage extends Component
             'unit' => $this->quickAddUnit,
         ]);
 
-        broadcast(new ItemAdded($item))->toOthers();
+        $this->broadcastToOthers(new ItemAdded($item));
 
         $this->reset('quickAddName');
         $this->quickAddQuantity = 1;
@@ -175,18 +226,21 @@ class ShoppingListPage extends Component
     public function onItemToggled(array $payload): void
     {
         unset($this->itemsByCategory);
+        Flux::toast(__('app.list_updated'));
     }
 
     #[On('echo:shopping.{shareToken},ItemAdded')]
     public function onItemAdded(array $payload): void
     {
         unset($this->itemsByCategory);
+        Flux::toast(__('app.list_updated'));
     }
 
     #[On('echo:shopping.{shareToken},ItemRemoved')]
     public function onItemRemoved(array $payload): void
     {
         unset($this->itemsByCategory);
+        Flux::toast(__('app.list_updated'));
     }
 
     public function render(): View

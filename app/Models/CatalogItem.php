@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class CatalogItem extends Model
 {
@@ -27,11 +28,14 @@ class CatalogItem extends Model
     }
 
     /**
-     * Search by name using case-insensitive matching (ILIKE for PostgreSQL).
+     * Search by name using case-insensitive matching.
+     * Uses ILIKE on PostgreSQL; falls back to LIKE on SQLite (case-insensitive for ASCII by default).
      */
     public function scopeSearch(Builder $query, string $term): Builder
     {
-        return $query->where('name', 'ILIKE', "%{$term}%")
+        $operator = DB::getDriverName() === 'pgsql' ? 'ILIKE' : 'LIKE';
+
+        return $query->where('name', $operator, "%{$term}%")
             ->orderBy('name')
             ->limit(8);
     }
@@ -39,5 +43,22 @@ class CatalogItem extends Model
     public function scopeByCategory(Builder $query, string $category): Builder
     {
         return $query->where('category', $category)->orderBy('name');
+    }
+
+    /**
+     * Update preferred_store if this item has been bought at the given store
+     * more than 3 times across all shopping lists.
+     */
+    public function syncPreferredStore(string $store): void
+    {
+        $count = ShoppingListItem::query()
+            ->where('catalog_item_id', $this->id)
+            ->where('is_bought', true)
+            ->whereHas('list', fn (Builder $q) => $q->where('store', $store))
+            ->count();
+
+        if ($count > 3) {
+            $this->update(['preferred_store' => $store]);
+        }
     }
 }

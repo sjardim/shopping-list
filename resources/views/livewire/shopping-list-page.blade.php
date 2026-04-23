@@ -81,7 +81,7 @@
                         {{-- Share list --}}
                         <flux:menu.item
                             icon="share"
-                            x-on:click="navigator.clipboard.writeText('{{ route('list.shared', $shareToken) }}').then(() => $flux.toast('{{ __('app.link_copied') }}'))"
+                            x-on:click="navigator.clipboard ? navigator.clipboard.writeText('{{ route('list.shared', $shareToken) }}').then(() => $flux.toast('{{ __('app.link_copied') }}')) : $flux.toast('{{ route('list.shared', $shareToken) }}')"
                         >
                             {{ __('app.share_list') }}
                         </flux:menu.item>
@@ -264,14 +264,44 @@
 
     {{-- Quick-add form (owner only) --}}
     @if($mode === 'owner')
-        <div class="fixed bottom-[73px] left-0 right-0 px-5 pb-3">
+        <div
+            class="fixed bottom-[73px] left-0 right-0 px-5 pb-3"
+            x-data="{ focused: false }"
+        >
+            {{-- Catalog suggestions --}}
+            @if(count($this->catalogSuggestions) > 0)
+                <div
+                    x-show="focused"
+                    x-transition:enter="transition ease-out duration-100"
+                    x-transition:enter-start="opacity-0 translate-y-1"
+                    x-transition:enter-end="opacity-100 translate-y-0"
+                    class="mb-2 bg-white rounded-2xl shadow-lg border border-[#ede8df] overflow-hidden"
+                >
+                    @foreach($this->catalogSuggestions as $suggestion)
+                        @php $storeEnum = $suggestion['preferred_store'] ? \App\Enums\Store::tryFrom($suggestion['preferred_store']) : null; @endphp
+                        <button
+                            wire:click="selectCatalogSuggestion({{ $suggestion['id'] }})"
+                            class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-[#f7f3ec] active:bg-[#f0ece3] transition-colors border-b border-[#f4f0e8] last:border-0"
+                        >
+                            <span class="text-xl shrink-0">{{ $suggestion['emoji'] ?: '🛒' }}</span>
+                            <span class="flex-1 text-sm font-medium text-[#1a1a1a]">{{ $suggestion['name'] }}</span>
+                            @if($storeEnum)
+                                <span class="size-2 rounded-full shrink-0" style="background-color: {{ $storeEnum->color() }}"></span>
+                            @endif
+                        </button>
+                    @endforeach
+                </div>
+            @endif
+
             <form wire:submit="quickAdd" class="flex gap-2 bg-white rounded-2xl shadow-lg shadow-black/5 border border-[#ede8df] px-4 py-2">
                 <input
-                    wire:model="quickAddName"
+                    wire:model.live.debounce.300ms="quickAddName"
                     type="text"
                     placeholder="{{ __('app.add_item_placeholder') }}"
                     autocomplete="off"
                     class="flex-1 bg-transparent text-[#1a1a1a] placeholder-[#b0a99a] text-sm outline-none"
+                    x-on:focus="focused = true"
+                    x-on:blur.debounce.200ms="focused = false"
                 />
                 <button
                     type="submit"

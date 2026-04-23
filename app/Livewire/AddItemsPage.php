@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Concerns\BroadcastsToOthers;
 use App\Events\ItemAdded;
 use App\Events\ItemRemoved;
 use App\Models\CatalogItem;
@@ -16,6 +17,8 @@ use Livewire\Component;
 
 class AddItemsPage extends Component
 {
+    use BroadcastsToOthers;
+
     #[Url(as: 'q')]
     public string $searchQuery = '';
 
@@ -78,7 +81,7 @@ class AddItemsPage extends Component
                 ->first();
 
             if ($listItem) {
-                broadcast(new ItemRemoved($listItem))->toOthers();
+                $this->broadcastToOthers(new ItemRemoved($listItem));
                 $listItem->delete();
             }
 
@@ -98,7 +101,7 @@ class AddItemsPage extends Component
                 'preferred_store' => $catalogItem->preferred_store,
             ]);
 
-            broadcast(new ItemAdded($item))->toOthers();
+            $this->broadcastToOthers(new ItemAdded($item));
 
             $this->selectedCatalogIds[] = $id;
         }
@@ -127,7 +130,7 @@ class AddItemsPage extends Component
                     'unit' => $bundleItem['unit'],
                 ]);
 
-                broadcast(new ItemAdded($item))->toOthers();
+                $this->broadcastToOthers(new ItemAdded($item));
             }
         }
 

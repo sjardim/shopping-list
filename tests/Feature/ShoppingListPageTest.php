@@ -2,6 +2,7 @@
 
 use App\Enums\Store;
 use App\Livewire\ShoppingListPage;
+use App\Models\CatalogItem;
 use App\Models\ShoppingList;
 use App\Models\ShoppingListItem;
 use App\Models\User;
@@ -194,6 +195,72 @@ test('shared mode cannot finish trip', function () {
         ->call('finishTrip');
 
     expect($list->fresh()->status->value)->toBe('active');
+});
+
+test('catalog suggestions returns matches for query of 2+ chars', function () {
+    $user = User::factory()->create();
+    ShoppingList::factory()->for($user)->create();
+
+    CatalogItem::factory()->create(['name' => 'Banana']);
+    CatalogItem::factory()->create(['name' => 'Bacalhau']);
+    CatalogItem::factory()->create(['name' => 'Leite']);
+
+    $component = Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->set('quickAddName', 'ba');
+
+    expect($component->instance()->catalogSuggestions)
+        ->toHaveCount(2)
+        ->each->toHaveKey('name');
+});
+
+test('catalog suggestions returns nothing for query under 2 chars', function () {
+    $user = User::factory()->create();
+    ShoppingList::factory()->for($user)->create();
+    CatalogItem::factory()->create(['name' => 'Banana']);
+
+    $component = Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->set('quickAddName', 'b');
+
+    expect($component->instance()->catalogSuggestions)->toBeEmpty();
+});
+
+test('catalog suggestions excludes items already on the list', function () {
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+    $banana = CatalogItem::factory()->create(['name' => 'Banana']);
+    ShoppingListItem::factory()->for($list, 'list')->create(['catalog_item_id' => $banana->id]);
+
+    $component = Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->set('quickAddName', 'ban');
+
+    expect($component->instance()->catalogSuggestions)->toBeEmpty();
+});
+
+test('selecting a suggestion adds the catalog item to the list', function () {
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+    $catalogItem = CatalogItem::factory()->create(['name' => 'Banana']);
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('selectCatalogSuggestion', $catalogItem->id);
+
+    expect($list->items()->where('catalog_item_id', $catalogItem->id)->exists())->toBeTrue();
+});
+
+test('selecting a suggestion clears the quick-add input', function () {
+    $user = User::factory()->create();
+    ShoppingList::factory()->for($user)->create();
+    $catalogItem = CatalogItem::factory()->create(['name' => 'Banana']);
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->set('quickAddName', 'ban')
+        ->call('selectCatalogSuggestion', $catalogItem->id)
+        ->assertSet('quickAddName', '');
 });
 
 test('shared mode cannot quick-add items', function () {

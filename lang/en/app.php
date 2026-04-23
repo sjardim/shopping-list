@@ -20,6 +20,7 @@ return [
     'trip_done' => 'Trip done! Fresh list started.',
     'usually' => 'usually :store',
     'link_copied' => 'Link copied!',
+    'list_updated' => 'List updated',
 
     // Profile menu
     'language' => 'Language',
