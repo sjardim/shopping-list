@@ -1,6 +1,8 @@
 # Deployment
 
-This app is deployed to [Laravel Cloud](https://cloud.laravel.com) with PostgreSQL and Laravel Reverb.
+This app is deployed to [Laravel Cloud](https://cloud.laravel.com) with PostgreSQL and optionally Laravel Reverb for real-time sync.
+
+Real-time sync (the "Lista atualizada" notification when the other user makes changes) requires Reverb. Without it, the app works fully for a single user or for shared use where each person manually refreshes. You can deploy without Reverb and add it later.
 
 ## Prerequisites
 
@@ -31,22 +33,22 @@ DB_DATABASE=                    # provided by Laravel Cloud
 DB_USERNAME=                    # provided by Laravel Cloud
 DB_PASSWORD=                    # provided by Laravel Cloud
 
-BROADCAST_CONNECTION=reverb
+BROADCAST_CONNECTION=log        # use "reverb" when Reverb is enabled
 QUEUE_CONNECTION=database
 SESSION_DRIVER=database
 CACHE_STORE=database
 
-REVERB_APP_ID=                  # from config/reverb.php apps[0].app_id
-REVERB_APP_KEY=                 # from config/reverb.php apps[0].key
-REVERB_APP_SECRET=              # from config/reverb.php apps[0].secret
-REVERB_HOST=                    # your domain, e.g. your-domain.com
-REVERB_PORT=8080
-REVERB_SCHEME=https
-
-VITE_REVERB_APP_KEY="${REVERB_APP_KEY}"
-VITE_REVERB_HOST="${REVERB_HOST}"
-VITE_REVERB_PORT="${REVERB_PORT}"
-VITE_REVERB_SCHEME="${REVERB_SCHEME}"
+# Reverb (omit or leave blank to disable real-time sync)
+# REVERB_APP_ID=
+# REVERB_APP_KEY=
+# REVERB_APP_SECRET=
+# REVERB_HOST=
+# REVERB_PORT=8080
+# REVERB_SCHEME=https
+# VITE_REVERB_APP_KEY="${REVERB_APP_KEY}"
+# VITE_REVERB_HOST="${REVERB_HOST}"
+# VITE_REVERB_PORT="${REVERB_PORT}"
+# VITE_REVERB_SCHEME="${REVERB_SCHEME}"
 ```
 
 ### Flux Pro (Composer auth)
@@ -78,19 +80,26 @@ On Laravel Cloud, set this via the **Composer auth** setting in the deployment c
 
 Add a **PostgreSQL** database from the Cloud dashboard. The `DB_*` variables will be injected automatically.
 
-### 3. Enable Reverb
+### 3. Enable Reverb (optional)
 
-Add a **Reverb** service from the Cloud dashboard. Set `BROADCAST_CONNECTION=reverb` and the `REVERB_*` variables above. Cloud provisions the WebSocket server and sets `REVERB_HOST` to the assigned hostname.
+Skip this step for the initial deploy. Add it later when you want real-time sync.
 
-### 4. Enable the queue worker
+1. Add a **Reverb** service from the Cloud dashboard.
+2. Set `BROADCAST_CONNECTION=reverb` in environment variables.
+3. Set the `REVERB_*` and `VITE_REVERB_*` variables. Cloud provides the `REVERB_HOST` value after provisioning.
+4. Rebuild and redeploy so the frontend JS picks up `VITE_REVERB_APP_KEY`.
 
-Add a **Worker** process in the Cloud dashboard with the command:
+When `VITE_REVERB_APP_KEY` is absent or empty, the frontend skips the Echo/WebSocket setup entirely — no errors, no reconnect attempts.
+
+### 4. Enable the queue worker (required for Reverb)
+
+Only needed when Reverb is enabled. Add a **Worker** process in the Cloud dashboard:
 
 ```
 php artisan queue:listen --tries=3 --timeout=60
 ```
 
-This processes broadcast jobs. Without it, real-time sync between the owner and shared view will not work.
+Broadcast events are queued. Without a worker they sit in the database and are never sent.
 
 ### 5. Deploy
 
@@ -110,7 +119,7 @@ The seeder uses `firstOrCreate`, so re-running it on subsequent deploys is safe.
 - [ ] Log in with `sergio@sergiojardim.com` and the password set in `DatabaseSeeder`.
 - [ ] Add an item to the list and confirm it appears.
 - [ ] Copy the share URL and open it in a private window — confirm shared mode (no "Finish trip" or "Clear" buttons).
-- [ ] Toggle an item in one window, confirm the other window shows "Lista atualizada" within a second or two.
+- [ ] (If Reverb is enabled) Toggle an item in one window, confirm the other window shows "Lista atualizada" within a second or two.
 - [ ] Finish a trip and confirm the history page shows the archived list.
 
 ## Changing the Owner Password
