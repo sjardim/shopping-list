@@ -6,9 +6,11 @@ use App\Concerns\BroadcastsToOthers;
 use App\Events\ItemAdded;
 use App\Events\ItemRemoved;
 use App\Models\CatalogItem;
+use App\Models\MealRecipe;
 use App\Models\ShoppingList;
 use App\Support\MealBundles;
 use Flux\Flux;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Livewire\Attributes\Computed;
@@ -68,6 +70,38 @@ class AddItemsPage extends Component
         return MealBundles::all();
     }
 
+    #[Computed]
+    public function userRecipes(): Collection
+    {
+        return MealRecipe::query()
+            ->where('user_id', Auth::id())
+            ->latest()
+            ->get();
+    }
+
+    public function applyUserRecipe(int $id): void
+    {
+        $recipe = MealRecipe::query()
+            ->where('user_id', Auth::id())
+            ->findOrFail($id);
+
+        foreach ($recipe->items as $bundleItem) {
+            $this->addBundleItem($bundleItem);
+        }
+
+        Flux::toast(__('app.bundle_added', ['name' => $recipe->name]), duration: 8000);
+    }
+
+    public function deleteUserRecipe(int $id): void
+    {
+        MealRecipe::query()
+            ->where('user_id', Auth::id())
+            ->findOrFail($id)
+            ->delete();
+
+        unset($this->userRecipes);
+    }
+
     public function updatedSearchQuery(): void
     {
         unset($this->groupedCatalogItems);
@@ -116,41 +150,49 @@ class AddItemsPage extends Component
         }
 
         foreach ($bundle['items'] as $bundleItem) {
-            $catalogItem = CatalogItem::query()
-                ->whereRaw('LOWER(name) = LOWER(?)', [$bundleItem['name']])
-                ->first();
-
-            if ($catalogItem !== null) {
-                if (in_array($catalogItem->id, $this->selectedCatalogIds, true)) {
-                    continue;
-                }
-
-                $item = $this->activeList->items()->create([
-                    'catalog_item_id' => $catalogItem->id,
-                    'name' => $catalogItem->name,
-                    'emoji' => $catalogItem->emoji,
-                    'category' => $catalogItem->category,
-                    'quantity' => $bundleItem['quantity'],
-                    'unit' => $bundleItem['unit'],
-                    'preferred_store' => $catalogItem->preferred_store,
-                ]);
-
-                $this->broadcastToOthers(new ItemAdded($item));
-                $this->selectedCatalogIds[] = $catalogItem->id;
-
-                continue;
-            }
-
-            $item = $this->activeList->items()->create([
-                'name' => $bundleItem['name'],
-                'quantity' => $bundleItem['quantity'],
-                'unit' => $bundleItem['unit'],
-            ]);
-
-            $this->broadcastToOthers(new ItemAdded($item));
+            $this->addBundleItem($bundleItem);
         }
 
         Flux::toast(__('app.bundle_added', ['name' => $bundle['name']]), duration: 8000);
+    }
+
+    /**
+     * @param  array{name: string, quantity: float|int, unit: string}  $bundleItem
+     */
+    private function addBundleItem(array $bundleItem): void
+    {
+        $catalogItem = CatalogItem::query()
+            ->whereRaw('LOWER(name) = LOWER(?)', [$bundleItem['name']])
+            ->first();
+
+        if ($catalogItem !== null) {
+            if (in_array($catalogItem->id, $this->selectedCatalogIds, true)) {
+                return;
+            }
+
+            $item = $this->activeList->items()->create([
+                'catalog_item_id' => $catalogItem->id,
+                'name' => $catalogItem->name,
+                'emoji' => $catalogItem->emoji,
+                'category' => $catalogItem->category,
+                'quantity' => $bundleItem['quantity'],
+                'unit' => $bundleItem['unit'],
+                'preferred_store' => $catalogItem->preferred_store,
+            ]);
+
+            $this->broadcastToOthers(new ItemAdded($item));
+            $this->selectedCatalogIds[] = $catalogItem->id;
+
+            return;
+        }
+
+        $item = $this->activeList->items()->create([
+            'name' => $bundleItem['name'],
+            'quantity' => $bundleItem['quantity'],
+            'unit' => $bundleItem['unit'],
+        ]);
+
+        $this->broadcastToOthers(new ItemAdded($item));
     }
 
     public function addToList(): void

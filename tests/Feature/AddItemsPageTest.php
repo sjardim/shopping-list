@@ -2,6 +2,7 @@
 
 use App\Livewire\AddItemsPage;
 use App\Models\CatalogItem;
+use App\Models\MealRecipe;
 use App\Models\ShoppingList;
 use App\Models\ShoppingListItem;
 use App\Models\User;
@@ -142,6 +143,38 @@ test('applying a meal bundle does not duplicate items already on the list', func
         ->call('applyMealBundle', 'bacalhau_braga');
 
     expect($list->fresh()->items()->where('catalog_item_id', $bacalhau->id)->count())->toBe(1);
+});
+
+test('applying a user recipe merges its items into the active list', function () {
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+
+    MealRecipe::factory()->for($user)->create([
+        'name' => 'My Soup',
+        'items' => [
+            ['name' => 'Sopa especial', 'quantity' => 1, 'unit' => 'l'],
+        ],
+    ]);
+
+    $recipe = MealRecipe::where('user_id', $user->id)->first();
+
+    Livewire::actingAs($user)
+        ->test(AddItemsPage::class)
+        ->call('applyUserRecipe', $recipe->id);
+
+    expect($list->fresh()->items()->where('name', 'Sopa especial')->exists())->toBeTrue();
+});
+
+test('owner can delete one of their recipes', function () {
+    $user = User::factory()->create();
+    ShoppingList::factory()->for($user)->create();
+    $recipe = MealRecipe::factory()->for($user)->create();
+
+    Livewire::actingAs($user)
+        ->test(AddItemsPage::class)
+        ->call('deleteUserRecipe', $recipe->id);
+
+    $this->assertModelMissing($recipe);
 });
 
 test('applying a meal bundle creates list items for non-catalog entries', function () {

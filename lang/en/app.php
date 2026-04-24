@@ -39,6 +39,18 @@ return [
     'set_price' => 'Set price for :name',
     'set_price_prompt' => 'Price for :name (€):',
     'spent_so_far' => 'spent so far',
+
+    // Recipes
+    'save_as_recipe' => 'Save as recipe',
+    'save_as_recipe_hint' => 'Reuse this list later from the Cook something tab.',
+    'recipe_name' => 'Recipe name',
+    'recipe_emoji' => 'Emoji',
+    'recipe_saved' => 'Recipe saved.',
+    'your_recipe' => 'your recipe',
+    'delete_recipe' => 'Delete :name',
+    'delete_recipe_confirm' => 'Delete this recipe?',
+    'cancel' => 'Cancel',
+    'save' => 'Save',
     'add_bundle' => 'Add ingredients for :name',
     'bundle_added' => 'Added :name to your list!',
     'repeat_list' => 'Restore :name to active list',

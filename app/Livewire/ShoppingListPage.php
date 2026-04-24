@@ -8,6 +8,7 @@ use App\Enums\Store;
 use App\Events\ItemAdded;
 use App\Events\ItemRemoved;
 use App\Models\CatalogItem;
+use App\Models\MealRecipe;
 use App\Models\ShoppingList;
 use Flux\Flux;
 use Illuminate\Support\Facades\Auth;
@@ -36,6 +37,10 @@ class ShoppingListPage extends Component
     public string $locale = 'en';
 
     public string $notes = '';
+
+    public string $newRecipeName = '';
+
+    public string $newRecipeEmoji = '🍽️';
 
     public function mount(?string $share_token = null): void
     {
@@ -270,6 +275,45 @@ class ShoppingListPage extends Component
     {
         $this->list->update(['notes' => trim($this->notes) ?: null]);
         $this->list->refresh();
+    }
+
+    public function saveAsRecipe(): void
+    {
+        if ($this->mode !== 'owner') {
+            return;
+        }
+
+        $this->validate([
+            'newRecipeName' => 'required|string|max:60',
+            'newRecipeEmoji' => 'required|string|max:8',
+        ]);
+
+        $items = $this->list->items()
+            ->get(['name', 'quantity', 'unit'])
+            ->map(fn ($item) => [
+                'name' => $item->name,
+                'quantity' => (float) $item->quantity,
+                'unit' => $item->unit,
+            ])
+            ->values()
+            ->all();
+
+        if (count($items) === 0) {
+            return;
+        }
+
+        MealRecipe::create([
+            'user_id' => Auth::id(),
+            'name' => trim($this->newRecipeName),
+            'emoji' => $this->newRecipeEmoji,
+            'items' => $items,
+        ]);
+
+        $this->reset('newRecipeName', 'newRecipeEmoji');
+        $this->newRecipeEmoji = '🍽️';
+
+        Flux::modal('save-recipe')->close();
+        Flux::toast(__('app.recipe_saved'), duration: 6000);
     }
 
     public function clearList(): void

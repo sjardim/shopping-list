@@ -39,6 +39,18 @@ return [
     'set_price' => 'Definir preço para :name',
     'set_price_prompt' => 'Preço para :name (€):',
     'spent_so_far' => 'gasto até agora',
+
+    // Recipes
+    'save_as_recipe' => 'Guardar como receita',
+    'save_as_recipe_hint' => 'Reutilize esta lista depois no separador Cozinhar algo.',
+    'recipe_name' => 'Nome da receita',
+    'recipe_emoji' => 'Emoji',
+    'recipe_saved' => 'Receita guardada.',
+    'your_recipe' => 'a sua receita',
+    'delete_recipe' => 'Eliminar :name',
+    'delete_recipe_confirm' => 'Eliminar esta receita?',
+    'cancel' => 'Cancelar',
+    'save' => 'Guardar',
     'add_bundle' => 'Adicionar ingredientes para :name',
     'bundle_added' => ':name adicionado à lista!',
     'repeat_list' => 'Restaurar :name para a lista ativa',

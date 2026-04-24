@@ -100,6 +100,51 @@
 
             {{-- Cook something --}}
             <div class="space-y-3 mt-4">
+                {{-- User-saved recipes --}}
+                @foreach($this->userRecipes as $recipe)
+                    <div wire:key="recipe-{{ $recipe->id }}" class="bg-white rounded-2xl px-4 py-3 shadow-sm fade-in-up border border-[#e3ede7]">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="text-2xl">{{ $recipe->emoji }}</span>
+                                <div>
+                                    <p class="font-medium text-[#1a1a1a] text-sm">{{ $recipe->name }}</p>
+                                    <p class="text-xs text-[#6b6055]">
+                                        {{ __('app.ingredients', ['count' => count($recipe->items)]) }}
+                                        · <span class="text-[#2f7d4f]">{{ __('app.your_recipe') }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <flux:button
+                                    wire:click="deleteUserRecipe({{ $recipe->id }})"
+                                    wire:confirm="{{ __('app.delete_recipe_confirm') }}"
+                                    variant="ghost"
+                                    size="sm"
+                                    icon="trash"
+                                    class="text-[#c5bdb0] hover:text-[#e53935] tap"
+                                    aria-label="{{ __('app.delete_recipe', ['name' => $recipe->name]) }}"
+                                />
+                                <flux:button
+                                    wire:click="applyUserRecipe({{ $recipe->id }})"
+                                    variant="ghost"
+                                    size="sm"
+                                    icon="plus"
+                                    class="tap"
+                                    aria-label="{{ __('app.add_bundle', ['name' => $recipe->name]) }}"
+                                />
+                            </div>
+                        </div>
+                        <div class="mt-2 flex flex-wrap gap-1">
+                            @foreach($recipe->items as $ingredient)
+                                <span class="text-xs bg-[#f7f3ec] text-[#6b6055] px-2 py-0.5 rounded-full">
+                                    {{ $ingredient['name'] }}
+                                </span>
+                            @endforeach
+                        </div>
+                    </div>
+                @endforeach
+
+                {{-- Built-in bundles --}}
                 @foreach($this->mealBundles as $key => $bundle)
                     <div wire:key="bundle-{{ $key }}" class="bg-white rounded-2xl px-4 py-3 shadow-sm fade-in-up">
                         <div class="flex items-center justify-between">

@@ -3,6 +3,7 @@
 use App\Enums\Store;
 use App\Livewire\ShoppingListPage;
 use App\Models\CatalogItem;
+use App\Models\MealRecipe;
 use App\Models\ShoppingList;
 use App\Models\ShoppingListItem;
 use App\Models\User;
@@ -260,6 +261,34 @@ test('total spent sums the prices of bought items only', function () {
     $component = Livewire::actingAs($user)->test(ShoppingListPage::class);
 
     expect($component->instance()->totalSpent)->toBe(5.0);
+});
+
+test('owner can save the current list as a recipe', function () {
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+    ShoppingListItem::factory()->for($list, 'list')->create([
+        'name' => 'Bacalhau',
+        'quantity' => 1,
+        'unit' => 'kg',
+    ]);
+    ShoppingListItem::factory()->for($list, 'list')->create([
+        'name' => 'Batata',
+        'quantity' => 2,
+        'unit' => 'kg',
+    ]);
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->set('newRecipeName', 'Bacalhau de Domingo')
+        ->set('newRecipeEmoji', '🐟')
+        ->call('saveAsRecipe');
+
+    $recipe = MealRecipe::where('user_id', $user->id)->first();
+    expect($recipe)->not->toBeNull();
+    expect($recipe->name)->toBe('Bacalhau de Domingo');
+    expect($recipe->emoji)->toBe('🐟');
+    expect($recipe->items)->toHaveCount(2);
+    expect($recipe->items[0]['name'])->toBe('Bacalhau');
 });
 
 test('owner can save notes on the list', function () {
