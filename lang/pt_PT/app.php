@@ -23,6 +23,8 @@ return [
     'notes_placeholder' => 'Notas para esta compra…',
     'export_json' => 'Exportar como JSON',
     'export_list' => 'Exportar :name como JSON',
+    'print_list' => 'Imprimir',
+    'print_hint' => 'Se a janela de impressão não abriu, use o menu de impressão do navegador.',
     'usually' => 'habitualmente :store',
     'link_copied' => 'Link copiado!',
     'list_updated' => 'Lista atualizada',

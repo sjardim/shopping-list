@@ -98,6 +98,15 @@
                             {{ __('app.export_json') }}
                         </flux:menu.item>
 
+                        {{-- Print --}}
+                        <flux:menu.item
+                            icon="printer"
+                            href="{{ route('list.print', $shareToken) }}"
+                            target="_blank"
+                        >
+                            {{ __('app.print_list') }}
+                        </flux:menu.item>
+
                         <flux:menu.separator />
 
                         {{-- Sign out --}}

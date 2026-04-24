@@ -23,6 +23,8 @@ return [
     'notes_placeholder' => 'Notes for this trip…',
     'export_json' => 'Export as JSON',
     'export_list' => 'Export :name as JSON',
+    'print_list' => 'Print',
+    'print_hint' => 'If the print dialog did not open, use your browser print menu.',
     'usually' => 'usually :store',
     'link_copied' => 'Link copied!',
     'list_updated' => 'List updated',
