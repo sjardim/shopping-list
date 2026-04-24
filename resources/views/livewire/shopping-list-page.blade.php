@@ -207,7 +207,17 @@
     {{-- Notes for this trip --}}
     <div class="px-5 mt-3">
         <div
-            x-data="voiceInput('{{ str_replace('_', '-', app()->getLocale()) }}')"
+            x-data="{
+                ...voiceInput('{{ str_replace('_', '-', app()->getLocale()) }}'),
+                saved: false,
+                savedTimer: null,
+                showSaved() {
+                    this.saved = true;
+                    clearTimeout(this.savedTimer);
+                    this.savedTimer = setTimeout(() => { this.saved = false; }, 2000);
+                },
+            }"
+            x-on:notes-saved.window="showSaved()"
             class="relative"
         >
             <textarea
@@ -217,6 +227,14 @@
                 rows="2"
                 class="w-full bg-white/60 rounded-2xl pl-4 pr-12 py-2 text-sm text-[#1a1a1a] placeholder-[#b0a99a] outline-none resize-none border border-[#ede8df] focus:border-[#2f7d4f] transition-colors"
             ></textarea>
+            <span
+                x-show="saved"
+                x-transition.opacity
+                class="absolute top-2 right-12 inline-flex items-center gap-1 text-[11px] font-semibold text-[#2f7d4f] bg-[#e3ede7] rounded-full px-2 py-0.5 pointer-events-none"
+            >
+                <flux:icon name="check" class="size-3" />
+                {{ __('app.saved_badge') }}
+            </span>
             <button
                 type="button"
                 x-show="supported"

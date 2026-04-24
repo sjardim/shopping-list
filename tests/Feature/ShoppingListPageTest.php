@@ -367,7 +367,8 @@ test('owner can save notes on the list', function () {
     Livewire::actingAs($user)
         ->test(ShoppingListPage::class)
         ->set('notes', 'Buy from butcher counter, not aisle')
-        ->call('updateNotes');
+        ->call('updateNotes')
+        ->assertDispatched('notes-saved');
 
     expect($list->fresh()->notes)->toBe('Buy from butcher counter, not aisle');
 });

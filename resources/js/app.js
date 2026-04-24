@@ -119,6 +119,20 @@ const sounds = {
             { freq: 1318.51, time: 0.04, dur: 0.08, gain: 0.1 },
         ]);
     },
+
+    voiceStart() {
+        synth([
+            { freq: 659.25, time: 0, dur: 0.06, gain: 0.1 },
+            { freq: 987.77, time: 0.05, dur: 0.1, gain: 0.1 },
+        ]);
+    },
+
+    voiceStop() {
+        synth([
+            { freq: 987.77, time: 0, dur: 0.06, gain: 0.1 },
+            { freq: 659.25, time: 0.05, dur: 0.1, gain: 0.1 },
+        ]);
+    },
 };
 
 window.lista = { sounds };
@@ -171,10 +185,12 @@ window.voiceInput = function (locale) {
 
             if (this.recording) {
                 this.recognition.stop();
+                sounds.voiceStop();
             } else {
                 try {
                     this.recognition.start();
                     this.recording = true;
+                    sounds.voiceStart();
                 } catch (e) {
                     this.recording = false;
                 }

@@ -360,6 +360,8 @@ class ShoppingListPage extends Component
     {
         $this->list->update(['notes' => trim($this->notes) ?: null]);
         $this->list->refresh();
+
+        $this->dispatch('notes-saved');
     }
 
     public function saveAsRecipe(): void

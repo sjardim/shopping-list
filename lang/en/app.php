@@ -21,6 +21,7 @@ return [
     'trip_restored' => 'Trip restored.',
     'undo_finish_trip' => 'Undo finish trip',
     'notes_placeholder' => 'Notes for this trip…',
+    'saved_badge' => 'Saved',
     'export_json' => 'Export as JSON',
     'export_list' => 'Export :name as JSON',
     'print_list' => 'Print',
