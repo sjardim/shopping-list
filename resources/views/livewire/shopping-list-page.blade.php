@@ -213,13 +213,31 @@
 
     {{-- Notes for this trip --}}
     <div class="px-5 mt-3">
-        <textarea
-            wire:model.live.debounce.500ms="notes"
-            wire:change="updateNotes"
-            placeholder="{{ __('app.notes_placeholder') }}"
-            rows="2"
-            class="w-full bg-white/60 rounded-2xl px-4 py-2 text-sm text-[#1a1a1a] placeholder-[#b0a99a] outline-none resize-none border border-[#ede8df] focus:border-[#2f7d4f] transition-colors"
-        ></textarea>
+        <div
+            x-data="voiceInput('{{ str_replace('_', '-', app()->getLocale()) }}')"
+            class="relative"
+        >
+            <textarea
+                wire:model.live.debounce.500ms="notes"
+                wire:change="updateNotes"
+                placeholder="{{ __('app.notes_placeholder') }}"
+                rows="2"
+                class="w-full bg-white/60 rounded-2xl pl-4 pr-12 py-2 text-sm text-[#1a1a1a] placeholder-[#b0a99a] outline-none resize-none border border-[#ede8df] focus:border-[#2f7d4f] transition-colors"
+            ></textarea>
+            <button
+                type="button"
+                x-show="supported"
+                x-on:click="toggle"
+                x-bind:class="recording ? 'bg-[#e53935] text-white animate-pulse' : 'bg-[#f4f0e8] text-[#1a1a1a] hover:bg-[#ede8df]'"
+                class="absolute bottom-2 right-2 size-7 rounded-lg flex items-center justify-center transition-colors tap"
+                aria-label="{{ __('app.start_voice_input') }}"
+                data-voice-toggle
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
+                </svg>
+            </button>
+        </div>
     </div>
 
     {{-- List body --}}

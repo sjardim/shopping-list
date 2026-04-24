@@ -143,14 +143,14 @@ window.voiceInput = function (locale) {
 
             this.recognition.addEventListener('result', (event) => {
                 const transcript = event.results[0][0].transcript.trim();
-                const input = this.$el.querySelector('input[type="text"]');
+                const target = this.$el.querySelector('textarea, input[type="text"]');
 
-                if (input && transcript) {
-                    input.value = input.value
-                        ? input.value + ' ' + transcript
+                if (target && transcript) {
+                    target.value = target.value
+                        ? target.value + ' ' + transcript
                         : transcript;
-                    input.dispatchEvent(new Event('input', { bubbles: true }));
-                    input.focus();
+                    target.dispatchEvent(new Event('input', { bubbles: true }));
+                    target.focus();
                 }
             });
 
