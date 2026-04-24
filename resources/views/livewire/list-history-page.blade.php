@@ -36,6 +36,14 @@
 
                             <div class="flex items-center gap-1 shrink-0">
                                 <flux:button
+                                    href="{{ route('list.export', $list->share_token) }}"
+                                    variant="ghost"
+                                    size="sm"
+                                    icon="arrow-down-tray"
+                                    class="tap"
+                                    aria-label="{{ __('app.export_list', ['name' => $list->name]) }}"
+                                />
+                                <flux:button
                                     wire:click="repeatList({{ $list->id }})"
                                     wire:confirm="{{ __('app.repeat_list_confirm') }}"
                                     variant="ghost"

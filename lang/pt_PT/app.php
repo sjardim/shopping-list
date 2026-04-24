@@ -21,6 +21,8 @@ return [
     'trip_restored' => 'Compra restaurada.',
     'undo_finish_trip' => 'Anular fim da compra',
     'notes_placeholder' => 'Notas para esta compra…',
+    'export_json' => 'Exportar como JSON',
+    'export_list' => 'Exportar :name como JSON',
     'usually' => 'habitualmente :store',
     'link_copied' => 'Link copiado!',
     'list_updated' => 'Lista atualizada',

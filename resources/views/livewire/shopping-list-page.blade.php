@@ -90,6 +90,14 @@
                             {{ __('app.share_list') }}
                         </flux:menu.item>
 
+                        {{-- Export JSON --}}
+                        <flux:menu.item
+                            icon="arrow-down-tray"
+                            href="{{ route('list.export', $shareToken) }}"
+                        >
+                            {{ __('app.export_json') }}
+                        </flux:menu.item>
+
                         <flux:menu.separator />
 
                         {{-- Sign out --}}
