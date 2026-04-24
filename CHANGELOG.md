@@ -2,11 +2,37 @@
 
 All notable changes to this project will be documented in this file. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## Unreleased
+## 1.2.0 — Mise en Place (2026-04-24)
+
+This release finishes the international rollout started in 1.1.0 (now five locales and five regions, each with a real catalog and history dataset) and adds a proper first run experience. New developers get a single command, `php artisan lista:install`, that walks them through language, region, currency, and admin setup. Admin identity moves out of env into the database. Quality tooling (Rector, PHPStan level 5) ships with the codebase.
 
 ### Added
 
-- **Spanish locale (`es`) and Spain region (`es`)** end-to-end. New `App\Enums\StoreEs` (Mercadona, Carrefour, Dia, Eroski, Alcampo, Hipercor) with brand colours and dark-text rules. New `CatalogItemSeederEs` with ~80 Spanish grocery items and `ShoppingHistorySeederEs` with 11 fake trips rotating across all six chains. `MealBundles::all()` gains a `'es'` branch with 10 Spanish recipes (Pollo Asado, Bacalao a la Vizcaína, Fabada Asturiana, etc.). The locale switcher dropdown shows `Español`, and `lista:install` lists Spanish/Spain as first-class options that default to `€`.
+- **Spanish locale (`es`) and Spain region (`es`)** end to end. New `App\Enums\StoreEs` (Mercadona, Carrefour, Dia, Eroski, Alcampo, Hipercor) with brand colours and dark text rules. New `CatalogItemSeederEs` with ~80 Spanish grocery items, plus `ShoppingHistorySeederEs` with 11 fake trips rotating across all six chains. `MealBundles::all()` gains an `'es'` branch with 10 Spanish recipes (Pollo Asado, Bacalao a la Vizcaína, Fabada Asturiana, etc.). The locale switcher dropdown shows `Español`, and `lista:install` lists Spanish and Spain as first class options that default to `€`.
+- **Brazilian Portuguese locale (`pt_BR`) and Brazil region (`br`).** New `App\Enums\StoreBr` (Pão de Açúcar, Carrefour, Extra, Assaí, Atacadão, Mercado Livre) with brand colours. `CatalogItemSeederBr` (~80 Brazilian items) and `ShoppingHistorySeederBr` (11 trips) ship the Brazilian dataset. `MealBundles` gains a Brazilian branch (Frango Assado, Macarrão à Bolonhesa, Feijoada Brasileira, etc.). Full `lang/pt_BR/app.php` translation file.
+- **British English locale (`en_GB`) and UK seeders.** Adds `lang/en_GB/app.php` and pairs it with `CatalogItemSeederGb` and `ShoppingHistorySeederGb` so the existing `StoreUk` enum has a proper catalog and history dataset behind it (previously the EN seeders did duty for both regions).
+- **`php artisan lista:install` interactive command.** Walks a new developer through five prompts (language, store region, currency symbol, admin email, admin name, admin password), writes the matching `APP_LOCALE`, `STORES_REGION`, `CURRENCY_SYMBOL` keys to `.env`, runs migrations, seeds the right catalog and history pair, and creates the admin. Idempotent. Defaults pair sensibly (pick `Español`, get region `es` and currency `€`).
+- **`php artisan lista:make-admin` command** for ad hoc admin creation or promotion outside the install wizard.
+- **Country flag emojis** in the locale switcher dropdown (🇵🇹 🇧🇷 🇺🇸 🇬🇧 🇪🇸) and in the `lista:install` language and region prompts.
+- **`is_admin` boolean column on `users`.** Admin identity now lives in the database instead of the `OWNER_EMAIL` env var. Seeders look up the admin via `User::admins()->first()` instead of email matching.
+- **Quality tooling.** Added `nunomaduro/essentials` (auto applies strict mode, etc.), Rector for refactor automation, and Larastan/PHPStan at level 5. Codebase passes all three with zero errors.
+- **Finish trip warning.** Tapping `Finish trip` without a store selected now shows a confirmation toast asking the user to pick a store first, instead of silently archiving.
+
+### Changed
+
+- **README slimmed to a summary**, with the full feature list extracted into `FEATURES.md`. Install instructions now point at `php artisan lista:install` first.
+- **Owner identity, currency, and store region extracted from hardcoded values to env vars** (`STORES_REGION`, `CURRENCY_SYMBOL`). Consolidated under `config/lista.php`.
+- **`BaseShoppingHistorySeeder` abstract class** introduced. Region specific history seeders now only implement `trips()` and `manualItems()`, eliminating ~150 lines of duplication across the five regional seeders.
+- **Heading rename**: the locale section in the profile dropdown is now labelled `Idioma da Interface` (Interface Language) so it's clear that switching only changes app UI strings, not catalog or history content.
+- **Locale persistence**. `switchLocale()` now writes the chosen locale to the session and applies it at runtime via `App::setLocale()`, so the switch takes effect immediately without a reload race.
+
+### Fixed
+
+- **`SetLocale` middleware whitelist** now includes `en_GB` and `pt_BR`, which were silently falling back to the configured default before. Caused the locale switcher to appear broken when those locales were picked.
+
+### Tests
+
+96 passing, 163 assertions (up from 93/156 in 1.1.0). New coverage for the install command, admin promotion, regional seeder selection, the BR/GB/ES catalogs, and the locale switcher fallthrough.
 
 ## 1.1.0 — Around the World (2026-04-24)
 
