@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ShoppingList;
+use App\Models\ShoppingListItem;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 
@@ -10,6 +11,7 @@ class ListExportController extends Controller
 {
     public function __invoke(string $share_token): JsonResponse
     {
+        /** @var ShoppingList $list */
         $list = ShoppingList::with('items')
             ->where('share_token', $share_token)
             ->firstOrFail();
@@ -19,16 +21,16 @@ class ListExportController extends Controller
             'store' => $list->store?->value,
             'status' => $list->status->value,
             'notes' => $list->notes,
-            'created_at' => $list->created_at?->toIso8601String(),
+            'created_at' => $list->created_at->toIso8601String(),
             'completed_at' => $list->completed_at?->toIso8601String(),
-            'items' => $list->items->map(fn ($item) => [
+            'items' => $list->items->map(fn (ShoppingListItem $item): array => [
                 'name' => $item->name,
                 'emoji' => $item->emoji,
                 'category' => $item->category,
                 'quantity' => (float) $item->quantity,
                 'unit' => $item->unit,
                 'preferred_store' => $item->preferred_store,
-                'is_bought' => (bool) $item->is_bought,
+                'is_bought' => $item->is_bought,
                 'bought_at' => $item->bought_at?->toIso8601String(),
             ])->all(),
         ];

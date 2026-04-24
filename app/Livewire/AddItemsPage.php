@@ -46,7 +46,7 @@ class AddItemsPage extends Component
             ->items()
             ->whereNotNull('catalog_item_id')
             ->pluck('catalog_item_id')
-            ->map(fn ($id) => (int) $id)
+            ->map(fn ($id): int => (int) $id)
             ->all();
     }
 
@@ -120,7 +120,7 @@ class AddItemsPage extends Component
             }
 
             $this->selectedCatalogIds = array_values(
-                array_filter($this->selectedCatalogIds, fn ($i) => $i !== $id)
+                array_filter($this->selectedCatalogIds, fn (int $i): bool => $i !== $id)
             );
         } else {
             $catalogItem = CatalogItem::findOrFail($id);

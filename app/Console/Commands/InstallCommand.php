@@ -3,6 +3,14 @@
 namespace App\Console\Commands;
 
 use App\Models\User;
+use Database\Seeders\CatalogItemSeeder;
+use Database\Seeders\CatalogItemSeederBr;
+use Database\Seeders\CatalogItemSeederEn;
+use Database\Seeders\CatalogItemSeederGb;
+use Database\Seeders\ShoppingHistorySeeder;
+use Database\Seeders\ShoppingHistorySeederBr;
+use Database\Seeders\ShoppingHistorySeederEn;
+use Database\Seeders\ShoppingHistorySeederGb;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
@@ -20,14 +28,14 @@ use function Laravel\Prompts\warning;
 #[Description('Interactive setup: pick locale, region, currency, and owner — writes .env, migrates, and seeds.')]
 class InstallCommand extends Command
 {
-    private const LOCALES = [
+    private const array LOCALES = [
         'en' => 'English',
         'en_GB' => 'English (UK)',
         'pt_PT' => 'Português (Portugal)',
         'pt_BR' => 'Português (Brasil)',
     ];
 
-    private const REGIONS = [
+    private const array REGIONS = [
         'pt' => 'Portugal',
         'us' => 'United States',
         'uk' => 'United Kingdom',
@@ -47,15 +55,15 @@ class InstallCommand extends Command
         $email = text(
             label: 'Admin email',
             default: 'admin@example.com',
-            validate: fn (string $v) => filter_var($v, FILTER_VALIDATE_EMAIL) ? null : 'Please enter a valid email address.',
+            validate: fn (string $v): ?string => filter_var($v, FILTER_VALIDATE_EMAIL) ? null : 'Please enter a valid email address.',
         );
 
         $name = text('Admin display name', default: 'Admin');
 
         $userPassword = password(
             label: 'Admin password',
+            validate: fn (string $v): ?string => strlen($v) >= 6 ? null : 'Password must be at least 6 characters.',
             hint: 'Min 6 characters. Rotate after first login.',
-            validate: fn (string $v) => strlen($v) >= 6 ? null : 'Password must be at least 6 characters.',
         );
 
         $this->renderSummary($locale, $region, $currency, $email, $name);
@@ -139,20 +147,20 @@ class InstallCommand extends Command
     private function catalogSeederFor(string $region): string
     {
         return match ($region) {
-            'pt' => 'Database\\Seeders\\CatalogItemSeeder',
-            'br' => 'Database\\Seeders\\CatalogItemSeederBr',
-            'uk' => 'Database\\Seeders\\CatalogItemSeederGb',
-            default => 'Database\\Seeders\\CatalogItemSeederEn',
+            'pt' => CatalogItemSeeder::class,
+            'br' => CatalogItemSeederBr::class,
+            'uk' => CatalogItemSeederGb::class,
+            default => CatalogItemSeederEn::class,
         };
     }
 
     private function historySeederFor(string $region): string
     {
         return match ($region) {
-            'pt' => 'Database\\Seeders\\ShoppingHistorySeeder',
-            'br' => 'Database\\Seeders\\ShoppingHistorySeederBr',
-            'uk' => 'Database\\Seeders\\ShoppingHistorySeederGb',
-            default => 'Database\\Seeders\\ShoppingHistorySeederEn',
+            'pt' => ShoppingHistorySeeder::class,
+            'br' => ShoppingHistorySeederBr::class,
+            'uk' => ShoppingHistorySeederGb::class,
+            default => ShoppingHistorySeederEn::class,
         };
     }
 

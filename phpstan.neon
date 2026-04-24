@@ -1,0 +1,28 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    level: 5
+
+    paths:
+        - app
+        - bootstrap/app.php
+        - config
+        - database
+        - routes
+        
+    reportUnmatchedIgnoredErrors: true
+
+    ignoreErrors:
+        # The Store contract is implemented by backed string enums whose ->value
+        # property is a PHP language feature, not declarable on the interface.
+        - identifier: property.notFound
+          message: '#Access to an undefined property App\\Contracts\\Store::\$value\.#'
+
+        # The priceHistory() query builder returns Collection<int, stdClass>
+        # with anonymous-shape properties; PHPStan's template covariance rules
+        # complain about the narrower object{...}&stdClass even though it's
+        # strictly more specific. Runtime is correct; this is a pure typing nit.
+        - identifier: return.type
+          path: app/Livewire/ShoppingListPage.php
+          message: '#priceHistory.+Collection.+stdClass#'

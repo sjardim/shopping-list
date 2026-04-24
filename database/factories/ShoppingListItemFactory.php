@@ -28,7 +28,7 @@ class ShoppingListItemFactory extends Factory
     public function definition(): array
     {
         $item = $this->faker->randomElement(self::$items);
-        $category = $this->faker->randomElement(Category::cases());
+        $this->faker->randomElement(Category::cases());
 
         return [
             'shopping_list_id' => ShoppingList::factory(),
@@ -47,7 +47,7 @@ class ShoppingListItemFactory extends Factory
 
     public function bought(): static
     {
-        return $this->state(fn () => [
+        return $this->state(fn (): array => [
             'is_bought' => true,
             'bought_at' => now(),
         ]);

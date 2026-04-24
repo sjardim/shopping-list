@@ -6,12 +6,28 @@ use App\Casts\StoreCast;
 use App\Contracts\Store;
 use App\Enums\ShoppingListStatus;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property string $name
+ * @property Store|null $store
+ * @property string|null $notes
+ * @property ShoppingListStatus $status
+ * @property string $share_token
+ * @property Carbon|null $completed_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read User $user
+ * @property-read Collection<int, ShoppingListItem> $items
+ */
 class ShoppingList extends Model
 {
     use HasFactory;
@@ -37,7 +53,7 @@ class ShoppingList extends Model
 
     protected static function booted(): void
     {
-        static::creating(function (ShoppingList $list) {
+        static::creating(function (ShoppingList $list): void {
             if (empty($list->share_token)) {
                 $list->share_token = (string) Str::uuid();
             }
@@ -52,18 +68,24 @@ class ShoppingList extends Model
     {
         $date = now()->format('d M');
 
-        if ($store !== null) {
+        if ($store instanceof Store) {
             return "{$store->label()} · {$date}";
         }
 
         return "Shopping · {$date}";
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return HasMany<ShoppingListItem, $this>
+     */
     public function items(): HasMany
     {
         return $this->hasMany(ShoppingListItem::class)

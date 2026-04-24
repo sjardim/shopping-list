@@ -17,7 +17,7 @@ use App\Enums\StoreUs;
 class Stores
 {
     /** @var array<string, class-string<Store>> */
-    private const REGIONS = [
+    private const array REGIONS = [
         'pt' => StorePt::class,
         'us' => StoreUs::class,
         'uk' => StoreUk::class,

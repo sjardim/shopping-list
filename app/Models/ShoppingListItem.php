@@ -8,10 +8,29 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property int $shopping_list_id
+ * @property int|null $catalog_item_id
+ * @property string $name
+ * @property string|null $emoji
+ * @property string|null $category
+ * @property string $quantity
+ * @property string $unit
+ * @property string|null $preferred_store
+ * @property string|null $price
+ * @property bool $is_bought
+ * @property Carbon|null $bought_at
+ * @property int $sort_order
+ * @property-read ShoppingList $list
+ * @property-read CatalogItem|null $catalogItem
+ */
 class ShoppingListItem extends Model
 {
-    use BroadcastsToOthers, HasFactory;
+    use BroadcastsToOthers;
+    use HasFactory;
 
     protected $fillable = [
         'shopping_list_id',
@@ -38,11 +57,17 @@ class ShoppingListItem extends Model
         ];
     }
 
+    /**
+     * @return BelongsTo<ShoppingList, $this>
+     */
     public function list(): BelongsTo
     {
         return $this->belongsTo(ShoppingList::class, 'shopping_list_id');
     }
 
+    /**
+     * @return BelongsTo<CatalogItem, $this>
+     */
     public function catalogItem(): BelongsTo
     {
         return $this->belongsTo(CatalogItem::class);

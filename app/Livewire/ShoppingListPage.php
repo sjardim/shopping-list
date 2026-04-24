@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Concerns\BroadcastsToOthers;
+use App\Contracts\Store;
 use App\Enums\ShoppingListStatus;
 use App\Events\ItemAdded;
 use App\Events\ItemRemoved;
@@ -15,12 +16,21 @@ use Flux\Flux;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
+/**
+ * @property-read array{pending: array<string, array<int, array<string, mixed>>>, bought: array<int, array<string, mixed>>} $itemsByCategory
+ * @property-read array<int, array<string, mixed>> $catalogSuggestions
+ * @property-read ShoppingListItem|null $editingItem
+ * @property-read Collection<int, object> $priceHistory
+ * @property-read float $totalSpent
+ * @property-read ShoppingList|null $recentlyFinishedList
+ */
 class ShoppingListPage extends Component
 {
     use BroadcastsToOthers;
@@ -90,7 +100,7 @@ class ShoppingListPage extends Component
             ->values()
             ->toArray();
 
-        return compact('pending', 'bought');
+        return ['pending' => $pending, 'bought' => $bought];
     }
 
     #[Computed]
@@ -216,7 +226,7 @@ class ShoppingListPage extends Component
     }
 
     /**
-     * @return Collection<int, object{store: ?string, price: float, bought_at: Carbon, list_name: string}>
+     * @return Collection<int, \stdClass>
      */
     #[Computed]
     public function priceHistory(): Collection
@@ -227,7 +237,7 @@ class ShoppingListPage extends Component
             return collect();
         }
 
-        return ShoppingListItem::query()
+        return DB::table('shopping_list_items')
             ->select([
                 'shopping_list_items.price',
                 'shopping_list_items.bought_at',
@@ -244,10 +254,10 @@ class ShoppingListPage extends Component
             ->limit(10)
             ->get()
             ->map(fn ($row) => (object) [
-                'store' => $row->store,
+                'store' => $row->store === null ? null : (string) $row->store,
                 'price' => (float) $row->price,
                 'bought_at' => Carbon::parse($row->bought_at),
-                'list_name' => $row->list_name,
+                'list_name' => (string) $row->list_name,
             ]);
     }
 
@@ -268,9 +278,9 @@ class ShoppingListPage extends Component
 
         try {
             $this->validate(['quickAddName' => 'required|string|max:100']);
-        } catch (ValidationException $e) {
+        } catch (ValidationException $validationException) {
             $this->dispatch('validation-failed');
-            throw $e;
+            throw $validationException;
         }
 
         $item = $this->list->items()->create([
@@ -288,9 +298,9 @@ class ShoppingListPage extends Component
         unset($this->itemsByCategory);
     }
 
-    private const UNDO_WINDOW_MINUTES = 5;
+    private const int UNDO_WINDOW_MINUTES = 5;
 
-    private const TOAST_DURATION_MS = 8000;
+    private const int TOAST_DURATION_MS = 8000;
 
     public function finishTrip(): void
     {
@@ -301,6 +311,7 @@ class ShoppingListPage extends Component
         $this->list->markCompleted();
 
         $this->list = ShoppingList::create(['user_id' => Auth::id()]);
+
         $this->shareToken = $this->list->share_token;
 
         unset($this->itemsByCategory, $this->recentlyFinishedList);
@@ -377,7 +388,7 @@ class ShoppingListPage extends Component
 
         $items = $this->list->items()
             ->get(['name', 'quantity', 'unit'])
-            ->map(fn ($item) => [
+            ->map(fn ($item): array => [
                 'name' => $item->name,
                 'quantity' => (float) $item->quantity,
                 'unit' => $item->unit,
@@ -437,7 +448,7 @@ class ShoppingListPage extends Component
 
         $this->list->update([
             'store' => $storeEnum,
-            'name' => $storeEnum !== null ? "{$storeEnum->label()} · {$date}" : "Shopping · {$date}",
+            'name' => $storeEnum instanceof Store ? "{$storeEnum->label()} · {$date}" : "Shopping · {$date}",
         ]);
 
         $this->list->refresh();

@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('shopping_list_items', function (Blueprint $table) {
+        Schema::table('shopping_list_items', function (Blueprint $table): void {
             $table->decimal('price', 10, 2)->nullable()->after('preferred_store');
         });
     }
 
     public function down(): void
     {
-        Schema::table('shopping_list_items', function (Blueprint $table) {
+        Schema::table('shopping_list_items', function (Blueprint $table): void {
             $table->dropColumn('price');
         });
     }

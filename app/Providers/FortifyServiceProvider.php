@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -24,7 +25,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Fortify::loginView(fn () => view('auth.login'));
+        Fortify::loginView(fn (): Factory|\Illuminate\Contracts\View\View => view('auth.login'));
 
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(

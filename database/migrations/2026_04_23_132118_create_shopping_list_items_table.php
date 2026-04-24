@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shopping_list_items', function (Blueprint $table) {
+        Schema::create('shopping_list_items', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('shopping_list_id')->constrained()->cascadeOnDelete();
             $table->foreignId('catalog_item_id')->nullable()->constrained()->nullOnDelete();

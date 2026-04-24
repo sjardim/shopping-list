@@ -31,7 +31,7 @@ class ShoppingListFactory extends Factory
 
     public function completed(): static
     {
-        return $this->state(fn () => [
+        return $this->state(fn (): array => [
             'status' => ShoppingListStatus::Completed->value,
             'completed_at' => $this->faker->dateTimeBetween('-30 days', 'now'),
         ]);
@@ -39,6 +39,6 @@ class ShoppingListFactory extends Factory
 
     public function forStore(Store $store): static
     {
-        return $this->state(fn () => ['store' => $store->value]);
+        return $this->state(fn (): array => ['store' => $store->value]);
     }
 }

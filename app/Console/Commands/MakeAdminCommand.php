@@ -23,7 +23,7 @@ class MakeAdminCommand extends Command
     {
         $email = $this->argument('email') ?? text(
             label: 'Admin email',
-            validate: fn (string $v) => filter_var($v, FILTER_VALIDATE_EMAIL) ? null : 'Please enter a valid email address.',
+            validate: fn (string $v): ?string => filter_var($v, FILTER_VALIDATE_EMAIL) ? null : 'Please enter a valid email address.',
         );
 
         $existing = User::where('email', $email)->first();
@@ -59,8 +59,8 @@ class MakeAdminCommand extends Command
 
         $userPassword = password(
             label: 'Password',
+            validate: fn (string $v): ?string => strlen($v) >= 6 ? null : 'Password must be at least 6 characters.',
             hint: 'Min 6 characters.',
-            validate: fn (string $v) => strlen($v) >= 6 ? null : 'Password must be at least 6 characters.',
         );
 
         User::create([
