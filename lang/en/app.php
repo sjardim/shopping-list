@@ -31,6 +31,7 @@ return [
     'remove_item' => 'Remove :name',
     'add_item' => 'Add item',
     'add_bundle' => 'Add ingredients for :name',
+    'bundle_added' => 'Added :name to your list!',
     'repeat_list' => 'Restore :name to active list',
     'delete_list' => 'Delete :name from history',
     'open_settings' => 'Open settings',
