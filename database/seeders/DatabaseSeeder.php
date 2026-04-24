@@ -18,6 +18,9 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        $this->call(CatalogItemSeeder::class);
+        $this->call([
+            CatalogItemSeeder::class,
+            ShoppingHistorySeeder::class,
+        ]);
     }
 }
