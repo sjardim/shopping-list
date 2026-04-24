@@ -71,7 +71,7 @@ return [
     'sound_effects' => 'Sound effects',
 
     // Profile menu
-    'language' => 'Language',
+    'language' => 'Interface language',
     'share_list' => 'Share list',
     'sign_out' => 'Sign out',
 
