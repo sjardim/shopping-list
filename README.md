@@ -67,7 +67,7 @@ System-level support:
 - **Flux UI v2** (Free edition only — see component list below)
 - **Laravel Reverb v1** for WebSocket broadcasts (optional)
 - **Laravel Fortify v1** for the owner's auth (no registration, login only)
-- **Pest 4** for tests (86 currently passing)
+- **Pest 4** for tests (93 currently passing)
 - **Phosphor Duotone** icons (21 SVGs published as Flux icon stubs)
 
 ## Flux UI components used
@@ -158,7 +158,7 @@ Meal bundles in `app/Support/MealBundles.php` are locale-aware: when `APP_LOCALE
 php artisan test --compact
 ```
 
-86 tests, ~140 assertions. Tests run against an in-memory SQLite database, so no setup needed.
+93 tests, ~155 assertions. Tests run against an in-memory SQLite database, so no setup needed.
 
 ## Deployment
 

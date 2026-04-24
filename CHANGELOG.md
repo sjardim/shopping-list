@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 1.1.0 — Around the World (2026-04-24)
+
+This release is about getting Lista out of Portugal. New developers cloning the repo for a US, UK, or any other supermarket landscape now have a clean path that doesn't involve learning the difference between Continente and Mercadona.
+
+### Added
+
+- **Regional store enums.** The single `App\Enums\Store` is gone. In its place: a `App\Contracts\Store` interface and three implementing enums — `App\Enums\StorePt` (Lidl, Aldi, Continente, Mercadona), `App\Enums\StoreUs` (Walmart, Target, Trader Joe's, Whole Foods), and `App\Enums\StoreUk` (Tesco, Sainsbury's, Asda, Morrisons, Waitrose, Lidl, Aldi). Each region's brand colors, badge initials, and dark-text rules live with its enum.
+- **`STORES_REGION` env var.** Picks which regional enum populates the store dropdown (`pt`, `us`, or `uk`). Defaults to `pt`. Other regions still resolve when slugs appear in the database — so swapping regions doesn't orphan historical badges.
+- **`App\Support\Stores` helper** with `Stores::active()` and `Stores::tryFrom(slug)` for region-aware lookups.
+- **`App\Casts\StoreCast`** transparently resolves the slug column to a Store enum instance, so `$list->store->color()` works exactly like before.
+- **`CatalogItemSeederEn`** with ~80 common US grocery items, store hints pointing at Walmart, Target, Trader Joe's, and Whole Foods (plus Lidl/Aldi where they make sense). Run with `php artisan db:seed --class=CatalogItemSeederEn`.
+- **`ShoppingHistorySeederEn`** mirrors the Portuguese history seeder but rotates US stores and uses English ad-hoc items (razor blades, AA batteries, birthday card, flowers, bag of ice).
+- **Locale-aware meal bundles.** `MealBundles::all()` now branches on `app()->getLocale()`. With `APP_LOCALE=en` the "Cook something" tab serves "Roast Chicken", "Spaghetti Bolognese", "Mixed Salad", etc. — with ingredient names that match `CatalogItemSeederEn` so catalog linking still works.
+
+### Changed
+
+- **Browser-tab titles** for `/history` and `/add` are now translated. Previously hardcoded English; now use `__('app.history_title')` and `__('app.add_items_title')`.
+- **Existing meal-bundle tests** explicitly pin `app()->setLocale('pt_PT')` so they no longer depend on the developer's `.env` having the right locale.
+
+### Removed
+
+- **`App\Enums\Store`.** Replaced by the three regional enums above. Anyone who was importing it directly needs to switch to `App\Enums\StorePt`/`StoreUs`/`StoreUk` or use `App\Support\Stores::tryFrom()`. Database values (the slug strings) are unchanged, so no data migration is needed.
+
+### Notes for adopters
+
+For a non-Portuguese setup, edit `database/seeders/DatabaseSeeder.php` to call the EN seeders instead of the PT ones, set `STORES_REGION=us` (or `uk`) in `.env`, and run `php artisan migrate:fresh --seed`. The README has the full step list under "Picking your region" and "Switching the seeded data".
+
+### Tests
+
+93 passing, 156 assertions (was 86/143 in 1.0.0). Five new tests cover the `Stores` helper region resolution and slug fallback behaviour; one covers the English meal bundle path; one covers the EN history seeder using only US stores.
+
 ## 1.0.0 — First Trip (2026-04-24)
 
 The first public release of Lista. A self-hosted, two-person grocery shopping app built for a kitchen shared by an owner and a tag-along. One account, one share link, no friction.
