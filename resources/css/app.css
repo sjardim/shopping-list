@@ -34,6 +34,21 @@
     line-height: 1.4;
 }
 
+/* High-contrast mode: darker muted text and stronger borders. */
+[data-contrast="high"] .text-\[\#6b6055\] { color: #2a2419; }
+[data-contrast="high"] .text-\[\#9b9080\] { color: #3a3328; }
+[data-contrast="high"] .text-\[\#b0a99a\] { color: #3a3328; }
+[data-contrast="high"] .text-\[\#c5bdb0\] { color: #2a2419; }
+[data-contrast="high"] .border-\[\#e0d9cc\] { border-color: #6b6055; }
+[data-contrast="high"] .border-\[\#d5cdbc\] { border-color: #6b6055; }
+[data-contrast="high"] .border-\[\#f0ece3\] { border-color: #b0a89a; }
+[data-contrast="high"] .border-\[\#ede8df\] { border-color: #b0a89a; }
+[data-contrast="high"] .border-\[\#f4f0e8\] { border-color: #b0a89a; }
+[data-contrast="high"] .divide-\[\#f4f0e8\] > * + * { border-color: #b0a89a; }
+[data-contrast="high"] .bg-white\/60 { background-color: rgb(255 255 255); }
+[data-contrast="high"] .bg-\[\#f4f0e8\] { background-color: #ddd5c2; }
+[data-contrast="high"] .bg-\[\#f7f3ec\] { background-color: #d6cdb8; }
+
 @utility heading-serif {
     font-family: Georgia, 'Times New Roman', serif;
 }

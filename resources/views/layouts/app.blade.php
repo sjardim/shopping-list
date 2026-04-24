@@ -21,6 +21,9 @@
                 var root = document.documentElement;
                 root.style.setProperty('--ui-scale', prefs.uiScale || 1);
                 root.style.setProperty('--list-scale', prefs.listScale || 1);
+                if (prefs.highContrast) {
+                    root.setAttribute('data-contrast', 'high');
+                }
             } catch (e) {}
         })();
 
@@ -28,11 +31,13 @@
             window.Alpine.store('prefs', {
                 uiScale: 1,
                 listScale: 1,
+                highContrast: false,
                 init: function () {
                     try {
                         var saved = JSON.parse(localStorage.getItem('lista-prefs') || '{}');
                         this.uiScale = saved.uiScale || 1;
                         this.listScale = saved.listScale || 1;
+                        this.highContrast = !!saved.highContrast;
                     } catch (e) {}
                 },
                 setUiScale: function (value) {
@@ -43,14 +48,24 @@
                     this.listScale = this.listScale > 1 ? 1 : 1.18;
                     this._apply();
                 },
+                toggleHighContrast: function () {
+                    this.highContrast = !this.highContrast;
+                    this._apply();
+                },
                 _apply: function () {
                     var root = document.documentElement;
                     root.style.setProperty('--ui-scale', this.uiScale);
                     root.style.setProperty('--list-scale', this.listScale);
+                    if (this.highContrast) {
+                        root.setAttribute('data-contrast', 'high');
+                    } else {
+                        root.removeAttribute('data-contrast');
+                    }
                     try {
                         localStorage.setItem('lista-prefs', JSON.stringify({
                             uiScale: this.uiScale,
                             listScale: this.listScale,
+                            highContrast: this.highContrast,
                         }));
                     } catch (e) {}
                 },

@@ -19,3 +19,9 @@
         <span x-show="$store.prefs.listScale > 1" class="text-[#2f7d4f] font-bold">✓</span>
     </span>
 </flux:menu.item>
+<flux:menu.item x-on:click.stop="$store.prefs.toggleHighContrast()">
+    <span class="flex items-center justify-between w-full">
+        <span>{{ __('app.high_contrast') }}</span>
+        <span x-show="$store.prefs.highContrast" class="text-[#2f7d4f] font-bold">✓</span>
+    </span>
+</flux:menu.item>
