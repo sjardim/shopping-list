@@ -34,6 +34,13 @@ APP_DEBUG=false
 APP_LOCALE=pt_PT
 APP_FALLBACK_LOCALE=en
 
+STORES_REGION=pt                 # pt, us, or uk
+CURRENCY_SYMBOL=€                # shown next to every price
+
+OWNER_EMAIL=you@example.com      # seeded owner account identity
+OWNER_NAME="Your Name"
+OWNER_PASSWORD=                  # change this, then rotate immediately after login
+
 DB_CONNECTION=pgsql
 DB_HOST=                        # provided by Laravel Cloud
 DB_PORT=5432
@@ -107,7 +114,7 @@ The seeder uses `firstOrCreate`, so re-running it on subsequent deploys is safe.
 ## Post-Deploy Checklist
 
 - [ ] Visit `/login` and confirm the login page loads.
-- [ ] Log in with `sergio@sergiojardim.com` and the password set in `DatabaseSeeder`.
+- [ ] Log in with the email + password from your `OWNER_EMAIL` / `OWNER_PASSWORD` env vars.
 - [ ] Add an item to the list and confirm it appears.
 - [ ] Copy the share URL and open it in a private window — confirm shared mode (no "Finish trip" or "Clear" buttons).
 - [ ] (If Reverb is enabled) Toggle an item in one window, confirm the other window shows "Lista atualizada" within a second or two.
@@ -115,10 +122,10 @@ The seeder uses `firstOrCreate`, so re-running it on subsequent deploys is safe.
 
 ## Changing the Owner Password
 
-The owner account is seeded with a hardcoded password (`secret`). Change it immediately after the first deploy:
+The owner account is seeded with the password from `OWNER_PASSWORD` (defaults to `secret`). Rotate it immediately after the first login:
 
 ```bash
-php artisan tinker --execute 'App\Models\User::where("email", "sergio@sergiojardim.com")->first()->update(["password" => bcrypt("your-new-password")])'
+php artisan tinker --execute 'App\Models\User::where("email", config("lista.owner.email"))->first()->update(["password" => bcrypt("your-new-password")])'
 ```
 
 ## Option B: Self-hosted VPS + SQLite
@@ -144,6 +151,13 @@ APP_FALLBACK_LOCALE=en
 
 DB_CONNECTION=sqlite
 # DB_DATABASE defaults to database/database.sqlite — leave it commented to use the default
+
+STORES_REGION=pt                 # pt, us, or uk
+CURRENCY_SYMBOL=€                # shown next to every price
+
+OWNER_EMAIL=you@example.com      # seeded owner account identity
+OWNER_NAME="Your Name"
+OWNER_PASSWORD=                  # change this, then rotate immediately after login
 
 BROADCAST_CONNECTION=log
 QUEUE_CONNECTION=database

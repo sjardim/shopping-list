@@ -22,8 +22,6 @@ use Illuminate\Support\Str;
  */
 class ShoppingHistorySeederEn extends Seeder
 {
-    private const OWNER_EMAIL = 'sergio@sergiojardim.com';
-
     private const ITEMS_PER_LIST_MIN = 8;
 
     private const ITEMS_PER_LIST_MAX = 16;
@@ -42,10 +40,11 @@ class ShoppingHistorySeederEn extends Seeder
 
     public function run(): void
     {
-        $owner = User::where('email', self::OWNER_EMAIL)->first();
+        $email = config('lista.owner.email');
+        $owner = User::where('email', $email)->first();
 
         if ($owner === null) {
-            $this->command->warn(sprintf('Owner user %s not found — run DatabaseSeeder first.', self::OWNER_EMAIL));
+            $this->command->warn(sprintf('Owner user %s not found — run DatabaseSeeder first.', $email));
 
             return;
         }

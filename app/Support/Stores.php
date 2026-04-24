@@ -10,7 +10,7 @@ use App\Enums\StoreUs;
 /**
  * Region-aware accessor for the regional Store enums.
  *
- * Picks the active region from config('stores.region'). Other regional enums
+ * Picks the active region from config('lista.stores.region'). Other regional enums
  * stay loaded as a fallback so historical data with foreign slugs still resolves.
  */
 class Stores
@@ -66,7 +66,7 @@ class Stores
     /** @return class-string<Store> */
     private static function activeEnum(): string
     {
-        $region = config('stores.region', 'pt');
+        $region = config('lista.stores.region', 'pt');
 
         return self::REGIONS[$region] ?? StorePt::class;
     }

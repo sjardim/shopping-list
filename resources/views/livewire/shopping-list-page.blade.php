@@ -176,7 +176,7 @@
 
             @if($this->totalSpent > 0)
                 <p class="mt-3 text-sm text-white/80">
-                    <span class="font-semibold text-white">€{{ number_format($this->totalSpent, 2) }}</span>
+                    <span class="font-semibold text-white">{{ config('lista.currency.symbol') }}{{ number_format($this->totalSpent, 2) }}</span>
                     {{ __('app.spent_so_far') }}
                 </p>
             @endif
@@ -324,9 +324,9 @@
                                         aria-label="{{ __('app.set_price', ['name' => $item['name']]) }}"
                                     >
                                         @if($item['price'])
-                                            €{{ number_format((float) $item['price'], 2) }}
+                                            {{ config('lista.currency.symbol') }}{{ number_format((float) $item['price'], 2) }}
                                         @else
-                                            +€
+                                            +{{ config('lista.currency.symbol') }}
                                         @endif
                                     </button>
                                     <button
@@ -383,9 +383,9 @@
                                         aria-label="{{ __('app.set_price', ['name' => $item['name']]) }}"
                                     >
                                         @if($item['price'])
-                                            €{{ number_format((float) $item['price'], 2) }}
+                                            {{ config('lista.currency.symbol') }}{{ number_format((float) $item['price'], 2) }}
                                         @else
-                                            +€
+                                            +{{ config('lista.currency.symbol') }}
                                         @endif
                                     </button>
                                 @endif
@@ -486,11 +486,11 @@
                             <span>{{ $editing->emoji ?: '🛒' }}</span>
                             <span>{{ $editing->name }}</span>
                         </flux:heading>
-                        <flux:subheading>{{ __('app.set_price_prompt', ['name' => $editing->name]) }}</flux:subheading>
+                        <flux:subheading>{{ __('app.set_price_prompt', ['name' => $editing->name, 'currency' => config('lista.currency.symbol')]) }}</flux:subheading>
                     </div>
 
                     <flux:field>
-                        <flux:label>{{ __('app.price_label') }}</flux:label>
+                        <flux:label>{{ __('app.price_label', ['currency' => config('lista.currency.symbol')]) }}</flux:label>
                         <flux:input wire:model="editingPrice" type="text" inputmode="decimal" autofocus placeholder="0.00" />
                     </flux:field>
 
@@ -511,7 +511,7 @@
                                         </span>
                                         <span class="flex items-center gap-3 shrink-0">
                                             <span class="text-xs text-[#6b6055]">{{ $entry->bought_at->format('d M Y') }}</span>
-                                            <span class="font-semibold text-[#2f7d4f]">€{{ number_format($entry->price, 2) }}</span>
+                                            <span class="font-semibold text-[#2f7d4f]">{{ config('lista.currency.symbol') }}{{ number_format($entry->price, 2) }}</span>
                                         </span>
                                     </div>
                                 @endforeach

@@ -6,24 +6,24 @@ use App\Enums\StoreUs;
 use App\Support\Stores;
 
 test('active() returns the cases of the configured region', function () {
-    config()->set('stores.region', 'pt');
+    config()->set('lista.stores.region', 'pt');
     expect(Stores::active())->toBe(StorePt::cases());
 
-    config()->set('stores.region', 'us');
+    config()->set('lista.stores.region', 'us');
     expect(Stores::active())->toBe(StoreUs::cases());
 
-    config()->set('stores.region', 'uk');
+    config()->set('lista.stores.region', 'uk');
     expect(Stores::active())->toBe(StoreUk::cases());
 });
 
 test('tryFrom() resolves slugs from the active region first', function () {
-    config()->set('stores.region', 'us');
+    config()->set('lista.stores.region', 'us');
 
     expect(Stores::tryFrom('walmart'))->toBe(StoreUs::Walmart);
 });
 
 test('tryFrom() falls back to other regions for unknown slugs', function () {
-    config()->set('stores.region', 'us');
+    config()->set('lista.stores.region', 'us');
 
     // continente only exists in StorePt
     expect(Stores::tryFrom('continente'))->toBe(StorePt::Continente);
@@ -37,9 +37,9 @@ test('tryFrom() returns null for unknown slugs', function () {
 
 test('tryFrom() prefers active region for slugs that exist in multiple regions', function () {
     // "lidl" exists in both StorePt and StoreUk
-    config()->set('stores.region', 'pt');
+    config()->set('lista.stores.region', 'pt');
     expect(Stores::tryFrom('lidl'))->toBe(StorePt::Lidl);
 
-    config()->set('stores.region', 'uk');
+    config()->set('lista.stores.region', 'uk');
     expect(Stores::tryFrom('lidl'))->toBe(StoreUk::Lidl);
 });

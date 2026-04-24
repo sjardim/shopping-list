@@ -11,10 +11,8 @@ use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
 uses(LazilyRefreshDatabase::class);
 
-const OWNER_EMAIL = 'sergio@sergiojardim.com';
-
 test('seeds completed lists for the owner when none exist', function () {
-    User::factory()->create(['email' => OWNER_EMAIL]);
+    User::factory()->create(['email' => config('lista.owner.email')]);
     CatalogItem::factory()->count(20)->create();
 
     $this->seed(ShoppingHistorySeeder::class);
@@ -27,7 +25,7 @@ test('seeds completed lists for the owner when none exist', function () {
 });
 
 test('is idempotent when run twice', function () {
-    User::factory()->create(['email' => OWNER_EMAIL]);
+    User::factory()->create(['email' => config('lista.owner.email')]);
     CatalogItem::factory()->count(20)->create();
 
     $this->seed(ShoppingHistorySeeder::class);
@@ -48,7 +46,7 @@ test('does nothing when the owner user is missing', function () {
 });
 
 test('does nothing when the catalog is empty', function () {
-    User::factory()->create(['email' => OWNER_EMAIL]);
+    User::factory()->create(['email' => config('lista.owner.email')]);
 
     $this->seed(ShoppingHistorySeeder::class);
 
@@ -56,7 +54,7 @@ test('does nothing when the catalog is empty', function () {
 });
 
 test('English seeder uses US stores and creates completed lists', function () {
-    User::factory()->create(['email' => OWNER_EMAIL]);
+    User::factory()->create(['email' => config('lista.owner.email')]);
     CatalogItem::factory()->count(20)->create();
 
     $this->seed(ShoppingHistorySeederEn::class);

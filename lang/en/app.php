@@ -38,9 +38,9 @@ return [
     'add_item' => 'Add item',
     'start_voice_input' => 'Dictate item with your voice',
     'set_price' => 'Set price for :name',
-    'set_price_prompt' => 'Price for :name (€):',
+    'set_price_prompt' => 'Price for :name (:currency):',
     'spent_so_far' => 'spent so far',
-    'price_label' => 'Price (€)',
+    'price_label' => 'Price (:currency)',
     'price_history' => 'Recent prices',
     'no_price_history' => 'No previous prices recorded for this item.',
 
