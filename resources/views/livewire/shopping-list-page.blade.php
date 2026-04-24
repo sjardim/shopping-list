@@ -228,6 +228,7 @@
                 class="w-full bg-white/60 rounded-2xl pl-4 pr-12 py-2 text-sm text-[#1a1a1a] placeholder-[#b0a99a] outline-none resize-none border border-[#ede8df] focus:border-[#2f7d4f] transition-colors"
             ></textarea>
             <span
+                x-cloak
                 x-show="saved"
                 x-transition.opacity
                 class="absolute top-2 right-12 inline-flex items-center gap-1 text-[11px] font-semibold text-[#2f7d4f] bg-[#e3ede7] rounded-full px-2 py-0.5 pointer-events-none"
@@ -237,6 +238,7 @@
             </span>
             <button
                 type="button"
+                x-cloak
                 x-show="supported"
                 x-on:click="toggle"
                 x-bind:class="recording ? 'bg-[#e53935] text-white animate-pulse' : 'bg-[#f4f0e8] text-[#1a1a1a] hover:bg-[#ede8df]'"
@@ -404,6 +406,7 @@
             {{-- Catalog suggestions --}}
             @if(count($this->catalogSuggestions) > 0)
                 <div
+                    x-cloak
                     x-show="focused"
                     x-transition:enter="transition ease-out duration-100"
                     x-transition:enter-start="opacity-0 translate-y-1"
@@ -443,6 +446,7 @@
                 />
                 <button
                     type="button"
+                    x-cloak
                     x-show="supported"
                     x-on:click="toggle"
                     x-bind:class="recording ? 'bg-[#e53935] text-white animate-pulse' : 'bg-[#f4f0e8] text-[#1a1a1a] hover:bg-[#ede8df]'"

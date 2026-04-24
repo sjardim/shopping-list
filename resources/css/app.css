@@ -22,6 +22,10 @@
     body {
         background-color: #f1ebd9;
     }
+
+    [x-cloak] {
+        display: none !important;
+    }
 }
 
 @utility list-text {
