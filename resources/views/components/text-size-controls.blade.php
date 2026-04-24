@@ -13,25 +13,25 @@
         >A</button>
     @endforeach
 </div>
-<flux:menu.item icon="text-cursor-input" x-on:click.stop="$store.prefs.toggleListScale()">
+<flux:menu.item icon="text-aa" x-on:click.stop="$store.prefs.toggleListScale()">
     <span class="flex items-center justify-between w-full">
         <span>{{ __('app.larger_list_items') }}</span>
         <span x-show="$store.prefs.listScale > 1" class="text-[#2f7d4f] font-bold">✓</span>
     </span>
 </flux:menu.item>
-<flux:menu.item icon="contrast" x-on:click.stop="$store.prefs.toggleHighContrast()">
+<flux:menu.item icon="circle-half" x-on:click.stop="$store.prefs.toggleHighContrast()">
     <span class="flex items-center justify-between w-full">
         <span>{{ __('app.high_contrast') }}</span>
         <span x-show="$store.prefs.highContrast" class="text-[#2f7d4f] font-bold">✓</span>
     </span>
 </flux:menu.item>
-<flux:menu.item icon="square-mouse-pointer" x-on:click.stop="$store.prefs.toggleBigTargets()">
+<flux:menu.item icon="cursor-click" x-on:click.stop="$store.prefs.toggleBigTargets()">
     <span class="flex items-center justify-between w-full">
         <span>{{ __('app.bigger_buttons') }}</span>
         <span x-show="$store.prefs.bigTargets" class="text-[#2f7d4f] font-bold">✓</span>
     </span>
 </flux:menu.item>
-<flux:menu.item icon="volume-2" x-on:click.stop="$store.prefs.toggleSound()">
+<flux:menu.item icon="speaker-high" x-on:click.stop="$store.prefs.toggleSound()">
     <span class="flex items-center justify-between w-full">
         <span>{{ __('app.sound_effects') }}</span>
         <span x-show="$store.prefs.soundEnabled" class="text-[#2f7d4f] font-bold">✓</span>

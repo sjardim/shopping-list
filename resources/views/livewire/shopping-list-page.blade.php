@@ -18,7 +18,7 @@
                                     ? 'background-color:' . $list->store->color() . '; color:' . ($list->store->hasDarkText() ? '#1a1a1a' : '#ffffff') . '; border-color: transparent'
                                     : ''"
                                 class="rounded-full! font-semibold gap-1"
-                                icon:trailing="chevron-down"
+                                icon:trailing="caret-down"
                             >{{ $list->store?->label() ?? __('app.choose_store') }}</flux:button>
 
                             <flux:menu>
@@ -84,7 +84,7 @@
 
                         {{-- Share list --}}
                         <flux:menu.item
-                            icon="share"
+                            icon="share-network"
                             x-on:click="navigator.clipboard ? navigator.clipboard.writeText('{{ route('list.shared', $shareToken) }}').then(() => $flux.toast({ text: '{{ __('app.link_copied') }}', duration: 8000 })) : $flux.toast({ text: '{{ route('list.shared', $shareToken) }}', duration: 12000 })"
                         >
                             {{ __('app.share_list') }}
@@ -92,7 +92,7 @@
 
                         {{-- Export JSON --}}
                         <flux:menu.item
-                            icon="arrow-down-tray"
+                            icon="download-simple"
                             href="{{ route('list.export', $shareToken) }}"
                         >
                             {{ __('app.export_json') }}
@@ -109,7 +109,7 @@
 
                         {{-- Save as recipe --}}
                         <flux:modal.trigger name="save-recipe">
-                            <flux:menu.item icon="bookmark-square">
+                            <flux:menu.item icon="bookmark-simple">
                                 {{ __('app.save_as_recipe') }}
                             </flux:menu.item>
                         </flux:modal.trigger>
@@ -118,7 +118,7 @@
 
                         {{-- Sign out --}}
                         <flux:menu.item
-                            icon="arrow-right-start-on-rectangle"
+                            icon="sign-out"
                             x-on:click="document.getElementById('logout-form').submit()"
                         >
                             {{ __('app.sign_out') }}
@@ -132,16 +132,13 @@
             @else
                 <flux:dropdown align="end">
                     <flux:button variant="ghost" size="sm" class="mt-1 rounded-full! size-9 p-0! shrink-0 bg-white border border-[#e0d9cc]" aria-label="{{ __('app.open_settings') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 text-[#6b6055]" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.559-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.764-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                        </svg>
+                        <flux:icon name="gear" class="size-4 text-[#6b6055]" />
                     </flux:button>
 
                     <flux:menu class="min-w-52">
                         {{-- Share --}}
                         <flux:menu.item
-                            icon="share"
+                            icon="share-network"
                             x-on:click="navigator.clipboard ? navigator.clipboard.writeText('{{ route('list.shared', $shareToken) }}').then(() => $flux.toast({ text: '{{ __('app.link_copied') }}', duration: 8000 })) : $flux.toast({ text: '{{ route('list.shared', $shareToken) }}', duration: 12000 })"
                         >
                             {{ __('app.share_list') }}
@@ -191,9 +188,7 @@
                         wire:confirm="{{ __('app.finish_trip_confirm') }}"
                         class="flex-1 bg-white text-[#1a1a1a] rounded-full py-2.5 text-sm font-semibold flex items-center justify-center gap-1.5 tap"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                        </svg>
+                        <flux:icon name="check" class="size-4" />
                         {{ __('app.finish_trip') }}
                     </button>
                     <button
@@ -201,9 +196,7 @@
                         wire:confirm="{{ __('app.clear_confirm') }}"
                         class="bg-white/20 text-white rounded-full px-5 py-2.5 text-sm font-semibold flex items-center gap-1.5 hover:bg-white/30 transition-colors tap"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                        </svg>
+                        <flux:icon name="trash" class="size-4" />
                         {{ __('app.clear') }}
                     </button>
                 </div>
@@ -233,9 +226,7 @@
                 aria-label="{{ __('app.start_voice_input') }}"
                 data-voice-toggle
             >
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
-                </svg>
+                <flux:icon name="microphone" class="size-3.5" />
             </button>
         </div>
     </div>
@@ -254,9 +245,7 @@
                         wire:click="undoFinishTrip"
                         class="tap mt-6 inline-flex items-center gap-2 bg-[#1a1a1a] text-white rounded-full px-5 py-2.5 text-sm font-semibold"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
-                        </svg>
+                        <flux:icon name="arrow-bend-up-left" class="size-4" />
                         {{ __('app.undo_finish_trip') }}
                     </button>
                 @endif
@@ -326,9 +315,7 @@
                                         class="shrink-0 size-7 rounded-full flex items-center justify-center text-[#c5bdb0] hover:text-[#e53935] hover:bg-red-50 transition-colors tap"
                                         aria-label="{{ __('app.remove_item', ['name' => $item['name']]) }}"
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                                        </svg>
+                                        <flux:icon name="x" class="size-3.5" />
                                     </button>
                                 @endif
                             </div>
@@ -358,9 +345,7 @@
                                     class="shrink-0 size-6 rounded-lg bg-[#2f7d4f] flex items-center justify-center hover:bg-[#256b41] transition-colors tap"
                                     aria-label="{{ __('app.mark_unbought', ['name' => $item['name']]) }}"
                                 >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                                    </svg>
+                                    <flux:icon name="check" class="size-3.5 text-white" />
                                 </button>
 
                                 {{-- Emoji --}}
@@ -447,18 +432,14 @@
                     aria-label="{{ __('app.start_voice_input') }}"
                     data-voice-toggle
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
-                    </svg>
+                    <flux:icon name="microphone" class="size-4" />
                 </button>
                 <button
                     type="submit"
                     class="shrink-0 size-8 rounded-xl bg-[#1a1a1a] text-white flex items-center justify-center hover:bg-[#333] transition-colors tap"
                     aria-label="{{ __('app.add_item') }}"
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                    </svg>
+                    <flux:icon name="plus" class="size-4" />
                 </button>
             </form>
             @error('quickAddName')

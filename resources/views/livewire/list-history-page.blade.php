@@ -39,7 +39,7 @@
                                     href="{{ route('list.export', $list->share_token) }}"
                                     variant="ghost"
                                     size="sm"
-                                    icon="arrow-down-tray"
+                                    icon="download-simple"
                                     class="tap"
                                     aria-label="{{ __('app.export_list', ['name' => $list->name]) }}"
                                 />
@@ -48,7 +48,7 @@
                                     wire:confirm="{{ __('app.repeat_list_confirm') }}"
                                     variant="ghost"
                                     size="sm"
-                                    icon="arrow-path"
+                                    icon="arrow-clockwise"
                                     class="tap"
                                     aria-label="{{ __('app.repeat_list', ['name' => $list->name]) }}"
                                 />
