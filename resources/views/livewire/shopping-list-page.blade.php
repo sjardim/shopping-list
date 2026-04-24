@@ -180,8 +180,19 @@
         </div>
     @endif
 
+    {{-- Notes for this trip --}}
+    <div class="px-5 mt-3">
+        <textarea
+            wire:model.live.debounce.500ms="notes"
+            wire:change="updateNotes"
+            placeholder="{{ __('app.notes_placeholder') }}"
+            rows="2"
+            class="w-full bg-white/60 rounded-2xl px-4 py-2 text-sm text-[#1a1a1a] placeholder-[#b0a99a] outline-none resize-none border border-[#ede8df] focus:border-[#2f7d4f] transition-colors"
+        ></textarea>
+    </div>
+
     {{-- List body --}}
-    <main class="flex-1 px-5 pb-32 mt-5 space-y-6">
+    <main class="flex-1 px-5 pb-32 mt-3 space-y-6">
 
         @if($total === 0)
             <div class="mt-16 text-center text-[#6b6055] fade-in-up">

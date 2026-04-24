@@ -20,6 +20,7 @@ return [
     'trip_done' => 'Trip done! Fresh list started.',
     'trip_restored' => 'Trip restored.',
     'undo_finish_trip' => 'Undo finish trip',
+    'notes_placeholder' => 'Notes for this trip…',
     'usually' => 'usually :store',
     'link_copied' => 'Link copied!',
     'list_updated' => 'List updated',

@@ -19,6 +19,7 @@ class ShoppingList extends Model
         'user_id',
         'name',
         'store',
+        'notes',
         'status',
         'share_token',
         'completed_at',

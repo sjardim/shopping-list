@@ -35,12 +35,15 @@ class ShoppingListPage extends Component
 
     public string $locale = 'en';
 
+    public string $notes = '';
+
     public function mount(?string $share_token = null): void
     {
         if ($share_token !== null) {
             $this->list = ShoppingList::where('share_token', $share_token)->firstOrFail();
             $this->mode = 'shared';
             $this->shareToken = $share_token;
+            $this->notes = (string) $this->list->notes;
 
             return;
         }
@@ -56,6 +59,7 @@ class ShoppingListPage extends Component
             ?? ShoppingList::create(['user_id' => $userId]);
 
         $this->shareToken = $this->list->share_token;
+        $this->notes = (string) $this->list->notes;
     }
 
     #[Computed]
@@ -239,6 +243,12 @@ class ShoppingListPage extends Component
         $this->dispatch('trip-restored');
 
         Flux::toast(__('app.trip_restored'), duration: self::TOAST_DURATION_MS);
+    }
+
+    public function updateNotes(): void
+    {
+        $this->list->update(['notes' => trim($this->notes) ?: null]);
+        $this->list->refresh();
     }
 
     public function clearList(): void

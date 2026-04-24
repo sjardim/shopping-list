@@ -229,6 +229,18 @@ test('shared mode cannot undo finish trip', function () {
     expect($list->fresh()->status->value)->toBe('completed');
 });
 
+test('owner can save notes on the list', function () {
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->set('notes', 'Buy from butcher counter, not aisle')
+        ->call('updateNotes');
+
+    expect($list->fresh()->notes)->toBe('Buy from butcher counter, not aisle');
+});
+
 test('owner can clear all items from list', function () {
     $user = User::factory()->create();
     $list = ShoppingList::factory()->for($user)->create();

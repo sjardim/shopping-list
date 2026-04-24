@@ -20,6 +20,7 @@ return [
     'trip_done' => 'Compra concluída! Nova lista criada.',
     'trip_restored' => 'Compra restaurada.',
     'undo_finish_trip' => 'Anular fim da compra',
+    'notes_placeholder' => 'Notas para esta compra…',
     'usually' => 'habitualmente :store',
     'link_copied' => 'Link copiado!',
     'list_updated' => 'Lista atualizada',
