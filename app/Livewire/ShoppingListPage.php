@@ -149,6 +149,27 @@ class ShoppingListPage extends Component
         unset($this->itemsByCategory);
     }
 
+    public function setItemPrice(int $id, ?float $price): void
+    {
+        if ($this->mode !== 'owner') {
+            return;
+        }
+
+        $item = $this->list->items()->findOrFail($id);
+        $item->update(['price' => $price !== null && $price > 0 ? $price : null]);
+
+        unset($this->itemsByCategory, $this->totalSpent);
+    }
+
+    #[Computed]
+    public function totalSpent(): float
+    {
+        return (float) $this->list->items()
+            ->where('is_bought', true)
+            ->whereNotNull('price')
+            ->sum('price');
+    }
+
     public function quickAdd(): void
     {
         if ($this->mode !== 'owner') {

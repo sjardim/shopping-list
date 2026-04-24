@@ -22,6 +22,7 @@ class ShoppingListItem extends Model
         'quantity',
         'unit',
         'preferred_store',
+        'price',
         'is_bought',
         'bought_at',
         'sort_order',
@@ -31,6 +32,7 @@ class ShoppingListItem extends Model
     {
         return [
             'quantity' => 'decimal:2',
+            'price' => 'decimal:2',
             'is_bought' => 'boolean',
             'bought_at' => 'datetime',
         ];

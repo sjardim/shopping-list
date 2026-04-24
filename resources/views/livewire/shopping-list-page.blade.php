@@ -170,6 +170,13 @@
                 <div class="h-full bg-white rounded-full transition-all duration-300" style="width: {{ $progress }}%"></div>
             </div>
 
+            @if($this->totalSpent > 0)
+                <p class="mt-3 text-sm text-white/80">
+                    <span class="font-semibold text-white">€{{ number_format($this->totalSpent, 2) }}</span>
+                    {{ __('app.spent_so_far') }}
+                </p>
+            @endif
+
             @if($mode === 'owner')
                 <div class="mt-4 flex gap-2">
                     <button
@@ -325,6 +332,28 @@
                                 </div>
 
                                 <p class="flex-1 font-semibold text-[#9b9080] line-through list-text">{{ $item['name'] }}</p>
+
+                                @if($mode === 'owner')
+                                    <button
+                                        type="button"
+                                        x-on:click="
+                                            const current = '{{ $item['price'] ?? '' }}';
+                                            const raw = window.prompt('{{ __('app.set_price_prompt', ['name' => $item['name']]) }}', current);
+                                            if (raw !== null) {
+                                                const value = raw.replace(',', '.').trim();
+                                                $wire.setItemPrice({{ $item['id'] }}, value === '' ? null : parseFloat(value));
+                                            }
+                                        "
+                                        class="shrink-0 text-xs font-semibold tap rounded-full px-2.5 py-1 transition-colors {{ $item['price'] ? 'bg-[#e3ede7] text-[#2f7d4f]' : 'bg-[#f4f0e8] text-[#9b9080]' }}"
+                                        aria-label="{{ __('app.set_price', ['name' => $item['name']]) }}"
+                                    >
+                                        @if($item['price'])
+                                            €{{ number_format((float) $item['price'], 2) }}
+                                        @else
+                                            +€
+                                        @endif
+                                    </button>
+                                @endif
                             </div>
                         @endforeach
                     </div>

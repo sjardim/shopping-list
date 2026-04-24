@@ -238,6 +238,30 @@ test('owner mode renders the voice-input button', function () {
         ->assertSeeHtml('data-voice-toggle');
 });
 
+test('owner can set a price on a bought item', function () {
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+    $item = ShoppingListItem::factory()->for($list, 'list')->bought()->create();
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('setItemPrice', $item->id, 4.5);
+
+    expect((float) $item->fresh()->price)->toBe(4.5);
+});
+
+test('total spent sums the prices of bought items only', function () {
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+    ShoppingListItem::factory()->for($list, 'list')->bought()->create(['price' => 3.20]);
+    ShoppingListItem::factory()->for($list, 'list')->bought()->create(['price' => 1.80]);
+    ShoppingListItem::factory()->for($list, 'list')->create(['price' => 99.99, 'is_bought' => false]);
+
+    $component = Livewire::actingAs($user)->test(ShoppingListPage::class);
+
+    expect($component->instance()->totalSpent)->toBe(5.0);
+});
+
 test('owner can save notes on the list', function () {
     $user = User::factory()->create();
     $list = ShoppingList::factory()->for($user)->create();
