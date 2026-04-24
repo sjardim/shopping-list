@@ -321,7 +321,7 @@
                 </button>
             </form>
             @error('quickAddName')
-                <p class="text-xs text-red-500 mt-1 px-1">{{ $message }}</p>
+                <p role="alert" class="text-xs text-red-500 mt-1 px-1">{{ $message }}</p>
             @enderror
         </div>
     @endif
