@@ -9,14 +9,13 @@ The app supports two deployment topologies. Pick the one that fits.
 
 Real-time sync (the "Lista atualizada" notification when the other user makes changes) requires Reverb. Without it, the app works fully for a single user or for shared use where each person manually refreshes. You can deploy without Reverb and add it later.
 
-A note on Flux Pro: the project pulls in `livewire/flux-pro` via composer for historical reasons, but no Pro-only components are in use in any view. If you want to drop the Pro requirement, remove `livewire/flux-pro` from `composer.json`'s `require` block and the `composer.fluxui.dev` repository entry. The `auth.json` step below is then unnecessary.
+The app uses only the Free edition of Flux UI, so there is no proprietary composer repository to authenticate against — `composer install` works for any clone of the repo.
 
 ## Option A: Laravel Cloud + PostgreSQL
 
 ### Prerequisites
 
 - A Laravel Cloud account
-- The Flux Pro license key (stored in `auth.json`), or remove Flux Pro per the note above
 - Git repository connected to Laravel Cloud
 
 ## Environment Variables
@@ -59,23 +58,6 @@ CACHE_STORE=database
 # VITE_REVERB_PORT="${REVERB_PORT}"
 # VITE_REVERB_SCHEME="${REVERB_SCHEME}"
 ```
-
-### Flux Pro (Composer auth)
-
-Flux Pro requires an authenticated Composer repository. Add your license token to `auth.json` (already in the repo, excluded from git) before building:
-
-```json
-{
-    "http-basic": {
-        "composer.fluxui.dev": {
-            "username": "your@email.com",
-            "password": "your-flux-license-key"
-        }
-    }
-}
-```
-
-On Laravel Cloud, set this via the **Composer auth** setting in the deployment configuration.
 
 ## Laravel Cloud Setup
 

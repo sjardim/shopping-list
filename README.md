@@ -72,7 +72,7 @@ System-level support:
 
 ## Flux UI components used
 
-Every component this app uses is in the **Free edition** of Flux UI. The repo currently pulls in Flux Pro via composer for historical reasons, but no Pro-only components are in use, so a future commit can drop the Pro requirement without changing any views.
+Every component this app uses is in the **Free edition** of Flux UI. `composer install` works for any clone of the repo without a Flux Pro license.
 
 | Component | Variant(s) used |
 |---|---|
