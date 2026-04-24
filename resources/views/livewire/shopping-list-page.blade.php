@@ -188,7 +188,7 @@
                                 {{-- Square checkbox --}}
                                 <button
                                     wire:click="toggleItem({{ $item['id'] }})"
-                                    x-on:click="$el.classList.remove('check-pulse'); requestAnimationFrame(() => $el.classList.add('check-pulse'))"
+                                    x-on:click="navigator.vibrate?.(8); $el.classList.remove('check-pulse'); requestAnimationFrame(() => $el.classList.add('check-pulse'))"
                                     class="shrink-0 size-6 rounded-lg border-2 border-[#d5cdbc] hover:border-[#2f7d4f] transition-colors tap"
                                     aria-label="{{ __('app.mark_bought', ['name' => $item['name']]) }}"
                                 ></button>
@@ -245,7 +245,7 @@
                                 {{-- Filled checkbox --}}
                                 <button
                                     wire:click="toggleItem({{ $item['id'] }})"
-                                    x-on:click="$el.classList.remove('check-pulse'); requestAnimationFrame(() => $el.classList.add('check-pulse'))"
+                                    x-on:click="navigator.vibrate?.(8); $el.classList.remove('check-pulse'); requestAnimationFrame(() => $el.classList.add('check-pulse'))"
                                     class="shrink-0 size-6 rounded-lg bg-[#2f7d4f] flex items-center justify-center hover:bg-[#256b41] transition-colors tap"
                                     aria-label="{{ __('app.mark_unbought', ['name' => $item['name']]) }}"
                                 >
