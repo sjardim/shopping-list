@@ -55,7 +55,16 @@
     min-height: 2.75rem;
 }
 
-/* Toast: span the full mobile viewport with safe gutters; cap at 28rem on tablet+. */
+/* Toast: strip the browser's default popover chrome and span the full mobile viewport. */
+ui-toast-group,
+ui-toast {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+}
+
 [data-flux-toast-dialog] {
     max-width: calc(100vw - 1.5rem);
     width: calc(100vw - 1.5rem);
