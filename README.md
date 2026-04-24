@@ -96,13 +96,22 @@ npm install
 cp .env.example .env
 php artisan key:generate
 touch database/database.sqlite     # default SQLite path
-php artisan migrate --seed
+php artisan lista:install          # interactive: language, region, currency, owner
 composer run dev
 ```
 
-Visit `http://shopping-list.test` (Laravel Herd) or `http://127.0.0.1:8000` (artisan serve) and log in with `sergio@sergiojardim.com` / `secret`. Change the password immediately via tinker (see [DEPLOYMENT.md](DEPLOYMENT.md#changing-the-owner-password)).
+`lista:install` walks you through:
+
+- **Language** — English / English (UK) / Português (Portugal) / Português (Brasil)
+- **Store region** — paired with a sensible default for the chosen language
+- **Currency symbol** — paired with a sensible default for the chosen region
+- **Owner email, name, and password** — the single seeded account
+
+It writes the chosen values to `.env`, runs the migrations, and seeds the matching catalog + history seeders. Idempotent and safe to re-run.
 
 `composer run dev` starts Vite, Reverb, the queue worker, and Pail in parallel.
+
+If you'd rather skip the interactive setup, set the env vars manually and run `php artisan migrate --seed` — `DatabaseSeeder` calls `OwnerUserSeeder` plus a hardcoded catalog/history pair (defaults to PT, edit the file to switch).
 
 ### English seed data (US groceries + stores)
 
