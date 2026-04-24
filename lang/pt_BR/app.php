@@ -1,0 +1,121 @@
+<?php
+
+return [
+    // Shopping List page
+    'shopping_list' => 'Lista de compras',
+    'at' => 'NO',
+    'choose_store' => 'Escolher loja',
+    'no_store' => 'Sem loja',
+    'shopping_now' => 'Fazendo compras',
+    'remaining' => 'de :total a comprar',
+    'finish_trip' => 'Finalizar',
+    'clear' => 'Limpar',
+    'finish_trip_confirm' => 'Finalizar compra e arquivar a lista?',
+    'clear_confirm' => 'Limpar todos os itens da lista?',
+    'remove_confirm' => 'Remover :name?',
+    'list_empty' => 'A lista está vazia',
+    'tap_to_add' => 'Toque em + para adicionar itens',
+    'in_cart' => 'No carrinho',
+    'add_item_placeholder' => 'Adicionar item…',
+    'trip_done' => 'Compra finalizada! Nova lista criada.',
+    'trip_restored' => 'Compra restaurada.',
+    'undo_finish_trip' => 'Desfazer finalização',
+    'notes_placeholder' => 'Anotações para esta compra…',
+    'saved_badge' => 'Salvo',
+    'export_json' => 'Exportar como JSON',
+    'export_list' => 'Exportar :name como JSON',
+    'print_list' => 'Imprimir',
+    'print_hint' => 'Se a janela de impressão não abriu, use o menu de impressão do navegador.',
+    'usually' => 'geralmente :store',
+    'link_copied' => 'Link copiado!',
+    'list_updated' => 'Lista atualizada',
+
+    // Accessibility labels
+    'open_menu' => 'Abrir menu',
+    'mark_bought' => 'Marcar :name como comprado',
+    'mark_unbought' => 'Marcar :name como não comprado',
+    'remove_item' => 'Remover :name',
+    'add_item' => 'Adicionar item',
+    'start_voice_input' => 'Ditar item por voz',
+    'set_price' => 'Definir preço de :name',
+    'set_price_prompt' => 'Preço de :name (:currency):',
+    'spent_so_far' => 'gastos até agora',
+    'price_label' => 'Preço (:currency)',
+    'price_history' => 'Preços recentes',
+    'no_price_history' => 'Nenhum preço anterior registrado para este item.',
+
+    // Recipes
+    'save_as_recipe' => 'Salvar como receita',
+    'save_as_recipe_hint' => 'Reutilize esta lista depois na aba Cozinhar algo.',
+    'recipe_name' => 'Nome da receita',
+    'recipe_emoji' => 'Emoji',
+    'recipe_saved' => 'Receita salva.',
+    'your_recipe' => 'sua receita',
+    'delete_recipe' => 'Excluir :name',
+    'delete_recipe_confirm' => 'Excluir esta receita?',
+    'cancel' => 'Cancelar',
+    'save' => 'Salvar',
+    'add_bundle' => 'Adicionar ingredientes para :name',
+    'bundle_added' => ':name adicionado à lista!',
+    'repeat_list' => 'Restaurar :name para a lista ativa',
+    'delete_list' => 'Excluir :name do histórico',
+    'open_settings' => 'Abrir configurações',
+
+    // Text-size controls
+    'text_size' => 'Tamanho do texto',
+    'text_size_option' => 'Escala de texto :scale',
+    'larger_list_items' => 'Itens da lista maiores',
+    'high_contrast' => 'Alto contraste',
+    'bigger_buttons' => 'Botões maiores',
+    'sound_effects' => 'Efeitos sonoros',
+
+    // Profile menu
+    'language' => 'Idioma',
+    'share_list' => 'Compartilhar lista',
+    'sign_out' => 'Sair',
+
+    // Add Items page
+    'add_items_title' => 'Adicionar itens',
+    'search_placeholder' => 'Buscar itens…',
+    'no_results' => 'Nenhum item encontrado para ":query"',
+    'add_count_to_list' => 'Adicionar :count à lista',
+    'done' => 'Concluído',
+    'suggested' => 'Sugeridos',
+    'cook_something' => 'Cozinhar algo',
+    'ingredients' => ':count ingredientes',
+
+    // History page
+    'history_title' => 'Histórico',
+    'no_past_lists' => 'Sem listas anteriores',
+    'history_empty_hint' => 'Finalize uma compra para ver o histórico aqui',
+    'skipped' => ':count pulados',
+    'more' => '+:count mais',
+    'items' => ':count itens',
+    'delete_list_confirm' => 'Excluir esta lista do histórico?',
+    'repeat_list_confirm' => 'Adicionar estes itens à sua lista ativa?',
+    'repeat_summary' => 'Adicionados :added, restaurados :restored, ignorados :skipped.',
+
+    // Bottom nav
+    'nav_list' => 'Lista',
+    'nav_add' => 'Adicionar',
+    'nav_history' => 'Histórico',
+
+    // Auth
+    'sign_in_heading' => 'Entre na sua lista de compras',
+    'email' => 'E-mail',
+    'password' => 'Senha',
+    'remember_me' => 'Lembrar-me',
+    'sign_in' => 'Entrar',
+
+    // Categories
+    'category_fruit' => 'Frutas',
+    'category_vegetables' => 'Legumes e Verduras',
+    'category_dairy' => 'Laticínios e Ovos',
+    'category_meat' => 'Carnes',
+    'category_fish' => 'Peixes e Frutos do Mar',
+    'category_bakery' => 'Padaria',
+    'category_beverages' => 'Bebidas',
+    'category_pantry' => 'Mercearia',
+    'category_cleaning' => 'Limpeza',
+    'category_personal' => 'Higiene Pessoal',
+];

@@ -115,8 +115,9 @@ Stores are split into regional enums under `app/Enums/`:
 - `StorePt` — Lidl, Aldi, Continente, Mercadona
 - `StoreUs` — Walmart, Target, Trader Joe's, Whole Foods
 - `StoreUk` — Tesco, Sainsbury's, Asda, Morrisons, Waitrose, Lidl, Aldi
+- `StoreBr` — Carrefour, Pão de Açúcar, Extra, Assaí, Atacadão
 
-Set the active region via the `STORES_REGION` env var (`pt`, `us`, or `uk`):
+Set the active region via the `STORES_REGION` env var (`pt`, `us`, `uk`, or `br`):
 
 ```env
 STORES_REGION=us
@@ -126,14 +127,30 @@ The store picker only shows the active region's options, but slugs from other re
 
 ### Switching the seeded data
 
-In `database/seeders/DatabaseSeeder.php`, comment out the Portuguese seeders and uncomment the English ones:
+### Switching the seeded data
+
+Three localised catalog + history seeder pairs ship with the project:
+
+| Locale | Catalog seeder | History seeder | `STORES_REGION` | `APP_LOCALE` | `CURRENCY_SYMBOL` |
+|---|---|---|---|---|---|
+| Portuguese (Portugal) | `CatalogItemSeeder` | `ShoppingHistorySeeder` | `pt` | `pt_PT` | `€` |
+| English (US) | `CatalogItemSeederEn` | `ShoppingHistorySeederEn` | `us` | `en` | `$` |
+| Portuguese (Brazil) | `CatalogItemSeederBr` | `ShoppingHistorySeederBr` | `br` | `pt_BR` | `R$` |
+
+For UK, use either the EN catalog or write a `CatalogItemSeederGb` of your own — the regional enum + lang file already exist.
+
+In `database/seeders/DatabaseSeeder.php`, comment out the seeders you don't want and uncomment the pair you do:
+
+For example, the Brazilian configuration:
 
 ```php
 $this->call([
     // CatalogItemSeeder::class,
-    CatalogItemSeederEn::class,
+    // CatalogItemSeederEn::class,
+    CatalogItemSeederBr::class,
     // ShoppingHistorySeeder::class,
-    ShoppingHistorySeederEn::class,
+    // ShoppingHistorySeederEn::class,
+    ShoppingHistorySeederBr::class,
 ]);
 ```
 
@@ -143,14 +160,9 @@ Then:
 php artisan migrate:fresh --seed
 ```
 
-This gives you:
+Each catalog seeder ships ~80 grocery items grouped by the same ten categories with preferred-store hints. Each history seeder creates 11 fake completed trips rotating across the region's stores, with locale-appropriate ad-hoc items.
 
-- ~80 common US grocery items in `CatalogItemSeederEn`, grouped by the same ten categories, with preferred-store hints pointing at Walmart, Target, Trader Joe's, Whole Foods, plus Lidl and Aldi where they make sense.
-- 11 fake completed trips in `ShoppingHistorySeederEn`, rotating across the same four US stores, with English ad-hoc items ("Razor blades", "AA batteries", "Birthday card", "Flowers", "Bag of ice").
-
-The `Store` enum carries both regions side by side, so the picker shows the four PT stores and the four US stores together. Adopters can prune the enum to whichever set they want.
-
-Meal bundles in `app/Support/MealBundles.php` are locale-aware: when `APP_LOCALE=en`, the "Cook something" tab serves English bundle names ("Roast Chicken", "Spaghetti Bolognese", "Mixed Salad", etc.) with ingredients that match `CatalogItemSeederEn`. Switch the locale and the bundles switch automatically.
+Meal bundles in `app/Support/MealBundles.php` are locale-aware: when `APP_LOCALE=en` you get "Roast Chicken" / "Spaghetti Bolognese" / "Mixed Salad" with English ingredient names; when `APP_LOCALE=pt_BR` you get "Frango Assado" / "Macarrão à Bolonhesa" / "Feijoada Brasileira" with Brazilian ingredient names; otherwise you get the European Portuguese set. Bundle keys are stable so existing user-saved recipes keep working across locale switches.
 
 ## Tests
 

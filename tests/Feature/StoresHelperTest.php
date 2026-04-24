@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\StoreBr;
 use App\Enums\StorePt;
 use App\Enums\StoreUk;
 use App\Enums\StoreUs;
@@ -14,6 +15,17 @@ test('active() returns the cases of the configured region', function () {
 
     config()->set('lista.stores.region', 'uk');
     expect(Stores::active())->toBe(StoreUk::cases());
+
+    config()->set('lista.stores.region', 'br');
+    expect(Stores::active())->toBe(StoreBr::cases());
+});
+
+test('br region resolves Brazilian store slugs', function () {
+    config()->set('lista.stores.region', 'br');
+
+    expect(Stores::tryFrom('carrefour'))->toBe(StoreBr::Carrefour);
+    expect(Stores::tryFrom('pao_de_acucar'))->toBe(StoreBr::PaoDeAcucar);
+    expect(Stores::tryFrom('atacadao'))->toBe(StoreBr::Atacadao);
 });
 
 test('tryFrom() resolves slugs from the active region first', function () {

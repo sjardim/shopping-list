@@ -149,6 +149,20 @@ test('applying a meal bundle does not duplicate items already on the list', func
     expect($list->fresh()->items()->where('catalog_item_id', $bacalhau->id)->count())->toBe(1);
 });
 
+test('Brazilian Portuguese locale serves brazilian meal bundles', function () {
+    app()->setLocale('pt_BR');
+
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+    $picanha = CatalogItem::factory()->create(['name' => 'Picanha']);
+
+    Livewire::actingAs($user)
+        ->test(AddItemsPage::class)
+        ->call('applyMealBundle', 'churrasco');
+
+    expect($list->fresh()->items()->where('catalog_item_id', $picanha->id)->exists())->toBeTrue();
+});
+
 test('English locale serves english meal bundles with english item names', function () {
     app()->setLocale('en');
 

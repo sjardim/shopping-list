@@ -70,7 +70,10 @@
                             <p class="text-[10px] font-bold uppercase tracking-widest text-[#6b6055] mb-1">{{ __('app.language') }}</p>
                         </div>
                         <flux:menu.item wire:click="switchLocale('pt_PT')" icon="{{ $locale === 'pt_PT' ? 'check' : '' }}">
-                            Português
+                            Português (Portugal)
+                        </flux:menu.item>
+                        <flux:menu.item wire:click="switchLocale('pt_BR')" icon="{{ $locale === 'pt_BR' ? 'check' : '' }}">
+                            Português (Brasil)
                         </flux:menu.item>
                         <flux:menu.item wire:click="switchLocale('en')" icon="{{ $locale === 'en' ? 'check' : '' }}">
                             English
