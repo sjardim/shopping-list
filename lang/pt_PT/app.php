@@ -11,6 +11,7 @@ return [
     'finish_trip' => 'Terminar',
     'clear' => 'Limpar',
     'finish_trip_confirm' => 'Terminar compra e arquivar a lista?',
+    'finish_trip_no_store_confirm' => 'Sem loja selecionada — terminar mesmo assim? Escolher uma loja primeiro permite ao catálogo aprender as suas preferências e alimenta o histórico de preços.',
     'clear_confirm' => 'Limpar todos os itens da lista?',
     'remove_confirm' => 'Remover :name?',
     'list_empty' => 'A lista está vazia',

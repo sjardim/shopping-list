@@ -191,7 +191,7 @@
                 <div class="mt-4 flex gap-2">
                     <button
                         wire:click="finishTrip"
-                        wire:confirm="{{ __('app.finish_trip_confirm') }}"
+                        wire:confirm="{{ $list->store ? __('app.finish_trip_confirm') : __('app.finish_trip_no_store_confirm') }}"
                         class="flex-1 bg-white text-[#1a1a1a] rounded-full py-2.5 text-sm font-semibold flex items-center justify-center gap-1.5 tap"
                     >
                         <flux:icon name="check" class="size-4" />

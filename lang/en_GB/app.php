@@ -11,6 +11,7 @@ return [
     'finish_trip' => 'Finish trip',
     'clear' => 'Clear',
     'finish_trip_confirm' => 'Finish trip and archive this list?',
+    'finish_trip_no_store_confirm' => 'No shop selected — finish trip anyway? Setting a shop first lets the catalogue learn your preferred-shop hints and feeds the price history.',
     'clear_confirm' => 'Clear all items from the list?',
     'remove_confirm' => 'Remove :name?',
     'list_empty' => 'Your list is empty',
