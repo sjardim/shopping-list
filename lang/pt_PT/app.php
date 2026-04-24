@@ -39,6 +39,9 @@ return [
     'set_price' => 'Definir preço para :name',
     'set_price_prompt' => 'Preço para :name (€):',
     'spent_so_far' => 'gasto até agora',
+    'price_label' => 'Preço (€)',
+    'price_history' => 'Preços recentes',
+    'no_price_history' => 'Sem preços anteriores registados para este item.',
 
     // Recipes
     'save_as_recipe' => 'Guardar como receita',

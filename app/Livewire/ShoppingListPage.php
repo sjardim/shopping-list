@@ -10,7 +10,10 @@ use App\Events\ItemRemoved;
 use App\Models\CatalogItem;
 use App\Models\MealRecipe;
 use App\Models\ShoppingList;
+use App\Models\ShoppingListItem;
 use Flux\Flux;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -41,6 +44,10 @@ class ShoppingListPage extends Component
     public string $newRecipeName = '';
 
     public string $newRecipeEmoji = '🍽️';
+
+    public ?int $editingItemId = null;
+
+    public string $editingPrice = '';
 
     public function mount(?string $share_token = null): void
     {
@@ -164,6 +171,84 @@ class ShoppingListPage extends Component
         $item->update(['price' => $price !== null && $price > 0 ? $price : null]);
 
         unset($this->itemsByCategory, $this->totalSpent);
+    }
+
+    public function openPriceEditor(int $id): void
+    {
+        if ($this->mode !== 'owner') {
+            return;
+        }
+
+        $item = $this->list->items()->findOrFail($id);
+
+        $this->editingItemId = $item->id;
+        $this->editingPrice = $item->price !== null ? (string) $item->price : '';
+
+        unset($this->editingItem, $this->priceHistory);
+
+        Flux::modal('edit-price')->show();
+    }
+
+    public function submitPrice(): void
+    {
+        if ($this->mode !== 'owner' || $this->editingItemId === null) {
+            return;
+        }
+
+        $normalised = trim(str_replace(',', '.', $this->editingPrice));
+        $price = $normalised === '' ? null : (float) $normalised;
+
+        $this->setItemPrice($this->editingItemId, $price);
+
+        $this->reset('editingItemId', 'editingPrice');
+
+        Flux::modal('edit-price')->close();
+    }
+
+    #[Computed]
+    public function editingItem(): ?ShoppingListItem
+    {
+        if ($this->editingItemId === null) {
+            return null;
+        }
+
+        return $this->list->items()->find($this->editingItemId);
+    }
+
+    /**
+     * @return Collection<int, object{store: ?string, price: float, bought_at: Carbon, list_name: string}>
+     */
+    #[Computed]
+    public function priceHistory(): Collection
+    {
+        $item = $this->editingItem;
+
+        if ($item === null || $item->catalog_item_id === null) {
+            return collect();
+        }
+
+        return ShoppingListItem::query()
+            ->select([
+                'shopping_list_items.price',
+                'shopping_list_items.bought_at',
+                'shopping_lists.store',
+                'shopping_lists.name as list_name',
+            ])
+            ->join('shopping_lists', 'shopping_lists.id', '=', 'shopping_list_items.shopping_list_id')
+            ->where('shopping_lists.user_id', Auth::id())
+            ->where('shopping_list_items.catalog_item_id', $item->catalog_item_id)
+            ->where('shopping_list_items.id', '!=', $item->id)
+            ->whereNotNull('shopping_list_items.price')
+            ->where('shopping_list_items.is_bought', true)
+            ->orderByDesc('shopping_list_items.bought_at')
+            ->limit(10)
+            ->get()
+            ->map(fn ($row) => (object) [
+                'store' => $row->store,
+                'price' => (float) $row->price,
+                'bought_at' => Carbon::parse($row->bought_at),
+                'list_name' => $row->list_name,
+            ]);
     }
 
     #[Computed]

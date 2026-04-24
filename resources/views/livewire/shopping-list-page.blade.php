@@ -292,14 +292,7 @@
                                 @if($mode === 'owner')
                                     <button
                                         type="button"
-                                        x-on:click="
-                                            const current = '{{ $item['price'] ?? '' }}';
-                                            const raw = window.prompt('{{ __('app.set_price_prompt', ['name' => $item['name']]) }}', current);
-                                            if (raw !== null) {
-                                                const value = raw.replace(',', '.').trim();
-                                                $wire.setItemPrice({{ $item['id'] }}, value === '' ? null : parseFloat(value));
-                                            }
-                                        "
+                                        wire:click="openPriceEditor({{ $item['id'] }})"
                                         class="shrink-0 text-xs font-semibold tap rounded-full px-2.5 py-1 transition-colors {{ $item['price'] ? 'bg-[#e3ede7] text-[#2f7d4f]' : 'bg-[#f4f0e8] text-[#9b9080]' }}"
                                         aria-label="{{ __('app.set_price', ['name' => $item['name']]) }}"
                                     >
@@ -362,14 +355,7 @@
                                 @if($mode === 'owner')
                                     <button
                                         type="button"
-                                        x-on:click="
-                                            const current = '{{ $item['price'] ?? '' }}';
-                                            const raw = window.prompt('{{ __('app.set_price_prompt', ['name' => $item['name']]) }}', current);
-                                            if (raw !== null) {
-                                                const value = raw.replace(',', '.').trim();
-                                                $wire.setItemPrice({{ $item['id'] }}, value === '' ? null : parseFloat(value));
-                                            }
-                                        "
+                                        wire:click="openPriceEditor({{ $item['id'] }})"
                                         class="shrink-0 text-xs font-semibold tap rounded-full px-2.5 py-1 transition-colors {{ $item['price'] ? 'bg-[#e3ede7] text-[#2f7d4f]' : 'bg-[#f4f0e8] text-[#9b9080]' }}"
                                         aria-label="{{ __('app.set_price', ['name' => $item['name']]) }}"
                                     >
@@ -466,6 +452,63 @@
     {{-- Bottom nav (owner only) --}}
     @if($mode === 'owner')
         <x-bottom-nav active-tab="list" :item-count="$pending ?? 0" />
+    @endif
+
+    {{-- Price editor with history (owner only) --}}
+    @if($mode === 'owner')
+        <flux:modal name="edit-price" class="md:w-96">
+            @php $editing = $this->editingItem; @endphp
+            @if($editing)
+                <form wire:submit="submitPrice" class="space-y-5">
+                    <div>
+                        <flux:heading size="lg" class="flex items-center gap-2">
+                            <span>{{ $editing->emoji ?: '🛒' }}</span>
+                            <span>{{ $editing->name }}</span>
+                        </flux:heading>
+                        <flux:subheading>{{ __('app.set_price_prompt', ['name' => $editing->name]) }}</flux:subheading>
+                    </div>
+
+                    <flux:field>
+                        <flux:label>{{ __('app.price_label') }}</flux:label>
+                        <flux:input wire:model="editingPrice" type="text" inputmode="decimal" autofocus placeholder="0.00" />
+                    </flux:field>
+
+                    @if($this->priceHistory->isNotEmpty())
+                        <div class="space-y-2">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-[#6b6055]">{{ __('app.price_history') }}</p>
+                            <div class="rounded-xl border border-[#ede8df] divide-y divide-[#f4f0e8] overflow-hidden">
+                                @foreach($this->priceHistory as $entry)
+                                    @php $storeEnum = $entry->store ? \App\Enums\Store::tryFrom($entry->store) : null; @endphp
+                                    <div class="flex items-center justify-between gap-3 px-3 py-2 text-sm">
+                                        <span class="flex items-center gap-2 min-w-0">
+                                            @if($storeEnum)
+                                                <x-store-badge :store="$storeEnum" />
+                                            @else
+                                                <span class="size-5"></span>
+                                            @endif
+                                            <span class="text-[#1a1a1a] truncate">{{ $storeEnum?->label() ?? __('app.no_store') }}</span>
+                                        </span>
+                                        <span class="flex items-center gap-3 shrink-0">
+                                            <span class="text-xs text-[#6b6055]">{{ $entry->bought_at->format('d M Y') }}</span>
+                                            <span class="font-semibold text-[#2f7d4f]">€{{ number_format($entry->price, 2) }}</span>
+                                        </span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @elseif($editing->catalog_item_id !== null)
+                        <p class="text-xs text-[#6b6055] italic">{{ __('app.no_price_history') }}</p>
+                    @endif
+
+                    <div class="flex justify-end gap-2">
+                        <flux:modal.close>
+                            <flux:button variant="ghost">{{ __('app.cancel') }}</flux:button>
+                        </flux:modal.close>
+                        <flux:button type="submit" variant="primary">{{ __('app.save') }}</flux:button>
+                    </div>
+                </form>
+            @endif
+        </flux:modal>
     @endif
 
     {{-- Save as recipe modal (owner only) --}}

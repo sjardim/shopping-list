@@ -239,6 +239,75 @@ test('owner mode renders the voice-input button', function () {
         ->assertSeeHtml('data-voice-toggle');
 });
 
+test('opening the price editor loads current price into editing state', function () {
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+    $item = ShoppingListItem::factory()->for($list, 'list')->create(['price' => 2.45]);
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('openPriceEditor', $item->id)
+        ->assertSet('editingItemId', $item->id)
+        ->assertSet('editingPrice', '2.45');
+});
+
+test('submitting the price editor persists the value and resets state', function () {
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+    $item = ShoppingListItem::factory()->for($list, 'list')->create(['price' => null]);
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('openPriceEditor', $item->id)
+        ->set('editingPrice', '3,75')
+        ->call('submitPrice')
+        ->assertSet('editingItemId', null);
+
+    expect((float) $item->fresh()->price)->toBe(3.75);
+});
+
+test('price history returns prior bought entries for the same catalog item across stores', function () {
+    $user = User::factory()->create();
+    $catalogItem = CatalogItem::factory()->create();
+
+    $oldList = ShoppingList::factory()->for($user)->completed()->create([
+        'store' => 'lidl',
+        'completed_at' => now()->subDays(10),
+    ]);
+    ShoppingListItem::factory()->for($oldList, 'list')->bought()->create([
+        'catalog_item_id' => $catalogItem->id,
+        'price' => 2.50,
+        'bought_at' => now()->subDays(10),
+    ]);
+
+    $recentList = ShoppingList::factory()->for($user)->completed()->create([
+        'store' => 'continente',
+        'completed_at' => now()->subDays(2),
+    ]);
+    ShoppingListItem::factory()->for($recentList, 'list')->bought()->create([
+        'catalog_item_id' => $catalogItem->id,
+        'price' => 2.95,
+        'bought_at' => now()->subDays(2),
+    ]);
+
+    $activeList = ShoppingList::factory()->for($user)->create();
+    $current = ShoppingListItem::factory()->for($activeList, 'list')->create([
+        'catalog_item_id' => $catalogItem->id,
+        'price' => null,
+    ]);
+
+    $component = Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('openPriceEditor', $current->id);
+
+    $history = $component->instance()->priceHistory;
+
+    expect($history)->toHaveCount(2);
+    expect($history->first()->store)->toBe('continente');
+    expect($history->first()->price)->toBe(2.95);
+    expect($history->last()->store)->toBe('lidl');
+});
+
 test('owner can set a price on a bought item', function () {
     $user = User::factory()->create();
     $list = ShoppingList::factory()->for($user)->create();
