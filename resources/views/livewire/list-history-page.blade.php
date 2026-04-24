@@ -1,7 +1,7 @@
 <div class="flex flex-col min-h-screen">
 
     {{-- Header --}}
-    <header class="sticky top-0 z-40 bg-[#eae2cf]/95 backdrop-blur-sm px-4 pt-10 pb-3">
+    <header class="sticky top-0 z-40 bg-[#f1ebd9]/95 backdrop-blur-sm px-4 pt-10 pb-3">
         <h1 class="heading-serif text-xl font-semibold text-[#1a1a1a]">{{ __('app.history_title') }}</h1>
     </header>
 

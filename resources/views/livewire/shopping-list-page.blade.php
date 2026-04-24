@@ -216,7 +216,7 @@
                             <div
                                 wire:key="item-{{ $item['id'] }}"
                                 x-data="{ sliding: false }"
-                                x-bind:class="sliding && '-translate-x-full opacity-0 bg-stone-50'"
+                                x-bind:class="sliding && '-translate-x-full opacity-0 bg-stone-100'"
                                 class="flex items-center gap-3 px-4 py-3.5 fade-in-up transition-all duration-200 ease-out"
                             >
                                 {{-- Square checkbox --}}
@@ -277,7 +277,7 @@
                             <div
                                 wire:key="bought-{{ $item['id'] }}"
                                 x-data="{ sliding: false }"
-                                x-bind:class="sliding && '-translate-x-full opacity-0 bg-stone-50'"
+                                x-bind:class="sliding && '-translate-x-full opacity-0 bg-stone-100'"
                                 class="flex items-center gap-3 px-4 py-3.5 fade-in-up transition-all duration-200 ease-out"
                             >
                                 {{-- Filled checkbox --}}
