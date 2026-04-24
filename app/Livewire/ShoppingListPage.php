@@ -437,7 +437,7 @@ class ShoppingListPage extends Component
         App::setLocale($locale);
         $this->locale = $locale;
 
-        $this->redirect(route('home'));
+        $this->redirect(route('home'), navigate: false);
     }
 
     public function updateStore(string $store): void
