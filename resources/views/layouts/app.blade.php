@@ -24,6 +24,9 @@
                 if (prefs.highContrast) {
                     root.setAttribute('data-contrast', 'high');
                 }
+                if (prefs.bigTargets) {
+                    root.setAttribute('data-targets', 'big');
+                }
             } catch (e) {}
         })();
 
@@ -32,12 +35,14 @@
                 uiScale: 1,
                 listScale: 1,
                 highContrast: false,
+                bigTargets: false,
                 init: function () {
                     try {
                         var saved = JSON.parse(localStorage.getItem('lista-prefs') || '{}');
                         this.uiScale = saved.uiScale || 1;
                         this.listScale = saved.listScale || 1;
                         this.highContrast = !!saved.highContrast;
+                        this.bigTargets = !!saved.bigTargets;
                     } catch (e) {}
                 },
                 setUiScale: function (value) {
@@ -52,6 +57,10 @@
                     this.highContrast = !this.highContrast;
                     this._apply();
                 },
+                toggleBigTargets: function () {
+                    this.bigTargets = !this.bigTargets;
+                    this._apply();
+                },
                 _apply: function () {
                     var root = document.documentElement;
                     root.style.setProperty('--ui-scale', this.uiScale);
@@ -61,11 +70,17 @@
                     } else {
                         root.removeAttribute('data-contrast');
                     }
+                    if (this.bigTargets) {
+                        root.setAttribute('data-targets', 'big');
+                    } else {
+                        root.removeAttribute('data-targets');
+                    }
                     try {
                         localStorage.setItem('lista-prefs', JSON.stringify({
                             uiScale: this.uiScale,
                             listScale: this.listScale,
                             highContrast: this.highContrast,
+                            bigTargets: this.bigTargets,
                         }));
                     } catch (e) {}
                 },

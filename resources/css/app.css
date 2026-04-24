@@ -49,6 +49,12 @@
 [data-contrast="high"] .bg-\[\#f4f0e8\] { background-color: #ddd5c2; }
 [data-contrast="high"] .bg-\[\#f7f3ec\] { background-color: #d6cdb8; }
 
+/* Bigger tap targets: every .tap element grows to at least 44px square (WCAG 2.5.5 AAA). */
+[data-targets="big"] .tap {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+}
+
 @utility heading-serif {
     font-family: Georgia, 'Times New Roman', serif;
 }

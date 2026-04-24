@@ -38,6 +38,7 @@ return [
     'text_size_option' => 'Escala de texto :scale',
     'larger_list_items' => 'Itens da lista maiores',
     'high_contrast' => 'Alto contraste',
+    'bigger_buttons' => 'Botões maiores',
 
     // Profile menu
     'language' => 'Idioma',

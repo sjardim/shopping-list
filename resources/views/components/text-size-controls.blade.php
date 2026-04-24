@@ -25,3 +25,9 @@
         <span x-show="$store.prefs.highContrast" class="text-[#2f7d4f] font-bold">✓</span>
     </span>
 </flux:menu.item>
+<flux:menu.item x-on:click.stop="$store.prefs.toggleBigTargets()">
+    <span class="flex items-center justify-between w-full">
+        <span>{{ __('app.bigger_buttons') }}</span>
+        <span x-show="$store.prefs.bigTargets" class="text-[#2f7d4f] font-bold">✓</span>
+    </span>
+</flux:menu.item>
