@@ -26,7 +26,7 @@
                                     {{ __('app.no_store') }}
                                 </flux:menu.item>
                                 <flux:menu.separator />
-                                @foreach(\App\Enums\Store::cases() as $store)
+                                @foreach(\App\Support\Stores::active() as $store)
                                     <flux:menu.item wire:click="updateStore('{{ $store->value }}')">
                                         <span class="flex items-center gap-2">
                                             <x-store-badge :store="$store" />
@@ -281,7 +281,7 @@
                     </h2>
                     <div class="bg-white rounded-3xl overflow-hidden divide-y divide-[#f4f0e8]">
                         @foreach($items as $item)
-                            @php $storeEnum = $item['preferred_store'] ? \App\Enums\Store::tryFrom($item['preferred_store']) : null; @endphp
+                            @php $storeEnum = $item['preferred_store'] ? \App\Support\Stores::tryFrom($item['preferred_store']) : null; @endphp
                             <div
                                 wire:key="item-{{ $item['id'] }}"
                                 x-data="{ sliding: false }"
@@ -414,7 +414,7 @@
                     class="mb-2 bg-white rounded-2xl shadow-lg border border-[#ede8df] overflow-hidden"
                 >
                     @foreach($this->catalogSuggestions as $suggestion)
-                        @php $storeEnum = $suggestion['preferred_store'] ? \App\Enums\Store::tryFrom($suggestion['preferred_store']) : null; @endphp
+                        @php $storeEnum = $suggestion['preferred_store'] ? \App\Support\Stores::tryFrom($suggestion['preferred_store']) : null; @endphp
                         <button
                             wire:key="suggestion-{{ $suggestion['id'] }}"
                             wire:click="selectCatalogSuggestion({{ $suggestion['id'] }})"
@@ -499,7 +499,7 @@
                             <p class="text-[10px] font-bold uppercase tracking-widest text-[#6b6055]">{{ __('app.price_history') }}</p>
                             <div class="rounded-xl border border-[#ede8df] divide-y divide-[#f4f0e8] overflow-hidden">
                                 @foreach($this->priceHistory as $entry)
-                                    @php $storeEnum = $entry->store ? \App\Enums\Store::tryFrom($entry->store) : null; @endphp
+                                    @php $storeEnum = $entry->store ? \App\Support\Stores::tryFrom($entry->store) : null; @endphp
                                     <div class="flex items-center justify-between gap-3 px-3 py-2 text-sm">
                                         <span class="flex items-center gap-2 min-w-0">
                                             @if($storeEnum)

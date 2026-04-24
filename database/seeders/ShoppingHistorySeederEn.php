@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Contracts\Store;
 use App\Enums\ShoppingListStatus;
-use App\Enums\Store;
+use App\Enums\StoreUs;
 use App\Models\CatalogItem;
 use App\Models\ShoppingList;
 use App\Models\User;
@@ -100,17 +101,17 @@ class ShoppingHistorySeederEn extends Seeder
     private function trips(): array
     {
         return [
-            [Store::Walmart, 2],
-            [Store::Target, 5],
-            [Store::TraderJoes, 9],
-            [Store::WholeFoods, 13],
-            [Store::Walmart, 17],
-            [Store::TraderJoes, 23],
-            [Store::Target, 28],
-            [Store::Walmart, 35],
-            [Store::TraderJoes, 42],
-            [Store::WholeFoods, 50],
-            [Store::Walmart, 58],
+            [StoreUs::Walmart, 2],
+            [StoreUs::Target, 5],
+            [StoreUs::TraderJoes, 9],
+            [StoreUs::WholeFoods, 13],
+            [StoreUs::Walmart, 17],
+            [StoreUs::TraderJoes, 23],
+            [StoreUs::Target, 28],
+            [StoreUs::Walmart, 35],
+            [StoreUs::TraderJoes, 42],
+            [StoreUs::WholeFoods, 50],
+            [StoreUs::Walmart, 58],
         ];
     }
 

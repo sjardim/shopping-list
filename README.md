@@ -108,6 +108,24 @@ Visit `http://shopping-list.test` (Laravel Herd) or `http://127.0.0.1:8000` (art
 
 The default seeders ship Portuguese grocery names and Iberian stores (Lidl, Aldi, Continente, Mercadona). For non-Portuguese developers an English alternative seeder is included:
 
+### Picking your region
+
+Stores are split into regional enums under `app/Enums/`:
+
+- `StorePt` — Lidl, Aldi, Continente, Mercadona
+- `StoreUs` — Walmart, Target, Trader Joe's, Whole Foods
+- `StoreUk` — Tesco, Sainsbury's, Asda, Morrisons, Waitrose, Lidl, Aldi
+
+Set the active region via the `STORES_REGION` env var (`pt`, `us`, or `uk`):
+
+```env
+STORES_REGION=us
+```
+
+The store picker only shows the active region's options, but slugs from other regions still resolve when read from the database — so older lists keep their badges if you ever change region. Adding a new region (e.g. France, Germany) means dropping a new `StoreFr` enum implementing the `App\Contracts\Store` interface and registering it in `App\Support\Stores::REGIONS`.
+
+### Switching the seeded data
+
 In `database/seeders/DatabaseSeeder.php`, comment out the Portuguese seeders and uncomment the English ones:
 
 ```php

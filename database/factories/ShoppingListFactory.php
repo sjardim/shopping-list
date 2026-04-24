@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Contracts\Store;
 use App\Enums\ShoppingListStatus;
-use App\Enums\Store;
 use App\Models\ShoppingList;
 use App\Models\User;
+use App\Support\Stores;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -16,7 +17,7 @@ class ShoppingListFactory extends Factory
 {
     public function definition(): array
     {
-        $store = $this->faker->randomElement(Store::cases());
+        $store = $this->faker->randomElement(Stores::active());
 
         return [
             'user_id' => User::factory(),

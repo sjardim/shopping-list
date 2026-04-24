@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\Store;
+use App\Enums\StorePt;
 use App\Livewire\ShoppingListPage;
 use App\Models\CatalogItem;
 use App\Models\MealRecipe;
@@ -395,12 +395,12 @@ test('owner can update store', function () {
 
     $list = ShoppingList::where('user_id', $user->id)->active()->first();
 
-    expect($list->store)->toBe(Store::Lidl);
+    expect($list->store)->toBe(StorePt::Lidl);
 });
 
 test('owner can clear store', function () {
     $user = User::factory()->create();
-    ShoppingList::factory()->for($user)->forStore(Store::Continente)->create();
+    ShoppingList::factory()->for($user)->forStore(StorePt::Continente)->create();
 
     Livewire::actingAs($user)
         ->test(ShoppingListPage::class)

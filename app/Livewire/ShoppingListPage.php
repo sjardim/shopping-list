@@ -4,13 +4,13 @@ namespace App\Livewire;
 
 use App\Concerns\BroadcastsToOthers;
 use App\Enums\ShoppingListStatus;
-use App\Enums\Store;
 use App\Events\ItemAdded;
 use App\Events\ItemRemoved;
 use App\Models\CatalogItem;
 use App\Models\MealRecipe;
 use App\Models\ShoppingList;
 use App\Models\ShoppingListItem;
+use App\Support\Stores;
 use Flux\Flux;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -432,7 +432,7 @@ class ShoppingListPage extends Component
             return;
         }
 
-        $storeEnum = $store !== '' ? Store::from($store) : null;
+        $storeEnum = Stores::tryFrom($store);
         $date = now()->format('d M');
 
         $this->list->update([

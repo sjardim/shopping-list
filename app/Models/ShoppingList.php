@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
+use App\Casts\StoreCast;
+use App\Contracts\Store;
 use App\Enums\ShoppingListStatus;
-use App\Enums\Store;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,7 +30,7 @@ class ShoppingList extends Model
     {
         return [
             'status' => ShoppingListStatus::class,
-            'store' => Store::class,
+            'store' => StoreCast::class,
             'completed_at' => 'datetime',
         ];
     }

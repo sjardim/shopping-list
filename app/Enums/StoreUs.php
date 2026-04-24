@@ -2,15 +2,10 @@
 
 namespace App\Enums;
 
-enum Store: string
-{
-    // Portugal / Iberia
-    case Lidl = 'lidl';
-    case Aldi = 'aldi';
-    case Continente = 'continente';
-    case Mercadona = 'mercadona';
+use App\Contracts\Store;
 
-    // United States
+enum StoreUs: string implements Store
+{
     case Walmart = 'walmart';
     case Target = 'target';
     case TraderJoes = 'trader_joes';
@@ -19,10 +14,6 @@ enum Store: string
     public function label(): string
     {
         return match ($this) {
-            self::Lidl => 'Lidl',
-            self::Aldi => 'Aldi',
-            self::Continente => 'Continente',
-            self::Mercadona => 'Mercadona',
             self::Walmart => 'Walmart',
             self::Target => 'Target',
             self::TraderJoes => "Trader Joe's",
@@ -30,14 +21,9 @@ enum Store: string
         };
     }
 
-    /** Hex background color for the store badge. */
     public function color(): string
     {
         return match ($this) {
-            self::Lidl => '#f5c518',
-            self::Aldi => '#1a73e8',
-            self::Continente => '#e53935',
-            self::Mercadona => '#2f7d4f',
             self::Walmart => '#0071ce',
             self::Target => '#cc0000',
             self::TraderJoes => '#b22234',
@@ -45,7 +31,6 @@ enum Store: string
         };
     }
 
-    /** Single uppercase letter shown inside the badge. */
     public function initial(): string
     {
         return match ($this) {
@@ -55,9 +40,8 @@ enum Store: string
         };
     }
 
-    /** Whether the badge initial should use dark text (for light bg colors). */
     public function hasDarkText(): bool
     {
-        return $this === self::Lidl;
+        return false;
     }
 }

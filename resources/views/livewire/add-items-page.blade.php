@@ -57,7 +57,7 @@
                             @foreach($items as $item)
                                 @php
                                     $isSelected = in_array($item['id'], $selectedCatalogIds, true);
-                                    $storeEnum  = $item['preferred_store'] ? \App\Enums\Store::tryFrom($item['preferred_store']) : null;
+                                    $storeEnum  = $item['preferred_store'] ? \App\Support\Stores::tryFrom($item['preferred_store']) : null;
                                 @endphp
                                 <button
                                     wire:key="catalog-{{ $item['id'] }}"

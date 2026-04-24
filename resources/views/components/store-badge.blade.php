@@ -1,7 +1,7 @@
 @props(['store'])
 
 @php
-    /** @var \App\Enums\Store $store */
+    /** @var \App\Contracts\Store $store */
 @endphp
 
 <span

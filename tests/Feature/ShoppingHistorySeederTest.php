@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\ShoppingListStatus;
-use App\Enums\Store;
+use App\Enums\StoreUs;
 use App\Models\CatalogItem;
 use App\Models\ShoppingList;
 use App\Models\User;
@@ -65,6 +65,6 @@ test('English seeder uses US stores and creates completed lists', function () {
 
     expect($lists)->not->toBeEmpty();
 
-    $usStores = [Store::Walmart->value, Store::Target->value, Store::TraderJoes->value, Store::WholeFoods->value];
+    $usStores = [StoreUs::Walmart->value, StoreUs::Target->value, StoreUs::TraderJoes->value, StoreUs::WholeFoods->value];
     expect($lists->every(fn ($list) => in_array($list->store->value, $usStores, true)))->toBeTrue();
 });
