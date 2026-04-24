@@ -118,6 +118,8 @@ test('meal bundle tab is available', function () {
 });
 
 test('applying a meal bundle creates list items for catalog matches', function () {
+    app()->setLocale('pt_PT');
+
     $user = User::factory()->create();
     $list = ShoppingList::factory()->for($user)->create();
 
@@ -133,6 +135,8 @@ test('applying a meal bundle creates list items for catalog matches', function (
 });
 
 test('applying a meal bundle does not duplicate items already on the list', function () {
+    app()->setLocale('pt_PT');
+
     $user = User::factory()->create();
     $list = ShoppingList::factory()->for($user)->create();
     $bacalhau = CatalogItem::factory()->create(['name' => 'Bacalhau']);
@@ -143,6 +147,20 @@ test('applying a meal bundle does not duplicate items already on the list', func
         ->call('applyMealBundle', 'bacalhau_braga');
 
     expect($list->fresh()->items()->where('catalog_item_id', $bacalhau->id)->count())->toBe(1);
+});
+
+test('English locale serves english meal bundles with english item names', function () {
+    app()->setLocale('en');
+
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+    $cod = CatalogItem::factory()->create(['name' => 'Cod']);
+
+    Livewire::actingAs($user)
+        ->test(AddItemsPage::class)
+        ->call('applyMealBundle', 'bacalhau_braga');
+
+    expect($list->fresh()->items()->where('catalog_item_id', $cod->id)->exists())->toBeTrue();
 });
 
 test('applying a user recipe merges its items into the active list', function () {

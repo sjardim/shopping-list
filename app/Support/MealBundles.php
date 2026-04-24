@@ -25,6 +25,16 @@ class MealBundles
      */
     private static function bundles(): array
     {
+        return app()->getLocale() === 'en'
+            ? self::englishBundles()
+            : self::portugueseBundles();
+    }
+
+    /**
+     * @return array<string, array{name: string, emoji: string, items: array<int, array{name: string, quantity: float, unit: string}>}>
+     */
+    private static function portugueseBundles(): array
+    {
         return [
             'frango_assado' => [
                 'name' => 'Frango Assado',
@@ -144,6 +154,136 @@ class MealBundles
                     ['name' => 'Atum em lata', 'quantity' => 2, 'unit' => 'lata'],
                     ['name' => 'Azeite', 'quantity' => 1, 'unit' => 'ml'],
                     ['name' => 'Vinagre', 'quantity' => 1, 'unit' => 'ml'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Item names match those in CatalogItemSeederEn so bundle merges link
+     * to catalog items (preserving emoji, category, preferred-store hints).
+     *
+     * @return array<string, array{name: string, emoji: string, items: array<int, array{name: string, quantity: float, unit: string}>}>
+     */
+    private static function englishBundles(): array
+    {
+        return [
+            'frango_assado' => [
+                'name' => 'Roast Chicken',
+                'emoji' => '🍗',
+                'items' => [
+                    ['name' => 'Whole chicken', 'quantity' => 1, 'unit' => 'kg'],
+                    ['name' => 'Garlic', 'quantity' => 4, 'unit' => 'un'],
+                    ['name' => 'Lemon', 'quantity' => 2, 'unit' => 'un'],
+                    ['name' => 'Olive oil', 'quantity' => 1, 'unit' => 'ml'],
+                    ['name' => 'Potato', 'quantity' => 1, 'unit' => 'kg'],
+                    ['name' => 'Onion', 'quantity' => 2, 'unit' => 'un'],
+                    ['name' => 'Salt', 'quantity' => 1, 'unit' => 'un'],
+                ],
+            ],
+            'caldo_verde' => [
+                'name' => 'Potato Soup',
+                'emoji' => '🥣',
+                'items' => [
+                    ['name' => 'Potato', 'quantity' => 1, 'unit' => 'kg'],
+                    ['name' => 'Sausage', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Onion', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Garlic', 'quantity' => 2, 'unit' => 'un'],
+                    ['name' => 'Olive oil', 'quantity' => 1, 'unit' => 'ml'],
+                ],
+            ],
+            'bacalhau_braga' => [
+                'name' => 'Baked Cod',
+                'emoji' => '🐟',
+                'items' => [
+                    ['name' => 'Cod', 'quantity' => 0.5, 'unit' => 'kg'],
+                    ['name' => 'Onion', 'quantity' => 3, 'unit' => 'un'],
+                    ['name' => 'Garlic', 'quantity' => 4, 'unit' => 'un'],
+                    ['name' => 'Potato', 'quantity' => 1, 'unit' => 'kg'],
+                    ['name' => 'Eggs', 'quantity' => 6, 'unit' => 'un'],
+                    ['name' => 'Olive oil', 'quantity' => 1, 'unit' => 'ml'],
+                ],
+            ],
+            'churrasco' => [
+                'name' => 'Backyard BBQ',
+                'emoji' => '🔥',
+                'items' => [
+                    ['name' => 'Pork chops', 'quantity' => 1, 'unit' => 'kg'],
+                    ['name' => 'Chicken breast', 'quantity' => 0.5, 'unit' => 'kg'],
+                    ['name' => 'Sausage', 'quantity' => 2, 'unit' => 'un'],
+                    ['name' => 'Beer', 'quantity' => 6, 'unit' => 'un'],
+                    ['name' => 'Sandwich bread', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Salt', 'quantity' => 1, 'unit' => 'un'],
+                ],
+            ],
+            'massa_bolonhesa' => [
+                'name' => 'Spaghetti Bolognese',
+                'emoji' => '🍝',
+                'items' => [
+                    ['name' => 'Spaghetti', 'quantity' => 500, 'unit' => 'g'],
+                    ['name' => 'Ground beef', 'quantity' => 500, 'unit' => 'g'],
+                    ['name' => 'Tomato paste', 'quantity' => 400, 'unit' => 'ml'],
+                    ['name' => 'Onion', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Garlic', 'quantity' => 2, 'unit' => 'un'],
+                    ['name' => 'Olive oil', 'quantity' => 1, 'unit' => 'ml'],
+                ],
+            ],
+            'arroz_frango' => [
+                'name' => 'Chicken & Rice',
+                'emoji' => '🍚',
+                'items' => [
+                    ['name' => 'Chicken breast', 'quantity' => 0.5, 'unit' => 'kg'],
+                    ['name' => 'Rice', 'quantity' => 1, 'unit' => 'kg'],
+                    ['name' => 'Tomato', 'quantity' => 2, 'unit' => 'un'],
+                    ['name' => 'Onion', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Garlic', 'quantity' => 2, 'unit' => 'un'],
+                    ['name' => 'Olive oil', 'quantity' => 1, 'unit' => 'ml'],
+                ],
+            ],
+            'sopa_legumes' => [
+                'name' => 'Vegetable Soup',
+                'emoji' => '🍲',
+                'items' => [
+                    ['name' => 'Carrot', 'quantity' => 2, 'unit' => 'un'],
+                    ['name' => 'Potato', 'quantity' => 3, 'unit' => 'un'],
+                    ['name' => 'Onion', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Garlic', 'quantity' => 2, 'unit' => 'un'],
+                    ['name' => 'Olive oil', 'quantity' => 1, 'unit' => 'ml'],
+                    ['name' => 'Salt', 'quantity' => 1, 'unit' => 'un'],
+                ],
+            ],
+            'feijoada' => [
+                'name' => 'Bean Stew',
+                'emoji' => '🫘',
+                'items' => [
+                    ['name' => 'Black beans', 'quantity' => 2, 'unit' => 'lata'],
+                    ['name' => 'Pork ribs', 'quantity' => 0.5, 'unit' => 'kg'],
+                    ['name' => 'Sausage', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Onion', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Garlic', 'quantity' => 2, 'unit' => 'un'],
+                ],
+            ],
+            'ovos_mexidos' => [
+                'name' => 'Scrambled Eggs with Ham',
+                'emoji' => '🍳',
+                'items' => [
+                    ['name' => 'Eggs', 'quantity' => 6, 'unit' => 'un'],
+                    ['name' => 'Ham', 'quantity' => 200, 'unit' => 'g'],
+                    ['name' => 'Butter', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Sandwich bread', 'quantity' => 1, 'unit' => 'un'],
+                ],
+            ],
+            'salada_mista' => [
+                'name' => 'Mixed Salad',
+                'emoji' => '🥗',
+                'items' => [
+                    ['name' => 'Lettuce', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Tomato', 'quantity' => 3, 'unit' => 'un'],
+                    ['name' => 'Cucumber', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Onion', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Canned tuna', 'quantity' => 2, 'unit' => 'lata'],
+                    ['name' => 'Olive oil', 'quantity' => 1, 'unit' => 'ml'],
+                    ['name' => 'Vinegar', 'quantity' => 1, 'unit' => 'ml'],
                 ],
             ],
         ];

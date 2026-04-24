@@ -104,6 +104,21 @@ Visit `http://shopping-list.test` (Laravel Herd) or `http://127.0.0.1:8000` (art
 
 `composer run dev` starts Vite, Reverb, the queue worker, and Pail in parallel.
 
+### English seed data (US groceries + stores)
+
+The default seeders ship Portuguese grocery names and Iberian stores (Lidl, Aldi, Continente, Mercadona). For non-Portuguese developers an English alternative seeder is included:
+
+```bash
+# Reset and use the English catalog instead
+php artisan migrate:fresh
+php artisan db:seed --class=Database\\Seeders\\DatabaseSeeder        # owner user + history
+php artisan db:seed --class=Database\\Seeders\\CatalogItemSeederEn   # English groceries + US stores
+```
+
+`CatalogItemSeederEn` provides ~80 common US grocery items grouped by the same ten categories, with preferred-store hints pointing at Walmart, Target, Trader Joe's, Whole Foods, plus Lidl and Aldi where they make sense. The `Store` enum carries both regions side by side, so the picker shows the four PT stores and the four US stores together — adopters can prune the enum to whichever set they want.
+
+Meal bundles in `app/Support/MealBundles.php` are locale-aware: when `APP_LOCALE=en`, the "Cook something" tab serves English bundle names ("Roast Chicken", "Spaghetti Bolognese", "Mixed Salad", etc.) with ingredients that match `CatalogItemSeederEn`. Switch the locale and the bundles switch automatically.
+
 ## Tests
 
 ```bash
