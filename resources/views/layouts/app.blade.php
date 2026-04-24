@@ -47,6 +47,7 @@
                 },
                 setUiScale: function (value) {
                     this.uiScale = value;
+                    this.listScale = value >= 1.2 ? 1.18 : 1;
                     this._apply();
                 },
                 toggleListScale: function () {
