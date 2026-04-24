@@ -111,6 +111,101 @@ test('owner can finish trip and create new list', function () {
         ->and(ShoppingList::where('user_id', $user->id)->active()->count())->toBe(1);
 });
 
+test('finish trip dispatches a trip-finished browser event', function () {
+    $user = User::factory()->create();
+    ShoppingList::factory()->for($user)->create();
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('finishTrip')
+        ->assertDispatched('trip-finished');
+});
+
+test('recently finished list is exposed when finished within the undo window', function () {
+    $user = User::factory()->create();
+    ShoppingList::factory()->for($user)->create();
+
+    $component = Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('finishTrip');
+
+    expect($component->instance()->recentlyFinishedList)->not->toBeNull();
+});
+
+test('recently finished list is null when last finish is older than the undo window', function () {
+    $user = User::factory()->create();
+    ShoppingList::factory()->for($user)->completed()->create([
+        'completed_at' => now()->subMinutes(10),
+    ]);
+
+    $component = Livewire::actingAs($user)->test(ShoppingListPage::class);
+
+    expect($component->instance()->recentlyFinishedList)->toBeNull();
+});
+
+test('undo finish trip restores the recently completed list as active', function () {
+    $user = User::factory()->create();
+    $previous = ShoppingList::factory()->for($user)->create();
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('finishTrip')
+        ->call('undoFinishTrip');
+
+    expect($previous->fresh()->status->value)->toBe('active');
+});
+
+test('undo finish trip discards the empty new active list', function () {
+    $user = User::factory()->create();
+    ShoppingList::factory()->for($user)->create();
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('finishTrip')
+        ->call('undoFinishTrip');
+
+    expect(ShoppingList::where('user_id', $user->id)->active()->count())->toBe(1);
+});
+
+test('undo finish trip preserves the new active list if it has items', function () {
+    $user = User::factory()->create();
+    ShoppingList::factory()->for($user)->create();
+
+    $component = Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('finishTrip');
+
+    $newList = ShoppingList::where('user_id', $user->id)->active()->latest()->first();
+    ShoppingListItem::factory()->for($newList, 'list')->create();
+
+    $component->call('undoFinishTrip');
+
+    expect(ShoppingList::where('user_id', $user->id)->active()->count())->toBe(2);
+});
+
+test('undo finish trip does nothing when no recently finished list exists', function () {
+    $user = User::factory()->create();
+    ShoppingList::factory()->for($user)->create();
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('undoFinishTrip');
+
+    expect(ShoppingList::where('user_id', $user->id)->active()->count())->toBe(1);
+});
+
+test('shared mode cannot undo finish trip', function () {
+    $owner = User::factory()->create();
+    $list = ShoppingList::factory()->for($owner)->completed()->create([
+        'completed_at' => now()->subMinute(),
+    ]);
+
+    Livewire::test(ShoppingListPage::class, ['share_token' => $list->share_token])
+        ->call('undoFinishTrip');
+
+    expect($list->fresh()->status->value)->toBe('completed');
+});
+
 test('owner can clear all items from list', function () {
     $user = User::factory()->create();
     $list = ShoppingList::factory()->for($user)->create();

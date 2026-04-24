@@ -18,6 +18,8 @@ return [
     'in_cart' => 'In cart',
     'add_item_placeholder' => 'Add item…',
     'trip_done' => 'Trip done! Fresh list started.',
+    'trip_restored' => 'Trip restored.',
+    'undo_finish_trip' => 'Undo finish trip',
     'usually' => 'usually :store',
     'link_copied' => 'Link copied!',
     'list_updated' => 'List updated',

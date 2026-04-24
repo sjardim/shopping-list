@@ -18,6 +18,8 @@ return [
     'in_cart' => 'No carrinho',
     'add_item_placeholder' => 'Adicionar item…',
     'trip_done' => 'Compra concluída! Nova lista criada.',
+    'trip_restored' => 'Compra restaurada.',
+    'undo_finish_trip' => 'Anular fim da compra',
     'usually' => 'habitualmente :store',
     'link_copied' => 'Link copiado!',
     'list_updated' => 'Lista atualizada',

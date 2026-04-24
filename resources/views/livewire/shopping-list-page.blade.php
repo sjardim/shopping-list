@@ -188,6 +188,18 @@
                 <p class="text-4xl mb-3">🛒</p>
                 <p class="text-base font-medium text-[#1a1a1a]">{{ __('app.list_empty') }}</p>
                 <p class="text-sm mt-1">{{ __('app.tap_to_add') }}</p>
+
+                @if($mode === 'owner' && $this->recentlyFinishedList)
+                    <button
+                        wire:click="undoFinishTrip"
+                        class="tap mt-6 inline-flex items-center gap-2 bg-[#1a1a1a] text-white rounded-full px-5 py-2.5 text-sm font-semibold"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                        </svg>
+                        {{ __('app.undo_finish_trip') }}
+                    </button>
+                @endif
             </div>
         @else
             {{-- Pending items grouped by category --}}

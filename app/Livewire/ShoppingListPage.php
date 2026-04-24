@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Concerns\BroadcastsToOthers;
+use App\Enums\ShoppingListStatus;
 use App\Enums\Store;
 use App\Events\ItemAdded;
 use App\Events\ItemRemoved;
@@ -166,6 +167,8 @@ class ShoppingListPage extends Component
         unset($this->itemsByCategory);
     }
 
+    private const UNDO_WINDOW_MINUTES = 5;
+
     public function finishTrip(): void
     {
         if ($this->mode !== 'owner') {
@@ -177,9 +180,55 @@ class ShoppingListPage extends Component
         $this->list = ShoppingList::create(['user_id' => Auth::id()]);
         $this->shareToken = $this->list->share_token;
 
-        unset($this->itemsByCategory);
+        unset($this->itemsByCategory, $this->recentlyFinishedList);
+
+        $this->dispatch('trip-finished');
 
         Flux::toast(__('app.trip_done'));
+    }
+
+    #[Computed]
+    public function recentlyFinishedList(): ?ShoppingList
+    {
+        if ($this->mode !== 'owner') {
+            return null;
+        }
+
+        return ShoppingList::query()
+            ->where('user_id', Auth::id())
+            ->where('status', ShoppingListStatus::Completed)
+            ->where('completed_at', '>=', now()->subMinutes(self::UNDO_WINDOW_MINUTES))
+            ->latest('completed_at')
+            ->first();
+    }
+
+    public function undoFinishTrip(): void
+    {
+        if ($this->mode !== 'owner') {
+            return;
+        }
+
+        $previous = $this->recentlyFinishedList;
+
+        if ($previous === null) {
+            return;
+        }
+
+        $previous->update([
+            'status' => ShoppingListStatus::Active,
+            'completed_at' => null,
+        ]);
+
+        if ($this->list->id !== $previous->id && $this->list->items()->count() === 0) {
+            $this->list->delete();
+        }
+
+        $this->list = $previous;
+        $this->shareToken = $previous->share_token;
+
+        unset($this->itemsByCategory, $this->recentlyFinishedList);
+
+        Flux::toast(__('app.trip_restored'));
     }
 
     public function clearList(): void
