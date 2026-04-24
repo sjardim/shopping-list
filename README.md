@@ -4,89 +4,26 @@ A small, opinionated grocery shopping app built for two people who share a kitch
 
 Built on Laravel 13, Livewire 4, Tailwind v4, and Flux UI (Free edition only).
 
-## Features
+## At a glance
 
-### Owner experience
-- Active shopping list grouped by category, with category emoji headers.
-- Quick-add bar with debounced catalog search ("ban..." suggests Bananas) and voice dictation via the Web Speech API.
-- Tap-to-check items slide off-screen left with a brief stone tint, a synthesised chirp, and a soft haptic on Android.
-- Tap-to-edit price per item: opens a modal showing the current price plus the last 10 prices recorded for that item across any past trip, with the store badge and date.
-- Running trip total ("€X.XX spent so far") on the progress card.
-- Per-trip free-text notes with debounced autosave and a fading "Saved" pill.
-- Store selector tinted to the brand color (Lidl yellow, Aldi blue, Continente red, Mercadona green).
-- "Finish trip" archives the active list and creates a fresh one. Confetti and a synthesised TADA mark the moment, and a 5-minute Undo window lets you reverse it. Optionally, drop your own `public/sounds/finish-trip.mp3` and the JS plays that instead of the synth.
+- **Categorised list** with tap-to-check and a running price total.
+- **Share link, no login** — the second user opens `/list/{token}` and sees the same list.
+- **Real-time sync** via Laravel Reverb (optional).
+- **Voice dictation** on the quick-add bar and notes field.
+- **Price history** per item per store — every bought item feeds the history.
+- **Saved recipes** alongside built-in meal bundles like "Bacalhau à Braga" or "Spaghetti Bolognese".
+- **Confetti and a TADA chord** when you finish a trip. **Undo** for 5 minutes.
+- **Full accessibility cluster**: text scaling (UI + list-only), high contrast, 44×44 tap targets, sound mute, `prefers-reduced-motion`.
+- **Export JSON** and **print A4** for any list.
+- **Four locales** (`en`, `en_GB`, `pt_PT`, `pt_BR`) and **four store regions** (`pt`, `us`, `uk`, `br`), each with a pre-seeded catalog and fake history.
+- **PWA-ready** — installs to the home screen.
+- **96 Pest tests**, runs on SQLite in memory.
 
-### Catalog and recipes
-- Pre-seeded Portuguese-grocery catalog with categories, default units/quantities, and learned preferred-store hints (e.g. "usually Continente").
-- Auto-learning rule: when an item is bought at the same store more than three times, the catalog's preferred store updates silently.
-- "Cook something" tab bundles common Portuguese meals (Bacalhau à Braga, Caldo Verde, Churrasco, Feijoada, etc.) into one-tap add-to-list actions.
-- Save-as-recipe: turn the current list into a reusable custom bundle that lives next to the built-in ones.
+Full feature list with all the details in [FEATURES.md](FEATURES.md).
 
-### Shared mode
-- Each list has a UUID share token. The wife (or whoever) opens `/list/{token}` with no login.
-- The shared view shows everything the owner sees, minus destructive actions and the bottom nav.
-- Real-time sync via Laravel Reverb: ticking an item on one device updates the other within a second, with a soft notification chime and a toast.
-- A small "share again" / settings dropdown gives the shared user access to text-size, contrast, and other preferences without exposing the owner's account.
+## Install
 
-### History
-- Every finished trip lands on `/history`, ordered most-recent first, with item-count and skipped-count summaries.
-- One-tap **Restore** merges a past list into your active one. Pending duplicates are skipped silently; bought duplicates are reset to pending. The toast reports the three counts ("added 5, restored 2, skipped 1").
-- Each card has download (export JSON) and trash buttons.
-
-### Accessibility (a11y)
-A user-toggleable preferences cluster lives in the profile dropdown, persisted to `localStorage`:
-
-- **Text size** — three-step scale (default / large / extra large) that re-roots the entire UI font-size, plus a separate "Larger list items" toggle for just the item rows.
-- **High contrast** — darker muted text and stronger borders that lift WCAG contrast on the warm cream background.
-- **Bigger buttons** — bumps every tappable element to a 44×44 minimum (WCAG 2.5.5 AAA).
-- **Sound effects** — mute toggle for all synthesised cues (TADA, undo, error buzz, item check chirp, voice toggle chirps, real-time update ping).
-
-System-level support:
-- `prefers-reduced-motion` respected globally (animations and transitions disabled).
-- `aria-label` on every icon-only button. `aria-current="page"` on the active bottom-nav tab. `aria-pressed` on the catalog selection grid. `role="alert"` on validation errors.
-- `focus-visible` ring on every tappable element and form input for keyboard users.
-- Light haptic feedback (`navigator.vibrate?.(8)`) on item check-off (Android only; iOS Safari ignores).
-
-### Internationalisation
-- Every string lives in `lang/en/app.php` and `lang/pt_PT/app.php`. The owner can switch between them from the profile dropdown.
-- `pt-PT` is the default locale; `en` is the fallback.
-
-### Export and printing
-- `GET /list/{token}/export.json` downloads a pretty-printed JSON snapshot of the list (name, store, status, notes, timestamps, full items) with a sensible `Content-Disposition` filename. Available from the owner profile dropdown and as a download icon on every history card.
-- `GET /list/{token}/print` opens a no-nav, A4-friendly black-on-white printable view that auto-fires `window.print()` on load. Nice when the wife prefers paper.
-
-### Progressive Web App
-- `manifest.json` + cream theme color + apple-touch-icon meta tags so the app installs to the home screen on iOS and Android with the right title, icon, and full-screen treatment.
-- `prefers-reduced-motion` and `prefers-color-scheme` respected. Inline `<head>` script applies user font-size and contrast prefs before paint to avoid flash of unstyled content.
-
-## Tech stack
-
-- **PHP 8.5** + **Laravel 13**
-- **Livewire 4** for reactive components, **Alpine.js** (bundled with Flux) for client-side touches
-- **Tailwind CSS v4** with custom utilities (`tap`, `fade-in-up`, `check-pulse`, `list-text`)
-- **Flux UI v2** (Free edition only — see component list below)
-- **Laravel Reverb v1** for WebSocket broadcasts (optional)
-- **Laravel Fortify v1** for the owner's auth (no registration, login only)
-- **Pest 4** for tests (93 currently passing)
-- **Phosphor Duotone** icons (21 SVGs published as Flux icon stubs)
-
-## Flux UI components used
-
-Every component this app uses is in the **Free edition** of Flux UI. `composer install` works for any clone of the repo without a Flux Pro license.
-
-| Component | Variant(s) used |
-|---|---|
-| `flux:button` | primary, ghost, with icon, with `href` |
-| `flux:dropdown` + `flux:menu` + `flux:menu.item` + `flux:menu.separator` | profile menu, store picker, settings |
-| `flux:modal` + `flux:modal.trigger` + `flux:modal.close` | save-as-recipe, edit-price |
-| `flux:icon` | for all 21 Phosphor Duotone stubs |
-| `flux:input`, `flux:label`, `flux:field`, `flux:error` | recipe form, price form, search |
-| `flux:checkbox` | (not actively used in views; available) |
-| `flux:heading`, `flux:subheading` | modal headings |
-| `flux:card` | (not actively used; available) |
-| `flux:toast` | global toast container, top-center, full-width on mobile |
-
-## Quick start
+### Fresh install (interactive)
 
 ```bash
 git clone <your-fork-url> shopping-list
@@ -95,134 +32,66 @@ composer install
 npm install
 cp .env.example .env
 php artisan key:generate
-touch database/database.sqlite     # default SQLite path
-php artisan lista:install          # interactive: language, region, currency, owner
+touch database/database.sqlite        # default SQLite path
+npm run build
+php artisan lista:install             # interactive setup
 composer run dev
 ```
 
-`lista:install` walks you through:
+`php artisan lista:install` walks you through four prompts — language, store region, currency symbol, admin email/name/password — then writes env, runs migrations, and seeds the matching catalog/history pair. Idempotent, safe to re-run.
 
-- **Language** — English / English (UK) / Português (Portugal) / Português (Brasil)
-- **Store region** — paired with a sensible default for the chosen language
-- **Currency symbol** — paired with a sensible default for the chosen region
-- **Owner email, name, and password** — the single seeded account
+Defaults pair sensibly: pick `English (UK)` and it proposes UK region + `£`; pick `Português (Brasil)` and it proposes BR region + `R$`. You can override any default.
 
-It writes the chosen values to `.env`, runs the migrations, and seeds the matching catalog + history seeders. Idempotent and safe to re-run.
+### Non-interactive install (dev defaults)
 
-`composer run dev` starts Vite, Reverb, the queue worker, and Pail in parallel.
-
-If you'd rather skip the interactive setup, run `php artisan migrate --seed` — `DatabaseSeeder` calls `AdminUserSeeder` (creates `admin@example.com` / `password`) plus a hardcoded catalog/history pair. Edit `DatabaseSeeder` to swap the catalog/history pair, then rotate the password via `lista:make-admin` or tinker.
-
-### English seed data (US groceries + stores)
-
-The default seeders ship Portuguese grocery names and Iberian stores (Lidl, Aldi, Continente, Mercadona). For non-Portuguese developers an English alternative seeder is included:
-
-### Picking your region
-
-Stores are split into regional enums under `app/Enums/`:
-
-- `StorePt` — Lidl, Aldi, Continente, Mercadona
-- `StoreUs` — Walmart, Target, Trader Joe's, Whole Foods
-- `StoreUk` — Tesco, Sainsbury's, Asda, Morrisons, Waitrose, Lidl, Aldi
-- `StoreBr` — Carrefour, Pão de Açúcar, Extra, Assaí, Atacadão
-
-Set the active region via the `STORES_REGION` env var (`pt`, `us`, `uk`, or `br`):
-
-```env
-STORES_REGION=us
-```
-
-The store picker only shows the active region's options, but slugs from other regions still resolve when read from the database — so older lists keep their badges if you ever change region. Adding a new region (e.g. France, Germany) means dropping a new `StoreFr` enum implementing the `App\Contracts\Store` interface and registering it in `App\Support\Stores::REGIONS`.
-
-### Switching the seeded data
-
-### Switching the seeded data
-
-Three localised catalog + history seeder pairs ship with the project:
-
-| Locale | Catalog seeder | History seeder | `STORES_REGION` | `APP_LOCALE` | `CURRENCY_SYMBOL` |
-|---|---|---|---|---|---|
-| Portuguese (Portugal) | `CatalogItemSeeder` | `ShoppingHistorySeeder` | `pt` | `pt_PT` | `€` |
-| English (US) | `CatalogItemSeederEn` | `ShoppingHistorySeederEn` | `us` | `en` | `$` |
-| Portuguese (Brazil) | `CatalogItemSeederBr` | `ShoppingHistorySeederBr` | `br` | `pt_BR` | `R$` |
-
-For UK, use either the EN catalog or write a `CatalogItemSeederGb` of your own — the regional enum + lang file already exist.
-
-In `database/seeders/DatabaseSeeder.php`, comment out the seeders you don't want and uncomment the pair you do:
-
-For example, the Brazilian configuration:
-
-```php
-$this->call([
-    // CatalogItemSeeder::class,
-    // CatalogItemSeederEn::class,
-    CatalogItemSeederBr::class,
-    // ShoppingHistorySeeder::class,
-    // ShoppingHistorySeederEn::class,
-    ShoppingHistorySeederBr::class,
-]);
-```
-
-Then:
+If you'd rather just poke around without the setup wizard:
 
 ```bash
-php artisan migrate:fresh --seed
+php artisan migrate --seed
 ```
 
-Each catalog seeder ships ~80 grocery items grouped by the same ten categories with preferred-store hints. Each history seeder creates 11 fake completed trips rotating across the region's stores, with locale-appropriate ad-hoc items.
+This creates `admin@example.com` / `password` (rotate immediately) and seeds the PT catalog + history. Edit `database/seeders/DatabaseSeeder.php` if you want a different pair.
 
-Meal bundles in `app/Support/MealBundles.php` are locale-aware: when `APP_LOCALE=en` you get "Roast Chicken" / "Spaghetti Bolognese" / "Mixed Salad" with English ingredient names; when `APP_LOCALE=pt_BR` you get "Frango Assado" / "Macarrão à Bolonhesa" / "Feijoada Brasileira" with Brazilian ingredient names; otherwise you get the European Portuguese set. Bundle keys are stable so existing user-saved recipes keep working across locale switches.
+### Admin management
 
-## Tests
+- Create a second admin or promote an existing user: `php artisan lista:make-admin <email>` (prompts for anything missing).
+- Rotate an admin password: `php artisan tinker --execute 'App\Models\User::admins()->first()->update(["password" => bcrypt("new-password")])'`.
+
+### Requirements
+
+- PHP 8.3+ (8.5 recommended)
+- Node 20+
+- SQLite (default, zero-config) or PostgreSQL — see [DEPLOYMENT.md](DEPLOYMENT.md) for trade-offs
+- Laravel Reverb is optional; the app works fully without real-time sync
+
+## Running locally
+
+```bash
+composer run dev
+```
+
+Starts the HTTP server, Vite, Reverb, the queue worker, and Pail (log viewer) in parallel.
+
+Visit [http://shopping-list.test](http://shopping-list.test) (Laravel Herd) or [http://127.0.0.1:8000](http://127.0.0.1:8000) (artisan serve) and log in with the credentials you set during install.
+
+## Testing
 
 ```bash
 php artisan test --compact
 ```
 
-93 tests, ~155 assertions. Tests run against an in-memory SQLite database, so no setup needed.
+96 tests, ~163 assertions, all against in-memory SQLite. No setup required.
 
 ## Deployment
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for the full guide. Three supported topologies:
+Two supported topologies, both covered in detail in [DEPLOYMENT.md](DEPLOYMENT.md):
 
-1. **Laravel Cloud + PostgreSQL + Reverb** — the recommended production setup, covered in detail.
-2. **Self-hosted VPS + SQLite + no Reverb** — the simplest possible deploy. Real-time sync is disabled, but everything else (history, recipes, prices, prints, exports) works. SQLite is the project's local default and the test environment, so nothing app-side needs to change.
-3. **Anything in between** — Laravel Forge, custom Docker, etc. The app has no special infrastructure requirements beyond a PHP runtime, a database supported by Laravel, and (optionally) a WebSocket server.
-
-## Project layout
-
-```
-app/
-  Concerns/      BroadcastsToOthers trait (guards toOthers() against undefined socket IDs)
-  Enums/         Store, Category, ShoppingListStatus
-  Events/        ItemAdded, ItemRemoved, ItemToggled (broadcast events)
-  Http/Controllers/  ListExportController, ListPrintController
-  Livewire/      ShoppingListPage, AddItemsPage, ListHistoryPage
-  Models/        User, ShoppingList, ShoppingListItem, CatalogItem, MealRecipe
-  Support/       MealBundles (static config for built-in recipes)
-
-database/
-  migrations/    Standard Laravel migrations
-  seeders/       CatalogItemSeeder (~80 Portuguese groceries),
-                 ShoppingHistorySeeder (11 fake completed trips for testing)
-  factories/     For all models with tests
-
-resources/
-  css/app.css    Tailwind v4 + custom utilities + a11y CSS
-  js/app.js      Echo setup, Phosphor icon stubs, sounds module, voiceInput Alpine helper
-  views/
-    flux/icon/    21 Phosphor Duotone stubs
-    livewire/     ShoppingListPage, AddItemsPage, ListHistoryPage
-    components/   bottom-nav, store-badge, text-size-controls
-    layouts/app.blade.php
-    list-print.blade.php
-
-tests/Feature/   Per-component happy-path + edge-case tests
-```
+1. **Laravel Cloud + PostgreSQL + optional Reverb** — managed, auto-TLS, recommended for production.
+2. **Self-hosted VPS + SQLite + no Reverb** — single file backup, minimal ops, perfect for personal use.
 
 ## License
 
-Open-source under the [MIT License](LICENSE) when you publish it. Add a `LICENSE` file before tagging a public release.
+[MIT](LICENSE). Add a `LICENSE` file before tagging a public release.
 
 ## Acknowledgements
 
