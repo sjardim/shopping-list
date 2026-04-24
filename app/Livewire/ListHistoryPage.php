@@ -86,6 +86,6 @@ class ListHistoryPage extends Component
     public function render(): View
     {
         return view('livewire.list-history-page')
-            ->layout('layouts.app', ['title' => 'History']);
+            ->layout('layouts.app', ['title' => __('app.history_title')]);
     }
 }

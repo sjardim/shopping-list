@@ -203,6 +203,6 @@ class AddItemsPage extends Component
     public function render(): View
     {
         return view('livewire.add-items-page')
-            ->layout('layouts.app', ['title' => 'Add Items']);
+            ->layout('layouts.app', ['title' => __('app.add_items_title')]);
     }
 }
