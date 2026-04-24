@@ -85,7 +85,7 @@
                         {{-- Share list --}}
                         <flux:menu.item
                             icon="share"
-                            x-on:click="navigator.clipboard ? navigator.clipboard.writeText('{{ route('list.shared', $shareToken) }}').then(() => $flux.toast('{{ __('app.link_copied') }}')) : $flux.toast('{{ route('list.shared', $shareToken) }}')"
+                            x-on:click="navigator.clipboard ? navigator.clipboard.writeText('{{ route('list.shared', $shareToken) }}').then(() => $flux.toast({ text: '{{ __('app.link_copied') }}', duration: 8000 })) : $flux.toast({ text: '{{ route('list.shared', $shareToken) }}', duration: 12000 })"
                         >
                             {{ __('app.share_list') }}
                         </flux:menu.item>
@@ -118,7 +118,7 @@
                         {{-- Share --}}
                         <flux:menu.item
                             icon="share"
-                            x-on:click="navigator.clipboard ? navigator.clipboard.writeText('{{ route('list.shared', $shareToken) }}').then(() => $flux.toast('{{ __('app.link_copied') }}')) : $flux.toast('{{ route('list.shared', $shareToken) }}')"
+                            x-on:click="navigator.clipboard ? navigator.clipboard.writeText('{{ route('list.shared', $shareToken) }}').then(() => $flux.toast({ text: '{{ __('app.link_copied') }}', duration: 8000 })) : $flux.toast({ text: '{{ route('list.shared', $shareToken) }}', duration: 12000 })"
                         >
                             {{ __('app.share_list') }}
                         </flux:menu.item>

@@ -175,6 +175,8 @@ class ShoppingListPage extends Component
 
     private const UNDO_WINDOW_MINUTES = 5;
 
+    private const TOAST_DURATION_MS = 8000;
+
     public function finishTrip(): void
     {
         if ($this->mode !== 'owner') {
@@ -190,7 +192,7 @@ class ShoppingListPage extends Component
 
         $this->dispatch('trip-finished');
 
-        Flux::toast(__('app.trip_done'));
+        Flux::toast(__('app.trip_done'), duration: self::TOAST_DURATION_MS);
     }
 
     #[Computed]
@@ -236,7 +238,7 @@ class ShoppingListPage extends Component
 
         $this->dispatch('trip-restored');
 
-        Flux::toast(__('app.trip_restored'));
+        Flux::toast(__('app.trip_restored'), duration: self::TOAST_DURATION_MS);
     }
 
     public function clearList(): void
@@ -301,7 +303,7 @@ class ShoppingListPage extends Component
     {
         unset($this->itemsByCategory);
         $this->dispatch('list-updated-remotely');
-        Flux::toast(__('app.list_updated'));
+        Flux::toast(__('app.list_updated'), duration: self::TOAST_DURATION_MS);
     }
 
     public function render(): View

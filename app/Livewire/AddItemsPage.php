@@ -134,7 +134,7 @@ class AddItemsPage extends Component
             }
         }
 
-        Flux::toast("Added {$bundle['name']} to your list!");
+        Flux::toast("Added {$bundle['name']} to your list!", duration: 8000);
     }
 
     public function addToList(): void

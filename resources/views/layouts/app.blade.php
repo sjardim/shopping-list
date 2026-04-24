@@ -105,7 +105,7 @@
     </div>
 
     @persist('toast')
-        <flux:toast />
+        <flux:toast position="top center" class="!pt-4" />
     @endpersist
 
     @fluxScripts

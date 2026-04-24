@@ -71,7 +71,7 @@ class ListHistoryPage extends Component
             'added' => $added,
             'restored' => $restored,
             'skipped' => $skipped,
-        ]));
+        ]), duration: 8000);
 
         $this->redirect(route('home'));
     }

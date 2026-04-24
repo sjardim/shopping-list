@@ -55,6 +55,19 @@
     min-height: 2.75rem;
 }
 
+/* Toast: span the full mobile viewport with safe gutters; cap at 28rem on tablet+. */
+[data-flux-toast-dialog] {
+    max-width: calc(100vw - 1.5rem);
+    width: calc(100vw - 1.5rem);
+}
+
+@media (min-width: 640px) {
+    [data-flux-toast-dialog] {
+        max-width: 28rem;
+        width: 28rem;
+    }
+}
+
 @utility heading-serif {
     font-family: Georgia, 'Times New Roman', serif;
 }
