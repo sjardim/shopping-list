@@ -48,17 +48,16 @@ abstract class BaseShoppingHistorySeeder extends Seeder
 
     public function run(): void
     {
-        $email = config('lista.owner.email');
-        $owner = User::where('email', $email)->first();
+        $admin = User::admins()->oldest('id')->first();
 
-        if ($owner === null) {
-            $this->command->warn(sprintf('Owner user %s not found — run DatabaseSeeder first.', $email));
+        if ($admin === null) {
+            $this->command->warn('No admin user found — run AdminUserSeeder first, or `php artisan lista:install`.');
 
             return;
         }
 
-        if ($this->ownerHasCompletedLists($owner)) {
-            $this->command->info('Shopping history already present for owner — skipping.');
+        if ($this->adminHasCompletedLists($admin)) {
+            $this->command->info('Shopping history already present for admin — skipping.');
 
             return;
         }
@@ -71,24 +70,24 @@ abstract class BaseShoppingHistorySeeder extends Seeder
             return;
         }
 
-        $this->buildHistoryFor($owner, $catalog);
+        $this->buildHistoryFor($admin, $catalog);
     }
 
-    private function ownerHasCompletedLists(User $owner): bool
+    private function adminHasCompletedLists(User $admin): bool
     {
         return ShoppingList::query()
-            ->where('user_id', $owner->id)
+            ->where('user_id', $admin->id)
             ->where('status', ShoppingListStatus::Completed)
             ->exists();
     }
 
-    private function buildHistoryFor(User $owner, Collection $catalog): void
+    private function buildHistoryFor(User $admin, Collection $catalog): void
     {
         foreach ($this->trips() as [$store, $daysAgo]) {
             $completedAt = Carbon::now()->subDays($daysAgo)->setTime(18, mt_rand(0, 59));
 
             $list = ShoppingList::create([
-                'user_id' => $owner->id,
+                'user_id' => $admin->id,
                 'name' => sprintf('%s · %s', $store->label(), $completedAt->format('d M')),
                 'store' => $store->value,
                 'status' => ShoppingListStatus::Completed->value,

@@ -29,22 +29,4 @@ return [
     'currency' => [
         'symbol' => env('CURRENCY_SYMBOL', '€'),
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Owner identity
-    |--------------------------------------------------------------------------
-    |
-    | Single-user app: these credentials seed the one owner account and are
-    | the lookup key for any seeder that needs to attach data to that user.
-    | Change the env values for your install before the first migration/seed.
-    | The seeded password should be rotated immediately after first login —
-    | see DEPLOYMENT.md → Changing the Owner Password.
-    |
-    */
-    'owner' => [
-        'email' => env('OWNER_EMAIL', 'owner@example.com'),
-        'name' => env('OWNER_NAME', 'Owner'),
-        'password' => env('OWNER_PASSWORD', 'secret'),
-    ],
 ];

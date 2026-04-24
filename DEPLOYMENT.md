@@ -37,9 +37,9 @@ APP_FALLBACK_LOCALE=en
 STORES_REGION=pt                 # pt, us, or uk
 CURRENCY_SYMBOL=€                # shown next to every price
 
-OWNER_EMAIL=you@example.com      # seeded owner account identity
-OWNER_NAME="Your Name"
-OWNER_PASSWORD=                  # change this, then rotate immediately after login
+# Admin user is created via the database, not env. After deploy run:
+#   php artisan lista:install        (interactive: locale, region, currency, admin)
+#   php artisan lista:make-admin     (ad-hoc admin creation / promotion)
 
 DB_CONNECTION=pgsql
 DB_HOST=                        # provided by Laravel Cloud
@@ -114,19 +114,21 @@ The seeder uses `firstOrCreate`, so re-running it on subsequent deploys is safe.
 ## Post-Deploy Checklist
 
 - [ ] Visit `/login` and confirm the login page loads.
-- [ ] Log in with the email + password from your `OWNER_EMAIL` / `OWNER_PASSWORD` env vars.
+- [ ] Log in with the email + password you set via `php artisan lista:install` (or the dev defaults `admin@example.com` / `password` if you ran `db:seed` instead).
 - [ ] Add an item to the list and confirm it appears.
 - [ ] Copy the share URL and open it in a private window — confirm shared mode (no "Finish trip" or "Clear" buttons).
 - [ ] (If Reverb is enabled) Toggle an item in one window, confirm the other window shows "Lista atualizada" within a second or two.
 - [ ] Finish a trip and confirm the history page shows the archived list.
 
-## Changing the Owner Password
+## Changing the Admin Password
 
-The owner account is seeded with the password from `OWNER_PASSWORD` (defaults to `secret`). Rotate it immediately after the first login:
+If you ran `db:seed`, the admin account is `admin@example.com` / `password`. Rotate it immediately:
 
 ```bash
-php artisan tinker --execute 'App\Models\User::where("email", config("lista.owner.email"))->first()->update(["password" => bcrypt("your-new-password")])'
+php artisan tinker --execute 'App\Models\User::admins()->first()->update(["password" => bcrypt("your-new-password")])'
 ```
+
+If you ran `php artisan lista:install`, the password is whatever you typed during setup — change it the same way, or via `php artisan lista:make-admin <email>` for promotion / re-creation flows.
 
 ## Option B: Self-hosted VPS + SQLite
 
@@ -155,9 +157,9 @@ DB_CONNECTION=sqlite
 STORES_REGION=pt                 # pt, us, or uk
 CURRENCY_SYMBOL=€                # shown next to every price
 
-OWNER_EMAIL=you@example.com      # seeded owner account identity
-OWNER_NAME="Your Name"
-OWNER_PASSWORD=                  # change this, then rotate immediately after login
+# Admin user is created via the database, not env. After deploy run:
+#   php artisan lista:install        (interactive: locale, region, currency, admin)
+#   php artisan lista:make-admin     (ad-hoc admin creation / promotion)
 
 BROADCAST_CONNECTION=log
 QUEUE_CONNECTION=database
@@ -175,7 +177,7 @@ CACHE_STORE=database
 6. `php artisan migrate --seed --force`
 7. `php artisan config:cache route:cache view:cache`
 8. Point Nginx/Apache at `public/`.
-9. Change the seeded owner password (see [Changing the Owner Password](#changing-the-owner-password)).
+9. Run `php artisan lista:install` (or `php artisan lista:make-admin <email>` to add an admin without the locale/region prompts).
 
 ### Backups
 

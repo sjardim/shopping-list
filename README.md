@@ -111,7 +111,7 @@ It writes the chosen values to `.env`, runs the migrations, and seeds the matchi
 
 `composer run dev` starts Vite, Reverb, the queue worker, and Pail in parallel.
 
-If you'd rather skip the interactive setup, set the env vars manually and run `php artisan migrate --seed` — `DatabaseSeeder` calls `OwnerUserSeeder` plus a hardcoded catalog/history pair (defaults to PT, edit the file to switch).
+If you'd rather skip the interactive setup, run `php artisan migrate --seed` — `DatabaseSeeder` calls `AdminUserSeeder` (creates `admin@example.com` / `password`) plus a hardcoded catalog/history pair. Edit `DatabaseSeeder` to swap the catalog/history pair, then rotate the password via `lista:make-admin` or tinker.
 
 ### English seed data (US groceries + stores)
 

@@ -2,9 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Models\User;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Hash;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\info;
@@ -47,22 +49,22 @@ class InstallCommand extends Command
         $currency = text('Currency symbol', default: $this->defaultCurrencyFor($region));
 
         $email = text(
-            label: 'Owner email',
-            default: 'owner@example.com',
+            label: 'Admin email',
+            default: 'admin@example.com',
             validate: fn (string $v) => filter_var($v, FILTER_VALIDATE_EMAIL) ? null : 'Please enter a valid email address.',
         );
 
-        $name = text('Owner display name', default: 'Owner');
+        $name = text('Admin display name', default: 'Admin');
 
         $userPassword = password(
-            label: 'Owner password',
+            label: 'Admin password',
             hint: 'Min 6 characters. Rotate after first login.',
             validate: fn (string $v) => strlen($v) >= 6 ? null : 'Password must be at least 6 characters.',
         );
 
         $this->renderSummary($locale, $region, $currency, $email, $name);
 
-        if (! confirm('Write these to .env, run migrations and seed?', default: true)) {
+        if (! confirm('Apply these settings now?', default: true)) {
             warning('Aborted. Nothing changed.');
 
             return self::FAILURE;
@@ -72,9 +74,6 @@ class InstallCommand extends Command
             'APP_LOCALE' => $locale,
             'STORES_REGION' => $region,
             'CURRENCY_SYMBOL' => $currency,
-            'OWNER_EMAIL' => $email,
-            'OWNER_NAME' => $name,
-            'OWNER_PASSWORD' => $userPassword,
         ]);
 
         // Refresh runtime config so the seeders pick up the new values immediately.
@@ -82,20 +81,28 @@ class InstallCommand extends Command
             'app.locale' => $locale,
             'lista.stores.region' => $region,
             'lista.currency.symbol' => $currency,
-            'lista.owner.email' => $email,
-            'lista.owner.name' => $name,
-            'lista.owner.password' => $userPassword,
         ]);
 
         app()->setLocale($locale);
 
         $this->call('migrate', ['--force' => true]);
-        $this->call('db:seed', ['--class' => 'Database\\Seeders\\OwnerUserSeeder', '--force' => true]);
+
+        // Create or update the admin directly (bypasses AdminUserSeeder so the
+        // user gets the credentials they typed, not the dev defaults).
+        User::updateOrCreate(
+            ['email' => $email],
+            [
+                'name' => $name,
+                'password' => Hash::make($userPassword),
+                'is_admin' => true,
+            ]
+        );
+
         $this->call('db:seed', ['--class' => $this->catalogSeederFor($region), '--force' => true]);
         $this->call('db:seed', ['--class' => $this->historySeederFor($region), '--force' => true]);
 
         info('All set. Run "composer run dev" and visit your local URL to log in.');
-        note(sprintf('Login: %s / (the password you just set). Rotate it from settings or via tinker.', $email));
+        note(sprintf('Login: %s / (the password you just set).', $email));
 
         return self::SUCCESS;
     }
