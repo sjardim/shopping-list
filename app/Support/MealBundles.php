@@ -26,8 +26,9 @@ class MealBundles
     private static function bundles(): array
     {
         return match (app()->getLocale()) {
-            'en' => self::englishBundles(),
+            'en', 'en_GB' => self::englishBundles(),
             'pt_BR' => self::brazilianBundles(),
+            'es' => self::spanishBundles(),
             default => self::portugueseBundles(),
         };
     }
@@ -417,6 +418,138 @@ class MealBundles
                     ['name' => 'Atum em lata', 'quantity' => 2, 'unit' => 'lata'],
                     ['name' => 'Azeite', 'quantity' => 1, 'unit' => 'ml'],
                     ['name' => 'Vinagre', 'quantity' => 1, 'unit' => 'ml'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Item names match those in CatalogItemSeederEs so bundle merges link
+     * to catalog items (preserving emoji, category, preferred-store hints).
+     *
+     * @return array<string, array{name: string, emoji: string, items: array<int, array{name: string, quantity: float, unit: string}>}>
+     */
+    private static function spanishBundles(): array
+    {
+        return [
+            'frango_assado' => [
+                'name' => 'Pollo Asado',
+                'emoji' => '🍗',
+                'items' => [
+                    ['name' => 'Pollo entero', 'quantity' => 1, 'unit' => 'kg'],
+                    ['name' => 'Ajo', 'quantity' => 4, 'unit' => 'un'],
+                    ['name' => 'Limón', 'quantity' => 2, 'unit' => 'un'],
+                    ['name' => 'Aceite de oliva', 'quantity' => 1, 'unit' => 'ml'],
+                    ['name' => 'Patata', 'quantity' => 1, 'unit' => 'kg'],
+                    ['name' => 'Cebolla', 'quantity' => 2, 'unit' => 'un'],
+                    ['name' => 'Sal', 'quantity' => 1, 'unit' => 'un'],
+                ],
+            ],
+            'caldo_verde' => [
+                'name' => 'Sopa Castellana',
+                'emoji' => '🥣',
+                'items' => [
+                    ['name' => 'Pan de barra', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Ajo', 'quantity' => 4, 'unit' => 'un'],
+                    ['name' => 'Pimentón', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Huevos', 'quantity' => 4, 'unit' => 'un'],
+                    ['name' => 'Aceite de oliva', 'quantity' => 1, 'unit' => 'ml'],
+                ],
+            ],
+            'bacalhau_braga' => [
+                'name' => 'Bacalao a la Vizcaína',
+                'emoji' => '🐟',
+                'items' => [
+                    ['name' => 'Bacalao', 'quantity' => 0.5, 'unit' => 'kg'],
+                    ['name' => 'Cebolla', 'quantity' => 3, 'unit' => 'un'],
+                    ['name' => 'Ajo', 'quantity' => 4, 'unit' => 'un'],
+                    ['name' => 'Pimiento', 'quantity' => 2, 'unit' => 'un'],
+                    ['name' => 'Tomate frito', 'quantity' => 350, 'unit' => 'g'],
+                    ['name' => 'Aceite de oliva', 'quantity' => 1, 'unit' => 'ml'],
+                ],
+            ],
+            'churrasco' => [
+                'name' => 'Parrillada',
+                'emoji' => '🔥',
+                'items' => [
+                    ['name' => 'Chuletas de cerdo', 'quantity' => 1, 'unit' => 'kg'],
+                    ['name' => 'Pechuga de pollo', 'quantity' => 0.5, 'unit' => 'kg'],
+                    ['name' => 'Chorizo', 'quantity' => 2, 'unit' => 'un'],
+                    ['name' => 'Cerveza', 'quantity' => 6, 'unit' => 'un'],
+                    ['name' => 'Pan de barra', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Sal', 'quantity' => 1, 'unit' => 'un'],
+                ],
+            ],
+            'massa_bolonhesa' => [
+                'name' => 'Espaguetis a la Boloñesa',
+                'emoji' => '🍝',
+                'items' => [
+                    ['name' => 'Espaguetis', 'quantity' => 500, 'unit' => 'g'],
+                    ['name' => 'Carne picada', 'quantity' => 500, 'unit' => 'g'],
+                    ['name' => 'Tomate frito', 'quantity' => 350, 'unit' => 'g'],
+                    ['name' => 'Cebolla', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Ajo', 'quantity' => 2, 'unit' => 'un'],
+                    ['name' => 'Aceite de oliva', 'quantity' => 1, 'unit' => 'ml'],
+                ],
+            ],
+            'arroz_frango' => [
+                'name' => 'Arroz con Pollo',
+                'emoji' => '🍚',
+                'items' => [
+                    ['name' => 'Pechuga de pollo', 'quantity' => 0.5, 'unit' => 'kg'],
+                    ['name' => 'Arroz', 'quantity' => 1, 'unit' => 'kg'],
+                    ['name' => 'Tomate', 'quantity' => 2, 'unit' => 'un'],
+                    ['name' => 'Cebolla', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Ajo', 'quantity' => 2, 'unit' => 'un'],
+                    ['name' => 'Aceite de oliva', 'quantity' => 1, 'unit' => 'ml'],
+                ],
+            ],
+            'sopa_legumes' => [
+                'name' => 'Sopa de Verduras',
+                'emoji' => '🍲',
+                'items' => [
+                    ['name' => 'Zanahoria', 'quantity' => 2, 'unit' => 'un'],
+                    ['name' => 'Patata', 'quantity' => 3, 'unit' => 'un'],
+                    ['name' => 'Cebolla', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Ajo', 'quantity' => 2, 'unit' => 'un'],
+                    ['name' => 'Aceite de oliva', 'quantity' => 1, 'unit' => 'ml'],
+                    ['name' => 'Sal', 'quantity' => 1, 'unit' => 'un'],
+                ],
+            ],
+            'feijoada' => [
+                'name' => 'Fabada Asturiana',
+                'emoji' => '🫘',
+                'items' => [
+                    ['name' => 'Judías blancas', 'quantity' => 2, 'unit' => 'lata'],
+                    ['name' => 'Chorizo', 'quantity' => 2, 'unit' => 'un'],
+                    ['name' => 'Morcilla', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Bacon', 'quantity' => 200, 'unit' => 'g'],
+                    ['name' => 'Cebolla', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Ajo', 'quantity' => 2, 'unit' => 'un'],
+                ],
+            ],
+            'ovos_mexidos' => [
+                'name' => 'Huevos Revueltos con Jamón',
+                'emoji' => '🍳',
+                'items' => [
+                    ['name' => 'Huevos', 'quantity' => 6, 'unit' => 'un'],
+                    ['name' => 'Jamón serrano', 'quantity' => 200, 'unit' => 'g'],
+                    ['name' => 'Mantequilla', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Pan de molde', 'quantity' => 1, 'unit' => 'un'],
+                ],
+            ],
+            'salada_mista' => [
+                'name' => 'Ensalada Mixta',
+                'emoji' => '🥗',
+                'items' => [
+                    ['name' => 'Lechuga', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Tomate', 'quantity' => 3, 'unit' => 'un'],
+                    ['name' => 'Pepino', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Cebolla', 'quantity' => 1, 'unit' => 'un'],
+                    ['name' => 'Atún en lata', 'quantity' => 2, 'unit' => 'lata'],
+                    ['name' => 'Aceite de oliva', 'quantity' => 1, 'unit' => 'ml'],
+                    ['name' => 'Vinagre', 'quantity' => 1, 'unit' => 'ml'],
+                    ['name' => 'Aceitunas', 'quantity' => 200, 'unit' => 'g'],
                 ],
             ],
         ];

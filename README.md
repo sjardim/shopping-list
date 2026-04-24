@@ -15,7 +15,7 @@ Built on Laravel 13, Livewire 4, Tailwind v4, and Flux UI (Free edition only).
 - **Confetti and a TADA chord** when you finish a trip. **Undo** for 5 minutes.
 - **Full accessibility cluster**: text scaling (UI + list-only), high contrast, 44×44 tap targets, sound mute, `prefers-reduced-motion`.
 - **Export JSON** and **print A4** for any list.
-- **Four locales** (`en`, `en_GB`, `pt_PT`, `pt_BR`) and **four store regions** (`pt`, `us`, `uk`, `br`), each with a pre-seeded catalog and fake history.
+- **Five locales** (`en`, `en_GB`, `pt_PT`, `pt_BR`, `es`) and **five store regions** (`pt`, `us`, `uk`, `br`, `es`), each with a pre-seeded catalog and fake history.
 - **PWA-ready** — installs to the home screen.
 - **96 Pest tests**, runs on SQLite in memory.
 
@@ -40,7 +40,7 @@ composer run dev
 
 `php artisan lista:install` walks you through four prompts — language, store region, currency symbol, admin email/name/password — then writes env, runs migrations, and seeds the matching catalog/history pair. Idempotent, safe to re-run.
 
-Defaults pair sensibly: pick `English (UK)` and it proposes UK region + `£`; pick `Português (Brasil)` and it proposes BR region + `R$`. You can override any default.
+Defaults pair sensibly: pick `English (UK)` and it proposes UK region + `£`; pick `Português (Brasil)` and it proposes BR region + `R$`; pick `Español` and it proposes ES region + `€`. You can override any default.
 
 ### Non-interactive install (dev defaults)
 

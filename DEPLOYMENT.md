@@ -34,7 +34,7 @@ APP_DEBUG=false
 APP_LOCALE=pt_PT
 APP_FALLBACK_LOCALE=en
 
-STORES_REGION=pt                 # pt, us, or uk
+STORES_REGION=pt                 # pt, us, uk, br, or es
 CURRENCY_SYMBOL=€                # shown next to every price
 
 # Admin user is created via the database, not env. After deploy run:
@@ -154,7 +154,7 @@ APP_FALLBACK_LOCALE=en
 DB_CONNECTION=sqlite
 # DB_DATABASE defaults to database/database.sqlite — leave it commented to use the default
 
-STORES_REGION=pt                 # pt, us, or uk
+STORES_REGION=pt                 # pt, us, uk, br, or es
 CURRENCY_SYMBOL=€                # shown next to every price
 
 # Admin user is created via the database, not env. After deploy run:

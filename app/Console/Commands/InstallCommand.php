@@ -6,10 +6,12 @@ use App\Models\User;
 use Database\Seeders\CatalogItemSeeder;
 use Database\Seeders\CatalogItemSeederBr;
 use Database\Seeders\CatalogItemSeederEn;
+use Database\Seeders\CatalogItemSeederEs;
 use Database\Seeders\CatalogItemSeederGb;
 use Database\Seeders\ShoppingHistorySeeder;
 use Database\Seeders\ShoppingHistorySeederBr;
 use Database\Seeders\ShoppingHistorySeederEn;
+use Database\Seeders\ShoppingHistorySeederEs;
 use Database\Seeders\ShoppingHistorySeederGb;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
@@ -29,17 +31,19 @@ use function Laravel\Prompts\warning;
 class InstallCommand extends Command
 {
     private const array LOCALES = [
-        'en' => 'English',
-        'en_GB' => 'English (UK)',
-        'pt_PT' => 'Português (Portugal)',
-        'pt_BR' => 'Português (Brasil)',
+        'en' => '🇺🇸 English',
+        'en_GB' => '🇬🇧 English (UK)',
+        'pt_PT' => '🇵🇹 Português (Portugal)',
+        'pt_BR' => '🇧🇷 Português (Brasil)',
+        'es' => '🇪🇸 Español',
     ];
 
     private const array REGIONS = [
-        'pt' => 'Portugal',
-        'us' => 'United States',
-        'uk' => 'United Kingdom',
-        'br' => 'Brazil',
+        'pt' => '🇵🇹 Portugal',
+        'us' => '🇺🇸 United States',
+        'uk' => '🇬🇧 United Kingdom',
+        'es' => '🇪🇸 Spain',
+        'br' => '🇧🇷 Brazil',
     ];
 
     public function handle(): int
@@ -130,6 +134,7 @@ class InstallCommand extends Command
             'pt_PT' => 'pt',
             'pt_BR' => 'br',
             'en_GB' => 'uk',
+            'es' => 'es',
             default => 'us',
         };
     }
@@ -137,7 +142,7 @@ class InstallCommand extends Command
     private function defaultCurrencyFor(string $region): string
     {
         return match ($region) {
-            'pt' => '€',
+            'pt', 'es' => '€',
             'uk' => '£',
             'br' => 'R$',
             default => '$',
@@ -150,6 +155,7 @@ class InstallCommand extends Command
             'pt' => CatalogItemSeeder::class,
             'br' => CatalogItemSeederBr::class,
             'uk' => CatalogItemSeederGb::class,
+            'es' => CatalogItemSeederEs::class,
             default => CatalogItemSeederEn::class,
         };
     }
@@ -160,6 +166,7 @@ class InstallCommand extends Command
             'pt' => ShoppingHistorySeeder::class,
             'br' => ShoppingHistorySeederBr::class,
             'uk' => ShoppingHistorySeederGb::class,
+            'es' => ShoppingHistorySeederEs::class,
             default => ShoppingHistorySeederEn::class,
         };
     }

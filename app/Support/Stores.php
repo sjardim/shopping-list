@@ -4,6 +4,7 @@ namespace App\Support;
 
 use App\Contracts\Store;
 use App\Enums\StoreBr;
+use App\Enums\StoreEs;
 use App\Enums\StorePt;
 use App\Enums\StoreUk;
 use App\Enums\StoreUs;
@@ -22,6 +23,7 @@ class Stores
         'us' => StoreUs::class,
         'uk' => StoreUk::class,
         'br' => StoreBr::class,
+        'es' => StoreEs::class,
     ];
 
     /**

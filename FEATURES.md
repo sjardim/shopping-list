@@ -19,7 +19,7 @@ A reference for everything Lista does. The [README](README.md) has the elevator 
 
 ## Catalog and recipes
 
-- **Pre-seeded catalog** — ~80 grocery items per region (PT, US, UK, BR), each with category, default unit, default quantity, emoji, and a preferred-store hint.
+- **Pre-seeded catalog** — ~80 grocery items per region (PT, US, UK, BR, ES), each with category, default unit, default quantity, emoji, and a preferred-store hint.
 - **Auto-learning preferred store** — when you buy a catalog item at the same store more than three times, the catalog updates the item's preferred store silently. Future lists show "usually at <store>" hints.
 - **Cook something tab** — built-in meal bundles (10 per locale: Frango Assado / Bacalhau à Braga / Caldo Verde / Churrasco / Massa Bolonhesa / etc.) merge all ingredients into the active list with one tap, skipping items already on the list and matching catalog items so your store hints stick.
 - **Save as recipe** — turn the current list into a custom bundle with a name and emoji. Saved recipes appear in the Cook tab next to the built-ins, each with a green "your recipe" badge and a delete action. Bundle keys are stable across locale switches.
@@ -78,12 +78,13 @@ To swap the TADA for a real applause clip, drop `public/sounds/finish-trip.mp3` 
 
 ## Internationalisation
 
-- **Four locales shipped**: `en`, `en_GB`, `pt_PT`, `pt_BR`. Switchable from the profile dropdown.
-- **Three currencies expected**: `€` (PT default), `$` (US), `£` (UK), `R$` (BR). Set via `CURRENCY_SYMBOL` env var.
-- **Four store regions**: `pt`, `us`, `uk`, `br`. Set via `STORES_REGION`. Picker only shows the active region's stores; other regions stay loaded as fallbacks so older lists keep their badges.
+- **Five locales shipped**: `en`, `en_GB`, `pt_PT`, `pt_BR`, `es`. Switchable from the profile dropdown.
+- **Currencies expected**: `€` (PT and ES default), `$` (US), `£` (UK), `R$` (BR). Set via `CURRENCY_SYMBOL` env var.
+- **Five store regions**: `pt`, `us`, `uk`, `br`, `es`. Set via `STORES_REGION`. Picker only shows the active region's stores; other regions stay loaded as fallbacks so older lists keep their badges.
 - **Locale-aware meal bundles** — `MealBundles::all()` branches on `app()->getLocale()`:
-  - `en` → English bundles ("Roast Chicken", "Spaghetti Bolognese", "Mixed Salad")
+  - `en`, `en_GB` → English bundles ("Roast Chicken", "Spaghetti Bolognese", "Mixed Salad")
   - `pt_BR` → Brazilian bundles ("Frango Assado", "Macarrão à Bolonhesa", "Feijoada Brasileira")
+  - `es` → Spanish bundles ("Pollo Asado", "Bacalao a la Vizcaína", "Fabada Asturiana")
   - any other (default) → European Portuguese bundles ("Frango Assado", "Bacalhau à Braga", "Caldo Verde")
 - Bundle keys are stable across locales so user-saved recipes keep working when you switch.
 
@@ -146,7 +147,7 @@ app/
   Concerns/      BroadcastsToOthers — guards toOthers() against undefined socket IDs
   Console/Commands/  InstallCommand, MakeAdminCommand
   Contracts/     Store interface
-  Enums/         StorePt, StoreUs, StoreUk, StoreBr, Category, ShoppingListStatus
+  Enums/         StorePt, StoreUs, StoreUk, StoreBr, StoreEs, Category, ShoppingListStatus
   Events/        ItemAdded, ItemRemoved, ItemToggled (broadcast events)
   Http/Controllers/  ListExportController, ListPrintController
   Livewire/      ShoppingListPage, AddItemsPage, ListHistoryPage

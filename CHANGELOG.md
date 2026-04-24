@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## Unreleased
+
+### Added
+
+- **Spanish locale (`es`) and Spain region (`es`)** end-to-end. New `App\Enums\StoreEs` (Mercadona, Carrefour, Dia, Eroski, Alcampo, Hipercor) with brand colours and dark-text rules. New `CatalogItemSeederEs` with ~80 Spanish grocery items and `ShoppingHistorySeederEs` with 11 fake trips rotating across all six chains. `MealBundles::all()` gains a `'es'` branch with 10 Spanish recipes (Pollo Asado, Bacalao a la Vizcaína, Fabada Asturiana, etc.). The locale switcher dropdown shows `Español`, and `lista:install` lists Spanish/Spain as first-class options that default to `€`.
+
 ## 1.1.0 — Around the World (2026-04-24)
 
 This release is about getting Lista out of Portugal. New developers cloning the repo for a US, UK, or any other supermarket landscape now have a clean path that doesn't involve learning the difference between Continente and Mercadona.
