@@ -116,22 +116,38 @@ class AddItemsPage extends Component
         }
 
         foreach ($bundle['items'] as $bundleItem) {
-            $catalogItem = CatalogItem::where('name', 'ILIKE', $bundleItem['name'])->first();
+            $catalogItem = CatalogItem::query()
+                ->whereRaw('LOWER(name) = LOWER(?)', [$bundleItem['name']])
+                ->first();
 
             if ($catalogItem !== null) {
-                if (! in_array($catalogItem->id, $this->selectedCatalogIds, true)) {
-                    $this->selectedCatalogIds[] = $catalogItem->id;
+                if (in_array($catalogItem->id, $this->selectedCatalogIds, true)) {
+                    continue;
                 }
-            } else {
-                // Create the item directly on the list for non-catalog entries
+
                 $item = $this->activeList->items()->create([
-                    'name' => $bundleItem['name'],
+                    'catalog_item_id' => $catalogItem->id,
+                    'name' => $catalogItem->name,
+                    'emoji' => $catalogItem->emoji,
+                    'category' => $catalogItem->category,
                     'quantity' => $bundleItem['quantity'],
                     'unit' => $bundleItem['unit'],
+                    'preferred_store' => $catalogItem->preferred_store,
                 ]);
 
                 $this->broadcastToOthers(new ItemAdded($item));
+                $this->selectedCatalogIds[] = $catalogItem->id;
+
+                continue;
             }
+
+            $item = $this->activeList->items()->create([
+                'name' => $bundleItem['name'],
+                'quantity' => $bundleItem['quantity'],
+                'unit' => $bundleItem['unit'],
+            ]);
+
+            $this->broadcastToOthers(new ItemAdded($item));
         }
 
         Flux::toast(__('app.bundle_added', ['name' => $bundle['name']]), duration: 8000);

@@ -115,3 +115,42 @@ test('meal bundle tab is available', function () {
         ->test(AddItemsPage::class)
         ->assertSet('activeTab', 'suggested');
 });
+
+test('applying a meal bundle creates list items for catalog matches', function () {
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+
+    $bacalhau = CatalogItem::factory()->create(['name' => 'Bacalhau']);
+    $cebola = CatalogItem::factory()->create(['name' => 'Cebola']);
+
+    Livewire::actingAs($user)
+        ->test(AddItemsPage::class)
+        ->call('applyMealBundle', 'bacalhau_braga');
+
+    expect($list->fresh()->items()->where('catalog_item_id', $bacalhau->id)->exists())->toBeTrue();
+    expect($list->fresh()->items()->where('catalog_item_id', $cebola->id)->exists())->toBeTrue();
+});
+
+test('applying a meal bundle does not duplicate items already on the list', function () {
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+    $bacalhau = CatalogItem::factory()->create(['name' => 'Bacalhau']);
+    ShoppingListItem::factory()->for($list, 'list')->create(['catalog_item_id' => $bacalhau->id]);
+
+    Livewire::actingAs($user)
+        ->test(AddItemsPage::class)
+        ->call('applyMealBundle', 'bacalhau_braga');
+
+    expect($list->fresh()->items()->where('catalog_item_id', $bacalhau->id)->count())->toBe(1);
+});
+
+test('applying a meal bundle creates list items for non-catalog entries', function () {
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+
+    Livewire::actingAs($user)
+        ->test(AddItemsPage::class)
+        ->call('applyMealBundle', 'churrasco');
+
+    expect($list->fresh()->items()->where('name', 'Sal grosso')->exists())->toBeTrue();
+});
