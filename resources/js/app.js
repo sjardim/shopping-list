@@ -112,7 +112,16 @@ const sounds = {
             { freq: 1318.51, time: 0, dur: 0.22, gain: 0.1 },
         ]);
     },
+
+    toggle() {
+        synth([
+            { freq: 880, time: 0, dur: 0.06, gain: 0.1 },
+            { freq: 1318.51, time: 0.04, dur: 0.08, gain: 0.1 },
+        ]);
+    },
 };
+
+window.lista = { sounds };
 
 function celebrateFinish() {
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {

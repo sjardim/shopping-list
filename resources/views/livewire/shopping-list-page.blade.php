@@ -213,11 +213,15 @@
                     <div class="bg-white rounded-3xl overflow-hidden divide-y divide-[#f4f0e8]">
                         @foreach($items as $item)
                             @php $storeEnum = $item['preferred_store'] ? \App\Enums\Store::tryFrom($item['preferred_store']) : null; @endphp
-                            <div wire:key="item-{{ $item['id'] }}" class="flex items-center gap-3 px-4 py-3.5 fade-in-up">
+                            <div
+                                wire:key="item-{{ $item['id'] }}"
+                                x-data="{ sliding: false }"
+                                x-bind:class="sliding && '-translate-x-full opacity-0'"
+                                class="flex items-center gap-3 px-4 py-3.5 fade-in-up transition-all duration-200 ease-out"
+                            >
                                 {{-- Square checkbox --}}
                                 <button
-                                    wire:click="toggleItem({{ $item['id'] }})"
-                                    x-on:click="navigator.vibrate?.(8); $el.classList.remove('check-pulse'); requestAnimationFrame(() => $el.classList.add('check-pulse'))"
+                                    x-on:click="navigator.vibrate?.(8); window.lista?.sounds?.toggle(); sliding = true; setTimeout(() => $wire.toggleItem({{ $item['id'] }}), 200)"
                                     class="shrink-0 size-6 rounded-lg border-2 border-[#d5cdbc] hover:border-[#2f7d4f] transition-colors tap"
                                     aria-label="{{ __('app.mark_bought', ['name' => $item['name']]) }}"
                                 ></button>
@@ -270,11 +274,15 @@
                     </h2>
                     <div class="bg-white/60 rounded-3xl overflow-hidden divide-y divide-[#f4f0e8]">
                         @foreach($this->itemsByCategory['bought'] as $item)
-                            <div wire:key="bought-{{ $item['id'] }}" class="flex items-center gap-3 px-4 py-3.5 fade-in-up">
+                            <div
+                                wire:key="bought-{{ $item['id'] }}"
+                                x-data="{ sliding: false }"
+                                x-bind:class="sliding && '-translate-x-full opacity-0'"
+                                class="flex items-center gap-3 px-4 py-3.5 fade-in-up transition-all duration-200 ease-out"
+                            >
                                 {{-- Filled checkbox --}}
                                 <button
-                                    wire:click="toggleItem({{ $item['id'] }})"
-                                    x-on:click="navigator.vibrate?.(8); $el.classList.remove('check-pulse'); requestAnimationFrame(() => $el.classList.add('check-pulse'))"
+                                    x-on:click="navigator.vibrate?.(8); window.lista?.sounds?.toggle(); sliding = true; setTimeout(() => $wire.toggleItem({{ $item['id'] }}), 200)"
                                     class="shrink-0 size-6 rounded-lg bg-[#2f7d4f] flex items-center justify-center hover:bg-[#256b41] transition-colors tap"
                                     aria-label="{{ __('app.mark_unbought', ['name' => $item['name']]) }}"
                                 >
