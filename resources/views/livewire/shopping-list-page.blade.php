@@ -78,6 +78,9 @@
                         <flux:menu.item wire:click="switchLocale('en')" icon="{{ $locale === 'en' ? 'check' : '' }}">
                             English
                         </flux:menu.item>
+                        <flux:menu.item wire:click="switchLocale('en_GB')" icon="{{ $locale === 'en_GB' ? 'check' : '' }}">
+                            English (UK)
+                        </flux:menu.item>
 
                         <flux:menu.separator />
 

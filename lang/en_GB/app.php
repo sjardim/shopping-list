@@ -1,0 +1,121 @@
+<?php
+
+return [
+    // Shopping List page
+    'shopping_list' => 'Shopping list',
+    'at' => 'AT',
+    'choose_store' => 'Choose store',
+    'no_store' => 'No store',
+    'shopping_now' => 'Shopping now',
+    'remaining' => 'of :total remaining',
+    'finish_trip' => 'Finish trip',
+    'clear' => 'Clear',
+    'finish_trip_confirm' => 'Finish trip and archive this list?',
+    'clear_confirm' => 'Clear all items from the list?',
+    'remove_confirm' => 'Remove :name?',
+    'list_empty' => 'Your list is empty',
+    'tap_to_add' => 'Tap + to add items',
+    'in_cart' => 'In trolley',
+    'add_item_placeholder' => 'Add item…',
+    'trip_done' => 'Trip done! Fresh list started.',
+    'trip_restored' => 'Trip restored.',
+    'undo_finish_trip' => 'Undo finish trip',
+    'notes_placeholder' => 'Notes for this trip…',
+    'saved_badge' => 'Saved',
+    'export_json' => 'Export as JSON',
+    'export_list' => 'Export :name as JSON',
+    'print_list' => 'Print',
+    'print_hint' => 'If the print dialog did not open, use your browser print menu.',
+    'usually' => 'usually :store',
+    'link_copied' => 'Link copied!',
+    'list_updated' => 'List updated',
+
+    // Accessibility labels
+    'open_menu' => 'Open menu',
+    'mark_bought' => 'Mark :name as bought',
+    'mark_unbought' => 'Mark :name as not bought',
+    'remove_item' => 'Remove :name',
+    'add_item' => 'Add item',
+    'start_voice_input' => 'Dictate item with your voice',
+    'set_price' => 'Set price for :name',
+    'set_price_prompt' => 'Price for :name (:currency):',
+    'spent_so_far' => 'spent so far',
+    'price_label' => 'Price (:currency)',
+    'price_history' => 'Recent prices',
+    'no_price_history' => 'No previous prices recorded for this item.',
+
+    // Recipes
+    'save_as_recipe' => 'Save as recipe',
+    'save_as_recipe_hint' => 'Reuse this list later from the Cook something tab.',
+    'recipe_name' => 'Recipe name',
+    'recipe_emoji' => 'Emoji',
+    'recipe_saved' => 'Recipe saved.',
+    'your_recipe' => 'your recipe',
+    'delete_recipe' => 'Delete :name',
+    'delete_recipe_confirm' => 'Delete this recipe?',
+    'cancel' => 'Cancel',
+    'save' => 'Save',
+    'add_bundle' => 'Add ingredients for :name',
+    'bundle_added' => 'Added :name to your list!',
+    'repeat_list' => 'Restore :name to active list',
+    'delete_list' => 'Delete :name from history',
+    'open_settings' => 'Open settings',
+
+    // Text-size controls
+    'text_size' => 'Text size',
+    'text_size_option' => 'Text scale :scale',
+    'larger_list_items' => 'Larger list items',
+    'high_contrast' => 'High contrast',
+    'bigger_buttons' => 'Bigger buttons',
+    'sound_effects' => 'Sound effects',
+
+    // Profile menu
+    'language' => 'Language',
+    'share_list' => 'Share list',
+    'sign_out' => 'Sign out',
+
+    // Add Items page
+    'add_items_title' => 'Add Items',
+    'search_placeholder' => 'Search items…',
+    'no_results' => 'No items found for ":query"',
+    'add_count_to_list' => 'Add :count to list',
+    'done' => 'Done',
+    'suggested' => 'Suggested',
+    'cook_something' => 'Cook something',
+    'ingredients' => ':count ingredients',
+
+    // History page
+    'history_title' => 'History',
+    'no_past_lists' => 'No past lists yet',
+    'history_empty_hint' => 'Finish a shopping trip to see your history here',
+    'skipped' => ':count skipped',
+    'more' => '+:count more',
+    'items' => ':count items',
+    'delete_list_confirm' => 'Delete this list from history?',
+    'repeat_list_confirm' => 'Add these items to your active list?',
+    'repeat_summary' => 'Added :added, restored :restored, skipped :skipped.',
+
+    // Bottom nav
+    'nav_list' => 'List',
+    'nav_add' => 'Add',
+    'nav_history' => 'History',
+
+    // Auth
+    'sign_in_heading' => 'Sign in to your shopping list',
+    'email' => 'Email',
+    'password' => 'Password',
+    'remember_me' => 'Remember me',
+    'sign_in' => 'Sign in',
+
+    // Categories
+    'category_fruit' => 'Fruit',
+    'category_vegetables' => 'Vegetables',
+    'category_dairy' => 'Dairy & Eggs',
+    'category_meat' => 'Meat',
+    'category_fish' => 'Fish & Seafood',
+    'category_bakery' => 'Bakery',
+    'category_beverages' => 'Beverages',
+    'category_pantry' => 'Pantry',
+    'category_cleaning' => 'Cleaning',
+    'category_personal' => 'Personal Care',
+];

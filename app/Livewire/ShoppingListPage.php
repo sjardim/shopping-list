@@ -416,7 +416,7 @@ class ShoppingListPage extends Component
 
     public function switchLocale(string $locale): void
     {
-        if (! in_array($locale, ['en', 'pt_PT', 'pt_BR'], strict: true)) {
+        if (! in_array($locale, ['en', 'en_GB', 'pt_PT', 'pt_BR'], strict: true)) {
             return;
         }
 
