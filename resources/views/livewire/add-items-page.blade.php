@@ -22,13 +22,13 @@
         <div class="flex gap-2 mt-3">
             <button
                 wire:click="$set('activeTab', 'suggested')"
-                class="flex-1 py-2.5 rounded-full text-sm font-semibold transition-colors {{ $activeTab === 'suggested' ? 'bg-[#1a1a1a] text-white' : 'bg-white text-[#6b6055] border border-[#e0d9cc]' }}"
+                class="flex-1 py-2.5 rounded-full text-sm font-semibold transition-colors tap {{ $activeTab === 'suggested' ? 'bg-[#1a1a1a] text-white' : 'bg-white text-[#6b6055] border border-[#e0d9cc]' }}"
             >
                 {{ __('app.suggested') }}
             </button>
             <button
                 wire:click="$set('activeTab', 'cook')"
-                class="flex-1 py-2.5 rounded-full text-sm font-semibold transition-colors {{ $activeTab === 'cook' ? 'bg-[#1a1a1a] text-white' : 'bg-white text-[#6b6055] border border-[#e0d9cc]' }}"
+                class="flex-1 py-2.5 rounded-full text-sm font-semibold transition-colors tap {{ $activeTab === 'cook' ? 'bg-[#1a1a1a] text-white' : 'bg-white text-[#6b6055] border border-[#e0d9cc]' }}"
             >
                 {{ __('app.cook_something') }}
             </button>
@@ -40,14 +40,14 @@
         @if($activeTab === 'suggested')
 
             @if($searchQuery !== '' && count($this->groupedCatalogItems) === 0)
-                <div class="mt-16 text-center text-[#6b6055]">
+                <div class="mt-16 text-center text-[#6b6055] fade-in-up">
                     <p class="text-3xl mb-2">🔍</p>
                     <p class="text-sm">{{ __('app.no_results', ['query' => $searchQuery]) }}</p>
                 </div>
             @else
                 @foreach($this->groupedCatalogItems as $category => $items)
                     @php $categoryEnum = \App\Enums\Category::tryFrom($category); @endphp
-                    <section class="mt-5">
+                    <section class="mt-5 fade-in-up">
                         <h2 class="flex items-center gap-1.5 text-[11px] font-bold text-[#6b6055] uppercase tracking-widest mb-2">
                             <span>{{ $categoryEnum?->emoji() }}</span>
                             <span>{{ $categoryEnum?->label() ?? $category }}</span>
@@ -62,7 +62,8 @@
                                 <button
                                     wire:key="catalog-{{ $item['id'] }}"
                                     wire:click="toggleCatalogItem({{ $item['id'] }})"
-                                    class="relative flex flex-col items-center justify-between gap-1 p-3 rounded-2xl border transition-colors aspect-square
+                                    aria-pressed="{{ $isSelected ? 'true' : 'false' }}"
+                                    class="relative flex flex-col items-center justify-between gap-1 p-3 rounded-2xl border transition-colors aspect-square tap
                                         {{ $isSelected
                                             ? 'bg-[#e3ede7] border-[#2f7d4f]/25'
                                             : 'bg-white border-[#f0ece3]' }}"
@@ -100,7 +101,7 @@
             {{-- Cook something --}}
             <div class="space-y-3 mt-4">
                 @foreach($this->mealBundles as $key => $bundle)
-                    <div class="bg-white rounded-2xl px-4 py-3 shadow-sm">
+                    <div wire:key="bundle-{{ $key }}" class="bg-white rounded-2xl px-4 py-3 shadow-sm fade-in-up">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <span class="text-2xl">{{ $bundle['emoji'] }}</span>
@@ -114,6 +115,8 @@
                                 variant="ghost"
                                 size="sm"
                                 icon="plus"
+                                class="tap"
+                                aria-label="{{ __('app.add_bundle', ['name' => $bundle['name']]) }}"
                             />
                         </div>
                         <div class="mt-2 flex flex-wrap gap-1">

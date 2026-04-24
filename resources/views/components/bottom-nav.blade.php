@@ -3,7 +3,7 @@
 <nav class="fixed bottom-0 left-0 right-0 bg-[#f7f3ec] border-t border-[#e0d9cc] rounded-t-3xl px-6 py-3 z-50 shadow-[0_-4px_24px_rgba(0,0,0,0.06)]">
     <div class="flex items-center justify-between">
         {{-- List tab --}}
-        <a href="{{ route('home') }}" class="flex items-center justify-center">
+        <a href="{{ route('home') }}" class="flex items-center justify-center tap" aria-label="{{ __('app.nav_list') }}" @if($activeTab === 'list') aria-current="page" @endif>
             @if($activeTab === 'list')
                 <span class="flex items-center gap-2 bg-[#1a1a1a] text-white rounded-full px-4 py-2 text-sm font-medium">
                     <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -26,7 +26,7 @@
         </a>
 
         {{-- Add tab --}}
-        <a href="{{ route('add') }}" class="flex items-center justify-center">
+        <a href="{{ route('add') }}" class="flex items-center justify-center tap" aria-label="{{ __('app.nav_add') }}" @if($activeTab === 'add') aria-current="page" @endif>
             @if($activeTab === 'add')
                 <span class="flex items-center gap-2 bg-[#1a1a1a] text-white rounded-full px-4 py-2 text-sm font-medium">
                     <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -44,7 +44,7 @@
         </a>
 
         {{-- History tab --}}
-        <a href="{{ route('history') }}" class="flex items-center justify-center">
+        <a href="{{ route('history') }}" class="flex items-center justify-center tap" aria-label="{{ __('app.nav_history') }}" @if($activeTab === 'history') aria-current="page" @endif>
             @if($activeTab === 'history')
                 <span class="flex items-center gap-2 bg-[#1a1a1a] text-white rounded-full px-4 py-2 text-sm font-medium">
                     <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

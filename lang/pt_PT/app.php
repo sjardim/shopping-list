@@ -22,6 +22,16 @@ return [
     'link_copied' => 'Link copiado!',
     'list_updated' => 'Lista atualizada',
 
+    // Accessibility labels
+    'open_menu' => 'Abrir menu',
+    'mark_bought' => 'Marcar :name como comprado',
+    'mark_unbought' => 'Marcar :name como não comprado',
+    'remove_item' => 'Remover :name',
+    'add_item' => 'Adicionar item',
+    'add_bundle' => 'Adicionar ingredientes para :name',
+    'repeat_list' => 'Restaurar :name para a lista ativa',
+    'delete_list' => 'Eliminar :name do histórico',
+
     // Profile menu
     'language' => 'Idioma',
     'share_list' => 'Partilhar lista',

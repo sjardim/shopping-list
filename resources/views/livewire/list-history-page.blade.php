@@ -8,7 +8,7 @@
     {{-- List --}}
     <main class="flex-1 px-4 pb-28 mt-2">
         @if($this->completedLists->isEmpty())
-            <div class="mt-16 text-center text-[#6b6055]">
+            <div class="mt-16 text-center text-[#6b6055] fade-in-up">
                 <p class="text-4xl mb-3">📋</p>
                 <p class="text-base font-medium">{{ __('app.no_past_lists') }}</p>
                 <p class="text-sm mt-1">{{ __('app.history_empty_hint') }}</p>
@@ -16,7 +16,7 @@
         @else
             <div class="space-y-3">
                 @foreach($this->completedLists as $list)
-                    <div class="bg-white rounded-2xl px-4 py-3 shadow-sm">
+                    <div wire:key="history-{{ $list->id }}" class="bg-white rounded-2xl px-4 py-3 shadow-sm fade-in-up">
                         <div class="flex items-start justify-between gap-2">
                             <div class="flex items-center gap-2 min-w-0">
                                 @if($list->store)
@@ -41,7 +41,8 @@
                                     variant="ghost"
                                     size="sm"
                                     icon="arrow-path"
-                                    title="{{ __('app.history_title') }}"
+                                    class="tap"
+                                    aria-label="{{ __('app.repeat_list', ['name' => $list->name]) }}"
                                 />
                                 <flux:button
                                     wire:click="deleteList({{ $list->id }})"
@@ -49,7 +50,8 @@
                                     variant="ghost"
                                     size="sm"
                                     icon="trash"
-                                    class="text-[#c5bdb0] hover:text-[#e53935]"
+                                    class="text-[#c5bdb0] hover:text-[#e53935] tap"
+                                    aria-label="{{ __('app.delete_list', ['name' => $list->name]) }}"
                                 />
                             </div>
                         </div>

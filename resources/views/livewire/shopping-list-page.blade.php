@@ -50,7 +50,7 @@
             {{-- Profile menu (owner) / Share button (shared) --}}
             @if($mode === 'owner')
                 <flux:dropdown align="end">
-                    <flux:button variant="ghost" size="sm" class="rounded-full! size-9 p-0! shrink-0">
+                    <flux:button variant="ghost" size="sm" class="rounded-full! size-9 p-0! shrink-0" aria-label="{{ __('app.open_menu') }}">
                         <span class="size-8 rounded-full bg-[#1a1a1a] text-white text-sm font-bold flex items-center justify-center">
                             {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                         </span>
@@ -103,8 +103,9 @@
                 </form>
             @else
                 <button
-                    class="mt-1 size-9 rounded-full bg-white border border-[#e0d9cc] flex items-center justify-center text-[#6b6055] hover:text-[#1a1a1a] transition-colors"
-                    x-on:click="navigator.clipboard.writeText('{{ route('list.shared', $shareToken) }}').then(() => $flux.toast('{{ __('app.link_copied') }}'))"
+                    class="mt-1 size-9 rounded-full bg-white border border-[#e0d9cc] flex items-center justify-center text-[#6b6055] hover:text-[#1a1a1a] transition-colors tap"
+                    aria-label="{{ __('app.share_list') }}"
+                    x-on:click="navigator.clipboard ? navigator.clipboard.writeText('{{ route('list.shared', $shareToken) }}').then(() => $flux.toast('{{ __('app.link_copied') }}')) : $flux.toast('{{ route('list.shared', $shareToken) }}')"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
@@ -140,7 +141,7 @@
                     <button
                         wire:click="finishTrip"
                         wire:confirm="{{ __('app.finish_trip_confirm') }}"
-                        class="flex-1 bg-white text-[#1a1a1a] rounded-full py-2.5 text-sm font-semibold flex items-center justify-center gap-1.5"
+                        class="flex-1 bg-white text-[#1a1a1a] rounded-full py-2.5 text-sm font-semibold flex items-center justify-center gap-1.5 tap"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
@@ -150,7 +151,7 @@
                     <button
                         wire:click="clearList"
                         wire:confirm="{{ __('app.clear_confirm') }}"
-                        class="bg-white/20 text-white rounded-full px-5 py-2.5 text-sm font-semibold flex items-center gap-1.5 hover:bg-white/30 transition-colors"
+                        class="bg-white/20 text-white rounded-full px-5 py-2.5 text-sm font-semibold flex items-center gap-1.5 hover:bg-white/30 transition-colors tap"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
@@ -166,7 +167,7 @@
     <main class="flex-1 px-5 pb-32 mt-5 space-y-6">
 
         @if($total === 0)
-            <div class="mt-16 text-center text-[#6b6055]">
+            <div class="mt-16 text-center text-[#6b6055] fade-in-up">
                 <p class="text-4xl mb-3">🛒</p>
                 <p class="text-base font-medium text-[#1a1a1a]">{{ __('app.list_empty') }}</p>
                 <p class="text-sm mt-1">{{ __('app.tap_to_add') }}</p>
@@ -183,11 +184,13 @@
                     <div class="bg-white rounded-3xl overflow-hidden divide-y divide-[#f4f0e8]">
                         @foreach($items as $item)
                             @php $storeEnum = $item['preferred_store'] ? \App\Enums\Store::tryFrom($item['preferred_store']) : null; @endphp
-                            <div wire:key="item-{{ $item['id'] }}" class="flex items-center gap-3 px-4 py-3.5">
+                            <div wire:key="item-{{ $item['id'] }}" class="flex items-center gap-3 px-4 py-3.5 fade-in-up">
                                 {{-- Square checkbox --}}
                                 <button
                                     wire:click="toggleItem({{ $item['id'] }})"
-                                    class="shrink-0 size-6 rounded-lg border-2 border-[#d5cdbc] hover:border-[#2f7d4f] transition-colors"
+                                    x-on:click="$el.classList.remove('check-pulse'); requestAnimationFrame(() => $el.classList.add('check-pulse'))"
+                                    class="shrink-0 size-6 rounded-lg border-2 border-[#d5cdbc] hover:border-[#2f7d4f] transition-colors tap"
+                                    aria-label="{{ __('app.mark_bought', ['name' => $item['name']]) }}"
                                 ></button>
 
                                 {{-- Emoji container --}}
@@ -215,7 +218,8 @@
                                     <button
                                         wire:click="removeItem({{ $item['id'] }})"
                                         wire:confirm="{{ __('app.remove_confirm', ['name' => $item['name']]) }}"
-                                        class="shrink-0 size-7 rounded-full flex items-center justify-center text-[#c5bdb0] hover:text-[#e53935] hover:bg-red-50 transition-colors"
+                                        class="shrink-0 size-7 rounded-full flex items-center justify-center text-[#c5bdb0] hover:text-[#e53935] hover:bg-red-50 transition-colors tap"
+                                        aria-label="{{ __('app.remove_item', ['name' => $item['name']]) }}"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -237,11 +241,13 @@
                     </h2>
                     <div class="bg-white/60 rounded-3xl overflow-hidden divide-y divide-[#f4f0e8]">
                         @foreach($this->itemsByCategory['bought'] as $item)
-                            <div wire:key="bought-{{ $item['id'] }}" class="flex items-center gap-3 px-4 py-3.5">
+                            <div wire:key="bought-{{ $item['id'] }}" class="flex items-center gap-3 px-4 py-3.5 fade-in-up">
                                 {{-- Filled checkbox --}}
                                 <button
                                     wire:click="toggleItem({{ $item['id'] }})"
-                                    class="shrink-0 size-6 rounded-lg bg-[#2f7d4f] flex items-center justify-center hover:bg-[#256b41] transition-colors"
+                                    x-on:click="$el.classList.remove('check-pulse'); requestAnimationFrame(() => $el.classList.add('check-pulse'))"
+                                    class="shrink-0 size-6 rounded-lg bg-[#2f7d4f] flex items-center justify-center hover:bg-[#256b41] transition-colors tap"
+                                    aria-label="{{ __('app.mark_unbought', ['name' => $item['name']]) }}"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
@@ -280,6 +286,7 @@
                     @foreach($this->catalogSuggestions as $suggestion)
                         @php $storeEnum = $suggestion['preferred_store'] ? \App\Enums\Store::tryFrom($suggestion['preferred_store']) : null; @endphp
                         <button
+                            wire:key="suggestion-{{ $suggestion['id'] }}"
                             wire:click="selectCatalogSuggestion({{ $suggestion['id'] }})"
                             class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-[#f7f3ec] active:bg-[#f0ece3] transition-colors border-b border-[#f4f0e8] last:border-0"
                         >
@@ -305,7 +312,8 @@
                 />
                 <button
                     type="submit"
-                    class="shrink-0 size-8 rounded-xl bg-[#1a1a1a] text-white flex items-center justify-center hover:bg-[#333] transition-colors"
+                    class="shrink-0 size-8 rounded-xl bg-[#1a1a1a] text-white flex items-center justify-center hover:bg-[#333] transition-colors tap"
+                    aria-label="{{ __('app.add_item') }}"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
