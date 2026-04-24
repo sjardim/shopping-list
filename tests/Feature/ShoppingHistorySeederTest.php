@@ -1,12 +1,14 @@
 <?php
 
 use App\Enums\ShoppingListStatus;
+use App\Enums\StoreUk;
 use App\Enums\StoreUs;
 use App\Models\CatalogItem;
 use App\Models\ShoppingList;
 use App\Models\User;
 use Database\Seeders\ShoppingHistorySeeder;
 use Database\Seeders\ShoppingHistorySeederEn;
+use Database\Seeders\ShoppingHistorySeederGb;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
 uses(LazilyRefreshDatabase::class);
@@ -52,6 +54,20 @@ test('does nothing when the catalog is empty', function () {
     $this->seed(ShoppingHistorySeeder::class);
 
     expect(ShoppingList::count())->toBe(0);
+});
+
+test('British seeder uses UK stores and creates completed lists', function () {
+    User::factory()->admin()->create();
+    CatalogItem::factory()->count(20)->create();
+
+    $this->seed(ShoppingHistorySeederGb::class);
+
+    $lists = ShoppingList::where('status', ShoppingListStatus::Completed)->get();
+
+    expect($lists)->not->toBeEmpty();
+
+    $ukStores = array_map(fn ($case) => $case->value, StoreUk::cases());
+    expect($lists->every(fn ($list) => in_array($list->store->value, $ukStores, true)))->toBeTrue();
 });
 
 test('English seeder uses US stores and creates completed lists', function () {

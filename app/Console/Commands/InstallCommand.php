@@ -42,10 +42,6 @@ class InstallCommand extends Command
         $locale = select('Language', self::LOCALES, default: 'en');
         $region = select('Store region', self::REGIONS, default: $this->defaultRegionFor($locale));
 
-        if ($region === 'uk') {
-            note('UK uses the English catalog. Store hints in the seeded items point at US chains, so the dropdown will show UK stores but no item will have a preferred-store badge until you customise CatalogItemSeederEn or add your own.');
-        }
-
         $currency = text('Currency symbol', default: $this->defaultCurrencyFor($region));
 
         $email = text(
@@ -145,6 +141,7 @@ class InstallCommand extends Command
         return match ($region) {
             'pt' => 'Database\\Seeders\\CatalogItemSeeder',
             'br' => 'Database\\Seeders\\CatalogItemSeederBr',
+            'uk' => 'Database\\Seeders\\CatalogItemSeederGb',
             default => 'Database\\Seeders\\CatalogItemSeederEn',
         };
     }
@@ -154,6 +151,7 @@ class InstallCommand extends Command
         return match ($region) {
             'pt' => 'Database\\Seeders\\ShoppingHistorySeeder',
             'br' => 'Database\\Seeders\\ShoppingHistorySeederBr',
+            'uk' => 'Database\\Seeders\\ShoppingHistorySeederGb',
             default => 'Database\\Seeders\\ShoppingHistorySeederEn',
         };
     }
