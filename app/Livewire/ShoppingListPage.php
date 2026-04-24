@@ -15,6 +15,7 @@ use App\Support\Stores;
 use Flux\Flux;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -432,6 +433,8 @@ class ShoppingListPage extends Component
         }
 
         session(['locale' => $locale]);
+        session()->save();
+        App::setLocale($locale);
         $this->locale = $locale;
 
         $this->redirect(route('home'));
