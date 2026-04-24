@@ -108,14 +108,29 @@ Visit `http://shopping-list.test` (Laravel Herd) or `http://127.0.0.1:8000` (art
 
 The default seeders ship Portuguese grocery names and Iberian stores (Lidl, Aldi, Continente, Mercadona). For non-Portuguese developers an English alternative seeder is included:
 
-```bash
-# Reset and use the English catalog instead
-php artisan migrate:fresh
-php artisan db:seed --class=Database\\Seeders\\DatabaseSeeder        # owner user + history
-php artisan db:seed --class=Database\\Seeders\\CatalogItemSeederEn   # English groceries + US stores
+In `database/seeders/DatabaseSeeder.php`, comment out the Portuguese seeders and uncomment the English ones:
+
+```php
+$this->call([
+    // CatalogItemSeeder::class,
+    CatalogItemSeederEn::class,
+    // ShoppingHistorySeeder::class,
+    ShoppingHistorySeederEn::class,
+]);
 ```
 
-`CatalogItemSeederEn` provides ~80 common US grocery items grouped by the same ten categories, with preferred-store hints pointing at Walmart, Target, Trader Joe's, Whole Foods, plus Lidl and Aldi where they make sense. The `Store` enum carries both regions side by side, so the picker shows the four PT stores and the four US stores together — adopters can prune the enum to whichever set they want.
+Then:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+This gives you:
+
+- ~80 common US grocery items in `CatalogItemSeederEn`, grouped by the same ten categories, with preferred-store hints pointing at Walmart, Target, Trader Joe's, Whole Foods, plus Lidl and Aldi where they make sense.
+- 11 fake completed trips in `ShoppingHistorySeederEn`, rotating across the same four US stores, with English ad-hoc items ("Razor blades", "AA batteries", "Birthday card", "Flowers", "Bag of ice").
+
+The `Store` enum carries both regions side by side, so the picker shows the four PT stores and the four US stores together. Adopters can prune the enum to whichever set they want.
 
 Meal bundles in `app/Support/MealBundles.php` are locale-aware: when `APP_LOCALE=en`, the "Cook something" tab serves English bundle names ("Roast Chicken", "Spaghetti Bolognese", "Mixed Salad", etc.) with ingredients that match `CatalogItemSeederEn`. Switch the locale and the bundles switch automatically.
 
