@@ -14,6 +14,50 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Lista">
 
+    <script>
+        (function () {
+            try {
+                var prefs = JSON.parse(localStorage.getItem('lista-prefs') || '{}');
+                var root = document.documentElement;
+                root.style.setProperty('--ui-scale', prefs.uiScale || 1);
+                root.style.setProperty('--list-scale', prefs.listScale || 1);
+            } catch (e) {}
+        })();
+
+        document.addEventListener('alpine:init', function () {
+            window.Alpine.store('prefs', {
+                uiScale: 1,
+                listScale: 1,
+                init: function () {
+                    try {
+                        var saved = JSON.parse(localStorage.getItem('lista-prefs') || '{}');
+                        this.uiScale = saved.uiScale || 1;
+                        this.listScale = saved.listScale || 1;
+                    } catch (e) {}
+                },
+                setUiScale: function (value) {
+                    this.uiScale = value;
+                    this._apply();
+                },
+                toggleListScale: function () {
+                    this.listScale = this.listScale > 1 ? 1 : 1.18;
+                    this._apply();
+                },
+                _apply: function () {
+                    var root = document.documentElement;
+                    root.style.setProperty('--ui-scale', this.uiScale);
+                    root.style.setProperty('--list-scale', this.listScale);
+                    try {
+                        localStorage.setItem('lista-prefs', JSON.stringify({
+                            uiScale: this.uiScale,
+                            listScale: this.listScale,
+                        }));
+                    } catch (e) {}
+                },
+            });
+        });
+    </script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @fluxAppearance
 </head>

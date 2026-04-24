@@ -31,6 +31,12 @@ return [
     'add_bundle' => 'Add ingredients for :name',
     'repeat_list' => 'Restore :name to active list',
     'delete_list' => 'Delete :name from history',
+    'open_settings' => 'Open settings',
+
+    // Text-size controls
+    'text_size' => 'Text size',
+    'text_size_option' => 'Text scale :scale',
+    'larger_list_items' => 'Larger list items',
 
     // Profile menu
     'language' => 'Language',

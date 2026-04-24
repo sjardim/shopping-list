@@ -10,9 +10,28 @@
 }
 
 @layer base {
+    :root {
+        --ui-scale: 1;
+        --list-scale: 1;
+    }
+
+    html {
+        font-size: calc(16px * var(--ui-scale));
+    }
+
     body {
         background-color: #eae2cf;
     }
+}
+
+@utility list-text {
+    font-size: calc(15px * var(--list-scale));
+    line-height: 1.35;
+}
+
+@utility list-text-sm {
+    font-size: calc(12px * var(--list-scale));
+    line-height: 1.4;
 }
 
 @utility heading-serif {
