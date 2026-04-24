@@ -45,6 +45,8 @@ return [
     'more' => '+:count more',
     'items' => ':count items',
     'delete_list_confirm' => 'Delete this list from history?',
+    'repeat_list_confirm' => 'Add these items to your active list?',
+    'repeat_summary' => 'Added :added, restored :restored, skipped :skipped.',
 
     // Bottom nav
     'nav_list' => 'List',

@@ -27,17 +27,23 @@ class ListHistoryPage extends Component
         $source = ShoppingList::where('user_id', Auth::id())->findOrFail($id);
 
         $userId = Auth::id();
-        $newList = ShoppingList::where('user_id', $userId)
+        $activeList = ShoppingList::where('user_id', $userId)
             ->active()
             ->latest()
             ->first()
             ?? ShoppingList::create(['user_id' => $userId]);
 
-        $existingNames = $newList->items()->pluck('name')->all();
+        $existingByName = $activeList->items()->get()->keyBy('name');
+
+        $added = 0;
+        $restored = 0;
+        $skipped = 0;
 
         foreach ($source->items as $item) {
-            if (! in_array($item->name, $existingNames, true)) {
-                $newList->items()->create([
+            $existing = $existingByName->get($item->name);
+
+            if ($existing === null) {
+                $activeList->items()->create([
                     'catalog_item_id' => $item->catalog_item_id,
                     'name' => $item->name,
                     'emoji' => $item->emoji,
@@ -46,10 +52,26 @@ class ListHistoryPage extends Component
                     'unit' => $item->unit,
                     'preferred_store' => $item->preferred_store,
                 ]);
+                $added++;
+
+                continue;
             }
+
+            if ($existing->is_bought) {
+                $existing->update(['is_bought' => false, 'bought_at' => null]);
+                $restored++;
+
+                continue;
+            }
+
+            $skipped++;
         }
 
-        Flux::toast('List items copied to your active list!');
+        Flux::toast(__('app.repeat_summary', [
+            'added' => $added,
+            'restored' => $restored,
+            'skipped' => $skipped,
+        ]));
 
         $this->redirect(route('home'));
     }

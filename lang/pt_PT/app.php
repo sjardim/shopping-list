@@ -45,6 +45,8 @@ return [
     'more' => '+:count mais',
     'items' => ':count itens',
     'delete_list_confirm' => 'Eliminar esta lista do histórico?',
+    'repeat_list_confirm' => 'Adicionar estes itens à sua lista ativa?',
+    'repeat_summary' => 'Adicionados :added, restaurados :restored, ignorados :skipped.',
 
     // Bottom nav
     'nav_list' => 'Lista',

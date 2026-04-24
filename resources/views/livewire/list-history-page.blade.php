@@ -37,6 +37,7 @@
                             <div class="flex items-center gap-1 shrink-0">
                                 <flux:button
                                     wire:click="repeatList({{ $list->id }})"
+                                    wire:confirm="{{ __('app.repeat_list_confirm') }}"
                                     variant="ghost"
                                     size="sm"
                                     icon="arrow-path"

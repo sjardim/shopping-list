@@ -85,10 +85,39 @@ test('repeat list copies items to active list', function () {
     expect($activeList->fresh()->items()->where('name', 'Oranges')->exists())->toBeTrue();
 });
 
-test('repeat list does not duplicate already existing items', function () {
+test('repeat list does not duplicate already existing pending items', function () {
     $user = User::factory()->create();
     $activeList = ShoppingList::factory()->for($user)->create();
-    ShoppingListItem::factory()->for($activeList, 'list')->create(['name' => 'Oranges']);
+    $existing = ShoppingListItem::factory()->for($activeList, 'list')->create([
+        'name' => 'Oranges',
+        'quantity' => 2,
+        'is_bought' => false,
+    ]);
+
+    $completedList = ShoppingList::factory()->for($user)->completed()->create();
+    ShoppingListItem::factory()->for($completedList, 'list')->create([
+        'name' => 'Oranges',
+        'quantity' => 5,
+    ]);
+
+    Livewire::actingAs($user)
+        ->test(ListHistoryPage::class)
+        ->call('repeatList', $completedList->id);
+
+    $items = $activeList->fresh()->items()->where('name', 'Oranges')->get();
+    expect($items)->toHaveCount(1);
+    expect((float) $items->first()->quantity)->toBe(2.0);
+    expect($items->first()->id)->toBe($existing->id);
+});
+
+test('repeat list restores bought duplicates back to pending', function () {
+    $user = User::factory()->create();
+    $activeList = ShoppingList::factory()->for($user)->create();
+    $bought = ShoppingListItem::factory()->for($activeList, 'list')->create([
+        'name' => 'Oranges',
+        'is_bought' => true,
+        'bought_at' => now()->subHour(),
+    ]);
 
     $completedList = ShoppingList::factory()->for($user)->completed()->create();
     ShoppingListItem::factory()->for($completedList, 'list')->create(['name' => 'Oranges']);
@@ -97,6 +126,9 @@ test('repeat list does not duplicate already existing items', function () {
         ->test(ListHistoryPage::class)
         ->call('repeatList', $completedList->id);
 
+    $bought->refresh();
+    expect($bought->is_bought)->toBeFalse();
+    expect($bought->bought_at)->toBeNull();
     expect($activeList->fresh()->items()->where('name', 'Oranges')->count())->toBe(1);
 });
 
