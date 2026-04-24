@@ -31,3 +31,9 @@
         <span x-show="$store.prefs.bigTargets" class="text-[#2f7d4f] font-bold">✓</span>
     </span>
 </flux:menu.item>
+<flux:menu.item x-on:click.stop="$store.prefs.toggleSound()">
+    <span class="flex items-center justify-between w-full">
+        <span>{{ __('app.sound_effects') }}</span>
+        <span x-show="$store.prefs.soundEnabled" class="text-[#2f7d4f] font-bold">✓</span>
+    </span>
+</flux:menu.item>

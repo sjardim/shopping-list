@@ -11,6 +11,7 @@ use App\Models\CatalogItem;
 use App\Models\ShoppingList;
 use Flux\Flux;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
@@ -150,7 +151,12 @@ class ShoppingListPage extends Component
             return;
         }
 
-        $this->validate(['quickAddName' => 'required|string|max:100']);
+        try {
+            $this->validate(['quickAddName' => 'required|string|max:100']);
+        } catch (ValidationException $e) {
+            $this->dispatch('validation-failed');
+            throw $e;
+        }
 
         $item = $this->list->items()->create([
             'name' => trim($this->quickAddName),
@@ -228,6 +234,8 @@ class ShoppingListPage extends Component
 
         unset($this->itemsByCategory, $this->recentlyFinishedList);
 
+        $this->dispatch('trip-restored');
+
         Flux::toast(__('app.trip_restored'));
     }
 
@@ -274,21 +282,25 @@ class ShoppingListPage extends Component
     #[On('echo:shopping.{shareToken},ItemToggled')]
     public function onItemToggled(array $payload): void
     {
-        unset($this->itemsByCategory);
-        Flux::toast(__('app.list_updated'));
+        $this->onRemoteListUpdate();
     }
 
     #[On('echo:shopping.{shareToken},ItemAdded')]
     public function onItemAdded(array $payload): void
     {
-        unset($this->itemsByCategory);
-        Flux::toast(__('app.list_updated'));
+        $this->onRemoteListUpdate();
     }
 
     #[On('echo:shopping.{shareToken},ItemRemoved')]
     public function onItemRemoved(array $payload): void
     {
+        $this->onRemoteListUpdate();
+    }
+
+    private function onRemoteListUpdate(): void
+    {
         unset($this->itemsByCategory);
+        $this->dispatch('list-updated-remotely');
         Flux::toast(__('app.list_updated'));
     }
 

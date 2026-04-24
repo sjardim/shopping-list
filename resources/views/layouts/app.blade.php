@@ -36,6 +36,7 @@
                 listScale: 1,
                 highContrast: false,
                 bigTargets: false,
+                soundEnabled: true,
                 init: function () {
                     try {
                         var saved = JSON.parse(localStorage.getItem('lista-prefs') || '{}');
@@ -43,6 +44,7 @@
                         this.listScale = saved.listScale || 1;
                         this.highContrast = !!saved.highContrast;
                         this.bigTargets = !!saved.bigTargets;
+                        this.soundEnabled = saved.soundEnabled !== false;
                     } catch (e) {}
                 },
                 setUiScale: function (value) {
@@ -60,6 +62,10 @@
                 },
                 toggleBigTargets: function () {
                     this.bigTargets = !this.bigTargets;
+                    this._apply();
+                },
+                toggleSound: function () {
+                    this.soundEnabled = !this.soundEnabled;
                     this._apply();
                 },
                 _apply: function () {
@@ -82,6 +88,7 @@
                             listScale: this.listScale,
                             highContrast: this.highContrast,
                             bigTargets: this.bigTargets,
+                            soundEnabled: this.soundEnabled,
                         }));
                     } catch (e) {}
                 },

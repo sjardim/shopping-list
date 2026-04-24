@@ -41,6 +41,7 @@ return [
     'larger_list_items' => 'Larger list items',
     'high_contrast' => 'High contrast',
     'bigger_buttons' => 'Bigger buttons',
+    'sound_effects' => 'Sound effects',
 
     // Profile menu
     'language' => 'Language',

@@ -41,6 +41,7 @@ return [
     'larger_list_items' => 'Itens da lista maiores',
     'high_contrast' => 'Alto contraste',
     'bigger_buttons' => 'Botões maiores',
+    'sound_effects' => 'Efeitos sonoros',
 
     // Profile menu
     'language' => 'Idioma',

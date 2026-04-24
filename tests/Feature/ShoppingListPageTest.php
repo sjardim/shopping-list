@@ -155,6 +155,29 @@ test('undo finish trip restores the recently completed list as active', function
     expect($previous->fresh()->status->value)->toBe('active');
 });
 
+test('undo finish trip dispatches a trip-restored event', function () {
+    $user = User::factory()->create();
+    ShoppingList::factory()->for($user)->create();
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('finishTrip')
+        ->call('undoFinishTrip')
+        ->assertDispatched('trip-restored');
+});
+
+test('quick add dispatches validation-failed when the name is empty', function () {
+    $user = User::factory()->create();
+    ShoppingList::factory()->for($user)->create();
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->set('quickAddName', '')
+        ->call('quickAdd')
+        ->assertDispatched('validation-failed')
+        ->assertHasErrors(['quickAddName']);
+});
+
 test('undo finish trip discards the empty new active list', function () {
     $user = User::factory()->create();
     ShoppingList::factory()->for($user)->create();

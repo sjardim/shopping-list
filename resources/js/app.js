@@ -18,18 +18,24 @@ if (import.meta.env.VITE_REVERB_APP_KEY) {
 
 const FINISH_SOUND_PATH = '/sounds/finish-trip.mp3';
 
-function playFinishSound() {
-    const audio = new Audio(FINISH_SOUND_PATH);
-    audio.volume = 0.6;
-
-    const playback = audio.play();
-
-    if (playback && typeof playback.catch === 'function') {
-        playback.catch(playSynthesisedChord);
+function isSoundEnabled() {
+    try {
+        const prefs = JSON.parse(localStorage.getItem('lista-prefs') || '{}');
+        return prefs.soundEnabled !== false;
+    } catch (e) {
+        return true;
     }
 }
 
-function playSynthesisedChord() {
+/**
+ * Play a sequence of notes with the Web Audio API.
+ * Each note: { freq, time?, dur?, type?, gain? }
+ */
+function synth(notes) {
+    if (!isSoundEnabled()) {
+        return;
+    }
+
     const Ctor = window.AudioContext || window.webkitAudioContext;
 
     if (!Ctor) {
@@ -39,27 +45,74 @@ function playSynthesisedChord() {
     try {
         const ctx = new Ctor();
         const start = ctx.currentTime;
-        const notes = [523.25, 659.25, 783.99, 1046.5];
 
-        notes.forEach((frequency, index) => {
+        notes.forEach((note) => {
             const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            const noteStart = start + index * 0.08;
+            const gainNode = ctx.createGain();
+            const noteStart = start + (note.time ?? 0);
+            const duration = note.dur ?? 0.4;
+            const peakGain = note.gain ?? 0.18;
 
-            osc.type = 'sine';
-            osc.frequency.value = frequency;
-            gain.gain.setValueAtTime(0, noteStart);
-            gain.gain.linearRampToValueAtTime(0.18, noteStart + 0.02);
-            gain.gain.exponentialRampToValueAtTime(0.001, noteStart + 0.45);
+            osc.type = note.type ?? 'sine';
+            osc.frequency.value = note.freq;
+            gainNode.gain.setValueAtTime(0, noteStart);
+            gainNode.gain.linearRampToValueAtTime(peakGain, noteStart + 0.02);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, noteStart + duration);
 
-            osc.connect(gain).connect(ctx.destination);
+            osc.connect(gainNode).connect(ctx.destination);
             osc.start(noteStart);
-            osc.stop(noteStart + 0.45);
+            osc.stop(noteStart + duration);
         });
     } catch (e) {
         // Audio is non-essential; silently swallow.
     }
 }
+
+const sounds = {
+    finish() {
+        if (!isSoundEnabled()) {
+            return;
+        }
+
+        const audio = new Audio(FINISH_SOUND_PATH);
+        audio.volume = 0.6;
+
+        const playback = audio.play();
+
+        if (playback && typeof playback.catch === 'function') {
+            playback.catch(() => {
+                synth([
+                    { freq: 523.25, time: 0 },
+                    { freq: 659.25, time: 0.08 },
+                    { freq: 783.99, time: 0.16 },
+                    { freq: 1046.5, time: 0.24, dur: 0.5 },
+                ]);
+            });
+        }
+    },
+
+    undo() {
+        synth([
+            { freq: 1046.5, time: 0 },
+            { freq: 783.99, time: 0.07 },
+            { freq: 659.25, time: 0.14 },
+            { freq: 523.25, time: 0.21, dur: 0.45 },
+        ]);
+    },
+
+    error() {
+        synth([
+            { freq: 415.3, time: 0, dur: 0.18, type: 'square', gain: 0.12 },
+            { freq: 277.18, time: 0.12, dur: 0.3, type: 'square', gain: 0.12 },
+        ]);
+    },
+
+    notify() {
+        synth([
+            { freq: 1318.51, time: 0, dur: 0.22, gain: 0.1 },
+        ]);
+    },
+};
 
 function celebrateFinish() {
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -72,9 +125,12 @@ function celebrateFinish() {
         });
     }
 
-    playFinishSound();
+    sounds.finish();
 }
 
 document.addEventListener('livewire:init', () => {
     window.Livewire.on('trip-finished', celebrateFinish);
+    window.Livewire.on('trip-restored', () => sounds.undo());
+    window.Livewire.on('list-updated-remotely', () => sounds.notify());
+    window.Livewire.on('validation-failed', () => sounds.error());
 });
