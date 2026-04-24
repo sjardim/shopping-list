@@ -123,6 +123,66 @@ const sounds = {
 
 window.lista = { sounds };
 
+window.voiceInput = function (locale) {
+    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    return {
+        supported: !!Recognition,
+        recording: false,
+        recognition: null,
+
+        init() {
+            if (!this.supported) {
+                return;
+            }
+
+            this.recognition = new Recognition();
+            this.recognition.lang = locale || 'en-US';
+            this.recognition.continuous = false;
+            this.recognition.interimResults = false;
+
+            this.recognition.addEventListener('result', (event) => {
+                const transcript = event.results[0][0].transcript.trim();
+                const input = this.$el.querySelector('input[type="text"]');
+
+                if (input && transcript) {
+                    input.value = input.value
+                        ? input.value + ' ' + transcript
+                        : transcript;
+                    input.dispatchEvent(new Event('input', { bubbles: true }));
+                    input.focus();
+                }
+            });
+
+            this.recognition.addEventListener('end', () => {
+                this.recording = false;
+            });
+
+            this.recognition.addEventListener('error', () => {
+                this.recording = false;
+                sounds.error();
+            });
+        },
+
+        toggle() {
+            if (!this.supported || !this.recognition) {
+                return;
+            }
+
+            if (this.recording) {
+                this.recognition.stop();
+            } else {
+                try {
+                    this.recognition.start();
+                    this.recording = true;
+                } catch (e) {
+                    this.recording = false;
+                }
+            }
+        },
+    };
+};
+
 function celebrateFinish() {
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         confetti({

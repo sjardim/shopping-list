@@ -365,7 +365,11 @@
                 </div>
             @endif
 
-            <form wire:submit="quickAdd" class="flex gap-2 bg-white rounded-2xl shadow-lg shadow-black/5 border border-[#ede8df] px-4 py-2">
+            <form
+                wire:submit="quickAdd"
+                x-data="voiceInput('{{ str_replace('_', '-', app()->getLocale()) }}')"
+                class="flex gap-2 bg-white rounded-2xl shadow-lg shadow-black/5 border border-[#ede8df] px-4 py-2"
+            >
                 <input
                     wire:model.live.debounce.300ms="quickAddName"
                     type="text"
@@ -375,6 +379,19 @@
                     x-on:focus="focused = true"
                     x-on:blur.debounce.200ms="focused = false"
                 />
+                <button
+                    type="button"
+                    x-show="supported"
+                    x-on:click="toggle"
+                    x-bind:class="recording ? 'bg-[#e53935] text-white animate-pulse' : 'bg-[#f4f0e8] text-[#1a1a1a] hover:bg-[#ede8df]'"
+                    class="shrink-0 size-8 rounded-xl flex items-center justify-center transition-colors tap"
+                    aria-label="{{ __('app.start_voice_input') }}"
+                    data-voice-toggle
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
+                    </svg>
+                </button>
                 <button
                     type="submit"
                     class="shrink-0 size-8 rounded-xl bg-[#1a1a1a] text-white flex items-center justify-center hover:bg-[#333] transition-colors tap"

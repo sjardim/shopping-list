@@ -229,6 +229,15 @@ test('shared mode cannot undo finish trip', function () {
     expect($list->fresh()->status->value)->toBe('completed');
 });
 
+test('owner mode renders the voice-input button', function () {
+    $user = User::factory()->create();
+    ShoppingList::factory()->for($user)->create();
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->assertSeeHtml('data-voice-toggle');
+});
+
 test('owner can save notes on the list', function () {
     $user = User::factory()->create();
     $list = ShoppingList::factory()->for($user)->create();

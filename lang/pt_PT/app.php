@@ -35,6 +35,7 @@ return [
     'mark_unbought' => 'Marcar :name como não comprado',
     'remove_item' => 'Remover :name',
     'add_item' => 'Adicionar item',
+    'start_voice_input' => 'Ditar item por voz',
     'add_bundle' => 'Adicionar ingredientes para :name',
     'bundle_added' => ':name adicionado à lista!',
     'repeat_list' => 'Restaurar :name para a lista ativa',
