@@ -41,6 +41,7 @@ return [
     'add_item' => 'Add item',
     'start_voice_input' => 'Dictate item with your voice',
     'set_price' => 'Set price for :name',
+    'mark_preferred_store' => 'Siempre en :store',
     'set_price_prompt' => 'Price for :name (:currency):',
     'spent_so_far' => 'spent so far',
     'price_label' => 'Price (:currency)',

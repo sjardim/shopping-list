@@ -1,6 +1,7 @@
 @props([
     'editing' => null,
     'priceHistory',
+    'listStore' => null,
 ])
 
 <flux:modal name="edit-price" class="md:w-96">
@@ -25,6 +26,17 @@
                 <flux:label>{{ __('app.price_label', ['currency' => config('lista.currency.symbol')]) }}</flux:label>
                 <flux:input wire:model="editingPrice" type="text" inputmode="decimal" autofocus placeholder="0.00" />
             </flux:field>
+
+            @if($listStore && $editing->catalog_item_id !== null && $editing->preferred_store !== $listStore->value)
+                <button
+                    type="button"
+                    wire:click="markPreferredStore({{ $editing->id }})"
+                    class="w-full inline-flex items-center justify-center gap-2 rounded-md border border-[#ede8df] bg-[#f7f3ec] px-3 py-2 text-sm font-medium text-[#1a1a1a] hover:bg-[#ede8df] tap"
+                >
+                    <span class="size-2.5 rounded-full" style="background-color: {{ $listStore->color() }}"></span>
+                    {{ __('app.mark_preferred_store', ['store' => $listStore->label()]) }}
+                </button>
+            @endif
 
             @if($priceHistory->isNotEmpty())
                 <div class="space-y-2">

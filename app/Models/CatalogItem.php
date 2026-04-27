@@ -54,19 +54,21 @@ class CatalogItem extends Model
         return $query->where('locale', $locale);
     }
 
+    private const int PREFERRED_STORE_THRESHOLD = 3;
+
     /**
-     * Update preferred_store if this item has been bought at the given store
-     * more than 3 times across all shopping lists.
+     * Update preferred_store once this catalog item has been recorded
+     * (priced or ticked off) at the given store at least three times.
      */
     public function syncPreferredStore(string $store): void
     {
         $count = ShoppingListItem::query()
             ->where('catalog_item_id', $this->id)
-            ->where('is_bought', true)
+            ->where(fn (Builder $q) => $q->where('is_bought', true)->orWhereNotNull('price'))
             ->whereHas('list', fn (Builder $q) => $q->where('store', $store))
             ->count();
 
-        if ($count > 3) {
+        if ($count >= self::PREFERRED_STORE_THRESHOLD) {
             $this->update(['preferred_store' => $store]);
         }
     }

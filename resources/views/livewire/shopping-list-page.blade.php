@@ -78,7 +78,7 @@
     @if($mode === 'owner')
         <x-shopping-list.quick-add :suggestions="$this->catalogSuggestions" />
         <x-bottom-nav active-tab="list" :item-count="$pending ?? 0" />
-        <x-shopping-list.price-modal :editing="$this->editingItem" :price-history="$this->priceHistory" />
+        <x-shopping-list.price-modal :editing="$this->editingItem" :price-history="$this->priceHistory" :list-store="$list->store" />
         <x-shopping-list.save-recipe-modal />
     @endif
 

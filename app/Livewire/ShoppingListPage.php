@@ -173,6 +173,26 @@ class ShoppingListPage extends Component
         unset($this->itemsByCategory);
     }
 
+    public function markPreferredStore(int $id): void
+    {
+        if ($this->mode !== 'owner' || $this->list->store === null) {
+            return;
+        }
+
+        $item = $this->list->items()->findOrFail($id);
+
+        if ($item->catalog_item_id === null) {
+            return;
+        }
+
+        $store = $this->list->store->value;
+
+        $item->catalogItem->update(['preferred_store' => $store]);
+        $item->update(['preferred_store' => $store]);
+
+        unset($this->itemsByCategory, $this->editingItem);
+    }
+
     public function setItemPrice(int $id, ?float $price): void
     {
         if ($this->mode !== 'owner') {
@@ -180,7 +200,13 @@ class ShoppingListPage extends Component
         }
 
         $item = $this->list->items()->findOrFail($id);
-        $item->update(['price' => $price !== null && $price > 0 ? $price : null]);
+        $normalised = $price !== null && $price > 0 ? $price : null;
+
+        $item->update(['price' => $normalised]);
+
+        if ($normalised !== null && $item->catalog_item_id !== null && $this->list->store !== null) {
+            $item->catalogItem->syncPreferredStore($this->list->store->value);
+        }
 
         unset($this->itemsByCategory, $this->totalSpent);
     }
