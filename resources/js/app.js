@@ -2,7 +2,13 @@ import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 import confetti from 'canvas-confetti';
 
-if (import.meta.env.VITE_REVERB_APP_KEY) {
+// Real-time sync via Reverb is opt-in. Set VITE_REVERB_ENABLED=true in .env
+// (and start `php artisan reverb:start`) to wire it up. Without this flag the
+// app falls back to standard Livewire HTTP polling on user actions.
+if (
+    import.meta.env.VITE_REVERB_ENABLED === 'true' &&
+    import.meta.env.VITE_REVERB_APP_KEY
+) {
     window.Pusher = Pusher;
 
     window.Echo = new Echo({

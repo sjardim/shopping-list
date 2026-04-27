@@ -29,4 +29,19 @@ return [
     'currency' => [
         'symbol' => env('CURRENCY_SYMBOL', '€'),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reverb (real-time sync) toggle
+    |--------------------------------------------------------------------------
+    |
+    | When false (default), the app skips both backend broadcasts and the
+    | client-side Echo subscription. Set to true (and start
+    | `php artisan reverb:start`) to wire up real-time updates between the
+    | owner and the shared list URL.
+    |
+    */
+    'reverb' => [
+        'enabled' => env('REVERB_ENABLED', false),
+    ],
 ];

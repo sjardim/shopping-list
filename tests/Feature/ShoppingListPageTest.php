@@ -616,6 +616,7 @@ test('increment uses 50 step for g/ml gram units', function () {
 });
 
 test('increment broadcasts ItemQuantityChanged to shared listeners', function () {
+    config()->set('lista.reverb.enabled', true);
     Event::fake([ItemQuantityChanged::class]);
 
     $user = User::factory()->create();
@@ -633,6 +634,7 @@ test('increment broadcasts ItemQuantityChanged to shared listeners', function ()
 });
 
 test('decrement broadcasts ItemQuantityChanged to shared listeners', function () {
+    config()->set('lista.reverb.enabled', true);
     Event::fake([ItemQuantityChanged::class]);
 
     $user = User::factory()->create();
@@ -650,6 +652,7 @@ test('decrement broadcasts ItemQuantityChanged to shared listeners', function ()
 });
 
 test('clamped decrement does not broadcast', function () {
+    config()->set('lista.reverb.enabled', true);
     Event::fake([ItemQuantityChanged::class]);
 
     $user = User::factory()->create();
