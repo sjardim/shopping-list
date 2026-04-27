@@ -45,7 +45,7 @@
                                 class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold tap border transition-colors {{ $isCurrent ? 'border-transparent text-white' : 'bg-white text-[#6b6055] border-[#e0d9cc] hover:bg-[#f7f3ec]' }}"
                                 @if($isCurrent) style="background-color: {{ $store->color() }}; color: {{ $store->hasDarkText() ? '#1a1a1a' : '#ffffff' }}" @endif
                             >
-                                <span class="size-2 rounded-full" style="background-color: {{ $store->color() }}"></span>
+                                <span class="size-2 rounded-full" style="background-color: {{ $isCurrent ? ($store->hasDarkText() ? '#1a1a1a' : '#ffffff') : $store->color() }}"></span>
                                 {{ $store->label() }}
                             </button>
                         @endforeach
