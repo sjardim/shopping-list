@@ -36,6 +36,8 @@ return [
     'mark_bought' => 'Mark :name as bought',
     'mark_unbought' => 'Mark :name as not bought',
     'remove_item' => 'Remove :name',
+    'increase_quantity' => 'Increase :name quantity',
+    'decrease_quantity' => 'Decrease :name quantity',
     'add_item' => 'Add item',
     'start_voice_input' => 'Dictate item with your voice',
     'set_price' => 'Set price for :name',

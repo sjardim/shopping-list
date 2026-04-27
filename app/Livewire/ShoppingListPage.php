@@ -172,6 +172,44 @@ class ShoppingListPage extends Component
         unset($this->itemsByCategory);
     }
 
+    public function incrementQuantity(int $id): void
+    {
+        $this->adjustQuantity($id, 1);
+    }
+
+    public function decrementQuantity(int $id): void
+    {
+        $this->adjustQuantity($id, -1);
+    }
+
+    private function adjustQuantity(int $id, int $direction): void
+    {
+        if ($this->mode !== 'owner') {
+            return;
+        }
+
+        $item = $this->list->items()->findOrFail($id);
+        $step = $this->quantityStep((string) $item->unit);
+        $next = round((float) $item->quantity + ($direction * $step), 2);
+
+        if ($next < $step) {
+            return;
+        }
+
+        $item->update(['quantity' => $next]);
+
+        unset($this->itemsByCategory);
+    }
+
+    private function quantityStep(string $unit): float
+    {
+        return match (strtolower($unit)) {
+            'kg', 'l' => 0.1,
+            'g', 'ml' => 50,
+            default => 1,
+        };
+    }
+
     public function setItemPrice(int $id, ?float $price): void
     {
         if ($this->mode !== 'owner') {

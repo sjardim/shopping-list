@@ -36,6 +36,8 @@ return [
     'mark_bought' => 'Marcar :name como comprado',
     'mark_unbought' => 'Marcar :name como não comprado',
     'remove_item' => 'Remover :name',
+    'increase_quantity' => 'Aumentar quantidade de :name',
+    'decrease_quantity' => 'Diminuir quantidade de :name',
     'add_item' => 'Adicionar item',
     'start_voice_input' => 'Ditar item por voz',
     'set_price' => 'Definir preço para :name',
