@@ -27,6 +27,7 @@ class PriceHistoryService
             ->select([
                 'shopping_list_items.price',
                 'shopping_list_items.bought_at',
+                'shopping_list_items.updated_at',
                 'shopping_lists.store',
                 'shopping_lists.name as list_name',
             ])
@@ -34,14 +35,13 @@ class PriceHistoryService
             ->where('shopping_lists.user_id', $userId)
             ->where('shopping_list_items.catalog_item_id', $item->catalog_item_id)
             ->whereNotNull('shopping_list_items.price')
-            ->where('shopping_list_items.is_bought', true)
-            ->orderByDesc('shopping_list_items.bought_at')
+            ->orderByDesc(DB::raw('COALESCE(shopping_list_items.bought_at, shopping_list_items.updated_at)'))
             ->limit($limit)
             ->get()
             ->map(fn ($row) => (object) [
                 'store' => $row->store === null ? null : (string) $row->store,
                 'price' => (float) $row->price,
-                'bought_at' => Carbon::parse($row->bought_at),
+                'bought_at' => Carbon::parse($row->bought_at ?? $row->updated_at),
                 'list_name' => (string) $row->list_name,
             ]);
     }

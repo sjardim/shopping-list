@@ -14,6 +14,25 @@ use Livewire\Livewire;
 
 uses(LazilyRefreshDatabase::class);
 
+test('priced but unticked items still appear in price history', function () {
+    $user = User::factory()->create();
+    $catalog = CatalogItem::factory()->create(['name' => 'Bread', 'locale' => 'pt_PT']);
+
+    $list = ShoppingList::factory()->for($user)->create();
+    $item = ShoppingListItem::factory()->for($list, 'list')->create([
+        'catalog_item_id' => $catalog->id,
+        'name' => 'Bread',
+        'price' => 1.20,
+        'is_bought' => false,
+        'bought_at' => null,
+    ]);
+
+    $history = app(PriceHistoryService::class)->forItem($item, $user->id);
+
+    expect($history)->toHaveCount(1)
+        ->and($history->first()->price)->toBe(1.20);
+});
+
 test('undo finish trip leaves the items findable in price history', function () {
     $user = User::factory()->create();
     $catalog = CatalogItem::factory()->create(['name' => 'Apples', 'locale' => 'pt_PT']);
