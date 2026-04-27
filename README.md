@@ -19,7 +19,7 @@ Built on Laravel 13, Livewire 4, Tailwind v4, and Flux UI (Free edition only).
 - **PWA-ready** — installs to the home screen.
 - **96 Pest tests**, runs on SQLite in memory.
 
-Full feature list with all the details in [FEATURES.md](FEATURES.md).
+Full feature list with all the details in [FEATURES.md](FEATURES.md). User guide split by topic in [docs/](docs/README.md).
 
 ## Install
 
