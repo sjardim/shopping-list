@@ -20,7 +20,7 @@
         aria-label="{{ __('app.mark_bought', ['name' => $item['name']]) }}"
     ></button>
 
-    <div class="shrink-0 size-10 rounded-md bg-[#f4f0e8] flex items-center justify-center text-lg">
+    <div class="item-emoji shrink-0 size-10 rounded-md bg-[#f4f0e8] flex items-center justify-center text-lg">
         {{ $item['emoji'] ?: '🛒' }}
     </div>
 

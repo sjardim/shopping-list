@@ -27,6 +27,9 @@
                 if (prefs.bigTargets) {
                     root.setAttribute('data-targets', 'big');
                 }
+                if ((prefs.uiScale || 1) >= 1.2) {
+                    root.setAttribute('data-text-size', 'max');
+                }
             } catch (e) {}
         })();
 
@@ -81,6 +84,11 @@
                         root.setAttribute('data-targets', 'big');
                     } else {
                         root.removeAttribute('data-targets');
+                    }
+                    if (this.uiScale >= 1.2) {
+                        root.setAttribute('data-text-size', 'max');
+                    } else {
+                        root.removeAttribute('data-text-size');
                     }
                     try {
                         localStorage.setItem('lista-prefs', JSON.stringify({

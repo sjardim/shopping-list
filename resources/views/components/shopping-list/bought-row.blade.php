@@ -17,7 +17,7 @@
         <flux:icon name="check" class="size-3.5 text-white" />
     </button>
 
-    <div class="shrink-0 size-10 rounded-md bg-[#f4f0e8]/60 flex items-center justify-center text-lg opacity-50">
+    <div class="item-emoji shrink-0 size-10 rounded-md bg-[#f4f0e8]/60 flex items-center justify-center text-lg opacity-50">
         {{ $item['emoji'] ?: '🛒' }}
     </div>
 

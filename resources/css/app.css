@@ -64,6 +64,11 @@
     min-height: 2.75rem;
 }
 
+/* Max text size hides item emojis to claim the horizontal space for the name + stepper. */
+[data-text-size="max"] .item-emoji {
+    display: none;
+}
+
 /* Toast: strip the browser's default popover chrome and span the full mobile viewport. */
 ui-toast-group,
 ui-toast {
