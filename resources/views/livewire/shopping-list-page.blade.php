@@ -4,7 +4,7 @@
     <header class="px-5 pt-10 pb-4">
         <div class="flex items-start justify-between">
             <div>
-                <h1 class="heading-serif text-3xl font-bold text-[#1a1a1a] leading-tight">{{ __('app.shopping_list') }}</h1>
+                <h1 class="heading-serif text-2xl font-bold text-[#1a1a1a] leading-tight">{{ __('app.shopping_list') }}</h1>
 
                 {{-- Store selector --}}
                 <div class="flex items-center gap-2 mt-2">
@@ -488,7 +488,7 @@
                 </button>
                 <button
                     type="submit"
-                    class="shrink-0 size-8 rounded-md bg-[#1a1a1a] text-white flex items-center justify-center hover:bg-[#333] transition-colors tap"
+                    class="shrink-0 size-8 rounded-md bg-green-700 text-white flex items-center justify-center hover:bg-[#333] transition-colors tap"
                     aria-label="{{ __('app.add_item') }}"
                 >
                     <flux:icon name="plus" class="size-4" />

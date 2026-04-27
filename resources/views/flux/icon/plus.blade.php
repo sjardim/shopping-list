@@ -24,5 +24,5 @@ $classes = Flux::classes('shrink-0')
     aria-hidden="true"
     data-slot="icon"
 >    
-    <g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"><path d="m40 128h176"/><path d="m128 40v176"/></g>
+    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"><path d="m40 128h176"/><path d="m128 40v176"/></g>
 </svg>
