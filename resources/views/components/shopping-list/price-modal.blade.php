@@ -1,7 +1,6 @@
 @props([
     'editing' => null,
     'priceHistory',
-    'listStore' => null,
 ])
 
 <flux:modal name="edit-price" class="md:w-96">
@@ -27,15 +26,31 @@
                 <flux:input wire:model="editingPrice" type="text" inputmode="decimal" autofocus placeholder="0.00" />
             </flux:field>
 
-            @if($listStore && $editing->catalog_item_id !== null && $editing->preferred_store !== $listStore->value)
-                <button
-                    type="button"
-                    wire:click="markPreferredStore({{ $editing->id }})"
-                    class="w-full inline-flex items-center justify-center gap-2 rounded-md border border-[#ede8df] bg-[#f7f3ec] px-3 py-2 text-sm font-medium text-[#1a1a1a] hover:bg-[#ede8df] tap"
-                >
-                    <span class="size-2.5 rounded-full" style="background-color: {{ $listStore->color() }}"></span>
-                    {{ __('app.mark_preferred_store', ['store' => $listStore->label()]) }}
-                </button>
+            @if($editing->catalog_item_id !== null)
+                <div class="space-y-2">
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-[#6b6055]">{{ __('app.preferred_store') }}</p>
+                    <div class="flex flex-wrap gap-1.5">
+                        <button
+                            type="button"
+                            wire:click="markPreferredStore({{ $editing->id }}, '')"
+                            class="rounded-full px-3 py-1 text-xs font-semibold tap border transition-colors {{ $editing->preferred_store === null ? 'bg-[#1a1a1a] text-white border-transparent' : 'bg-white text-[#6b6055] border-[#e0d9cc] hover:bg-[#f7f3ec]' }}"
+                        >
+                            {{ __('app.no_store') }}
+                        </button>
+                        @foreach(\App\Support\Stores::active() as $store)
+                            @php $isCurrent = $editing->preferred_store === $store->value; @endphp
+                            <button
+                                type="button"
+                                wire:click="markPreferredStore({{ $editing->id }}, '{{ $store->value }}')"
+                                class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold tap border transition-colors {{ $isCurrent ? 'border-transparent text-white' : 'bg-white text-[#6b6055] border-[#e0d9cc] hover:bg-[#f7f3ec]' }}"
+                                @if($isCurrent) style="background-color: {{ $store->color() }}; color: {{ $store->hasDarkText() ? '#1a1a1a' : '#ffffff' }}" @endif
+                            >
+                                <span class="size-2 rounded-full" style="background-color: {{ $store->color() }}"></span>
+                                {{ $store->label() }}
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
             @endif
 
             @if($priceHistory->isNotEmpty())

@@ -173,9 +173,9 @@ class ShoppingListPage extends Component
         unset($this->itemsByCategory);
     }
 
-    public function markPreferredStore(int $id): void
+    public function markPreferredStore(int $id, ?string $store = null): void
     {
-        if ($this->mode !== 'owner' || $this->list->store === null) {
+        if ($this->mode !== 'owner') {
             return;
         }
 
@@ -185,10 +185,10 @@ class ShoppingListPage extends Component
             return;
         }
 
-        $store = $this->list->store->value;
+        $resolved = $store === null || $store === '' ? null : Stores::tryFrom($store)?->value;
 
-        $item->catalogItem->update(['preferred_store' => $store]);
-        $item->update(['preferred_store' => $store]);
+        $item->catalogItem->update(['preferred_store' => $resolved]);
+        $item->update(['preferred_store' => $resolved]);
 
         unset($this->itemsByCategory, $this->editingItem);
     }

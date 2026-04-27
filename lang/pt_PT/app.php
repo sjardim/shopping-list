@@ -42,6 +42,7 @@ return [
     'start_voice_input' => 'Ditar item por voz',
     'set_price' => 'Definir preço para :name',
     'mark_preferred_store' => 'Sempre no :store',
+    'preferred_store' => 'Loja habitual',
     'set_price_prompt' => 'Preço para :name (:currency):',
     'spent_so_far' => 'gasto até agora',
     'price_label' => 'Preço (:currency)',

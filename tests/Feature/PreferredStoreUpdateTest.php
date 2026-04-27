@@ -102,10 +102,10 @@ test('priced items at the same store flip preferred_store even without ticking',
     expect($catalogItem->fresh()->preferred_store)->toBe('mercadona');
 });
 
-test('owner can manually mark the current list store as preferred', function () {
+test('owner can manually pick any region store as preferred', function () {
     $user = User::factory()->create();
     $catalogItem = CatalogItem::factory()->create(['preferred_store' => 'continente']);
-    $list = ShoppingList::factory()->for($user)->create(['store' => 'mercadona']);
+    $list = ShoppingList::factory()->for($user)->create(['store' => null]);
     $item = ShoppingListItem::factory()->for($list, 'list')->create([
         'catalog_item_id' => $catalogItem->id,
         'preferred_store' => 'continente',
@@ -113,25 +113,43 @@ test('owner can manually mark the current list store as preferred', function () 
 
     Livewire::actingAs($user)
         ->test(ShoppingListPage::class)
-        ->call('markPreferredStore', $item->id);
+        ->call('markPreferredStore', $item->id, 'mercadona');
 
     expect($catalogItem->fresh()->preferred_store)->toBe('mercadona')
         ->and($item->fresh()->preferred_store)->toBe('mercadona');
 });
 
-test('manual mark requires a list store', function () {
+test('owner can clear the preferred store by passing an empty slug', function () {
     $user = User::factory()->create();
     $catalogItem = CatalogItem::factory()->create(['preferred_store' => 'continente']);
     $list = ShoppingList::factory()->for($user)->create(['store' => null]);
     $item = ShoppingListItem::factory()->for($list, 'list')->create([
         'catalog_item_id' => $catalogItem->id,
+        'preferred_store' => 'continente',
     ]);
 
     Livewire::actingAs($user)
         ->test(ShoppingListPage::class)
-        ->call('markPreferredStore', $item->id);
+        ->call('markPreferredStore', $item->id, '');
 
-    expect($catalogItem->fresh()->preferred_store)->toBe('continente');
+    expect($catalogItem->fresh()->preferred_store)->toBeNull()
+        ->and($item->fresh()->preferred_store)->toBeNull();
+});
+
+test('unknown store slug is rejected (clears instead of corrupting)', function () {
+    $user = User::factory()->create();
+    $catalogItem = CatalogItem::factory()->create(['preferred_store' => 'continente']);
+    $list = ShoppingList::factory()->for($user)->create();
+    $item = ShoppingListItem::factory()->for($list, 'list')->create([
+        'catalog_item_id' => $catalogItem->id,
+        'preferred_store' => 'continente',
+    ]);
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('markPreferredStore', $item->id, 'not-a-real-store');
+
+    expect($catalogItem->fresh()->preferred_store)->toBeNull();
 });
 
 test('preferred store is not updated for ad-hoc items without a catalog item', function () {
