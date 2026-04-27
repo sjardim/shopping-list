@@ -33,7 +33,6 @@ class PriceHistoryService
             ->join('shopping_lists', 'shopping_lists.id', '=', 'shopping_list_items.shopping_list_id')
             ->where('shopping_lists.user_id', $userId)
             ->where('shopping_list_items.catalog_item_id', $item->catalog_item_id)
-            ->where('shopping_list_items.id', '!=', $item->id)
             ->whereNotNull('shopping_list_items.price')
             ->where('shopping_list_items.is_bought', true)
             ->orderByDesc('shopping_list_items.bought_at')
