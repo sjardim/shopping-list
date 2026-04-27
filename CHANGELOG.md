@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## Unreleased
+
+### Added
+
+- **Per item quantity stepper.** Each list row now shows a `−` and `+` pair around the quantity. Steps are unit aware: `0.1` for kg/l, `50` for g/ml, `1` for everything else. Decrement clamps at the step so a row never reaches zero. Owner only; shared mode still shows the static quantity.
+- **`ItemQuantityChanged` broadcast event.** Stepper edits now ride the same Reverb channel as toggle, add, and remove. The shared user sees quantity changes in real time with the usual ping toast.
+- **Catalog `locale` column.** Each catalog row is tagged with the locale that seeded it (`en`, `en_GB`, `pt_PT`, `pt_BR`, `es`). New `forLocale($locale)` scope on `CatalogItem`. `search()` and `byCategory()` now filter by the current app locale, with rows lacking a locale tag included as a graceful fallback for legacy data. Unblocks shipping multiple locales side by side.
+- **`PriceHistoryService`** extracted from `ShoppingListPage` to make the top-10 historical-price query reusable and testable in isolation.
+- **`HandlesQuantity` trait** holds the stepper actions to keep `ShoppingListPage` cohesive.
+- **8 anonymous Blade components under `components/shopping-list/`** (`header`, `progress-card`, `notes-input`, `item-row`, `bought-row`, `quick-add`, `price-modal`, `save-recipe-modal`). The page view shrunk from ~600 lines to ~85.
+- **`ROADMAP.md`** capturing a six-hats audit of v1.2.0 plus the prioritised follow-ups behind this release.
+
+### Changed
+
+- **Halved every non `rounded-full` corner radius across the UI**. The cards, stepper buttons, modal panels, and bottom nav read tighter on mobile.
+- **Catalog item labels in the Add Items grid use the new `list-text-xs` utility** so they respect the user's text size preferences (both `--ui-scale` and `--list-scale`).
+- **Localised unit strings in the EN, GB, and ES seeders.** `pacote` becomes `pack` (EN/GB) or `paquete` (ES). `lata` becomes `can` (EN/GB). `rolo` becomes `roll` (EN/GB) or `rollo` (ES). Stops Portuguese unit names leaking into English and Spanish stores.
+
+### Tests
+
+109 passing, 177 assertions (up from 96/163). New coverage for the quantity stepper (six tests), the `ItemQuantityChanged` broadcast (three tests), and the catalog locale scopes (four tests).
+
 ## 1.2.0 — Mise en Place (2026-04-24)
 
 This release finishes the international rollout started in 1.1.0 (now five locales and five regions, each with a real catalog and history dataset) and adds a proper first run experience. New developers get a single command, `php artisan lista:install`, that walks them through language, region, currency, and admin setup. Admin identity moves out of env into the database. Quality tooling (Rector, PHPStan level 5) ships with the codebase.

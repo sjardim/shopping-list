@@ -7,17 +7,17 @@ use App\Contracts\Store;
 use App\Enums\ShoppingListStatus;
 use App\Events\ItemAdded;
 use App\Events\ItemRemoved;
+use App\Livewire\Concerns\HandlesQuantity;
 use App\Models\CatalogItem;
 use App\Models\MealRecipe;
 use App\Models\ShoppingList;
 use App\Models\ShoppingListItem;
+use App\Services\PriceHistoryService;
 use App\Support\Stores;
 use Flux\Flux;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Computed;
@@ -35,6 +35,7 @@ use Livewire\Component;
 class ShoppingListPage extends Component
 {
     use BroadcastsToOthers;
+    use HandlesQuantity;
 
     public ShoppingList $list;
 
@@ -172,44 +173,6 @@ class ShoppingListPage extends Component
         unset($this->itemsByCategory);
     }
 
-    public function incrementQuantity(int $id): void
-    {
-        $this->adjustQuantity($id, 1);
-    }
-
-    public function decrementQuantity(int $id): void
-    {
-        $this->adjustQuantity($id, -1);
-    }
-
-    private function adjustQuantity(int $id, int $direction): void
-    {
-        if ($this->mode !== 'owner') {
-            return;
-        }
-
-        $item = $this->list->items()->findOrFail($id);
-        $step = $this->quantityStep((string) $item->unit);
-        $next = round((float) $item->quantity + ($direction * $step), 2);
-
-        if ($next < $step) {
-            return;
-        }
-
-        $item->update(['quantity' => $next]);
-
-        unset($this->itemsByCategory);
-    }
-
-    private function quantityStep(string $unit): float
-    {
-        return match (strtolower($unit)) {
-            'kg', 'l' => 0.1,
-            'g', 'ml' => 50,
-            default => 1,
-        };
-    }
-
     public function setItemPrice(int $id, ?float $price): void
     {
         if ($this->mode !== 'owner') {
@@ -272,32 +235,11 @@ class ShoppingListPage extends Component
     {
         $item = $this->editingItem;
 
-        if ($item === null || $item->catalog_item_id === null) {
+        if ($item === null) {
             return collect();
         }
 
-        return DB::table('shopping_list_items')
-            ->select([
-                'shopping_list_items.price',
-                'shopping_list_items.bought_at',
-                'shopping_lists.store',
-                'shopping_lists.name as list_name',
-            ])
-            ->join('shopping_lists', 'shopping_lists.id', '=', 'shopping_list_items.shopping_list_id')
-            ->where('shopping_lists.user_id', Auth::id())
-            ->where('shopping_list_items.catalog_item_id', $item->catalog_item_id)
-            ->where('shopping_list_items.id', '!=', $item->id)
-            ->whereNotNull('shopping_list_items.price')
-            ->where('shopping_list_items.is_bought', true)
-            ->orderByDesc('shopping_list_items.bought_at')
-            ->limit(10)
-            ->get()
-            ->map(fn ($row) => (object) [
-                'store' => $row->store === null ? null : (string) $row->store,
-                'price' => (float) $row->price,
-                'bought_at' => Carbon::parse($row->bought_at),
-                'list_name' => (string) $row->list_name,
-            ]);
+        return app(PriceHistoryService::class)->forItem($item, (int) Auth::id());
     }
 
     #[Computed]
@@ -509,6 +451,12 @@ class ShoppingListPage extends Component
 
     #[On('echo:shopping.{shareToken},ItemRemoved')]
     public function onItemRemoved(array $payload): void
+    {
+        $this->onRemoteListUpdate();
+    }
+
+    #[On('echo:shopping.{shareToken},ItemQuantityChanged')]
+    public function onItemQuantityChanged(array $payload): void
     {
         $this->onRemoteListUpdate();
     }

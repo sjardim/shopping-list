@@ -130,7 +130,8 @@ class CatalogItemSeederGb extends Seeder
         ];
 
         foreach ($items as $item) {
-            CatalogItem::firstOrCreate(['name' => $item['name']], $item);
+            $item['locale'] = 'en_GB';
+            CatalogItem::firstOrCreate(['name' => $item['name'], 'locale' => 'en_GB'], $item);
         }
     }
 }

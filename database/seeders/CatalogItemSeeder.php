@@ -119,7 +119,8 @@ class CatalogItemSeeder extends Seeder
         ];
 
         foreach ($items as $item) {
-            CatalogItem::firstOrCreate(['name' => $item['name']], $item);
+            $item['locale'] = 'pt_PT';
+            CatalogItem::firstOrCreate(['name' => $item['name'], 'locale' => 'pt_PT'], $item);
         }
     }
 }

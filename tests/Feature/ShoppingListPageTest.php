@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\StorePt;
+use App\Events\ItemQuantityChanged;
 use App\Livewire\ShoppingListPage;
 use App\Models\CatalogItem;
 use App\Models\MealRecipe;
@@ -8,6 +9,7 @@ use App\Models\ShoppingList;
 use App\Models\ShoppingListItem;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Livewire\Livewire;
 
 uses(LazilyRefreshDatabase::class);
@@ -611,6 +613,57 @@ test('increment uses 50 step for g/ml gram units', function () {
         ->call('incrementQuantity', $item->id);
 
     expect($item->fresh()->quantity)->toBe('150.00');
+});
+
+test('increment broadcasts ItemQuantityChanged to shared listeners', function () {
+    Event::fake([ItemQuantityChanged::class]);
+
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+    $item = ShoppingListItem::factory()->for($list, 'list')->create([
+        'quantity' => 1,
+        'unit' => 'un',
+    ]);
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('incrementQuantity', $item->id);
+
+    Event::assertDispatched(ItemQuantityChanged::class, fn ($event): bool => $event->item->id === $item->id);
+});
+
+test('decrement broadcasts ItemQuantityChanged to shared listeners', function () {
+    Event::fake([ItemQuantityChanged::class]);
+
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+    $item = ShoppingListItem::factory()->for($list, 'list')->create([
+        'quantity' => 3,
+        'unit' => 'un',
+    ]);
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('decrementQuantity', $item->id);
+
+    Event::assertDispatched(ItemQuantityChanged::class, fn ($event): bool => $event->item->id === $item->id);
+});
+
+test('clamped decrement does not broadcast', function () {
+    Event::fake([ItemQuantityChanged::class]);
+
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+    $item = ShoppingListItem::factory()->for($list, 'list')->create([
+        'quantity' => 1,
+        'unit' => 'un',
+    ]);
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('decrementQuantity', $item->id);
+
+    Event::assertNotDispatched(ItemQuantityChanged::class);
 });
 
 test('shared mode cannot change quantity', function () {

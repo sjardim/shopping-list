@@ -16,6 +16,7 @@ class CatalogItem extends Model
         'emoji',
         'category',
         'preferred_store',
+        'locale',
         'default_unit',
         'default_quantity',
     ];
@@ -28,21 +29,34 @@ class CatalogItem extends Model
     }
 
     /**
-     * Search by name using case-insensitive matching.
-     * Uses ILIKE on PostgreSQL; falls back to LIKE on SQLite (case-insensitive for ASCII by default).
+     * Search by name using case-insensitive matching, scoped to the current
+     * locale (with rows lacking a locale tag included as fallback).
+     * Uses ILIKE on PostgreSQL; falls back to LIKE on SQLite.
      */
     public function scopeSearch(Builder $query, string $term): Builder
     {
         $operator = DB::getDriverName() === 'pgsql' ? 'ILIKE' : 'LIKE';
 
         return $query->where('name', $operator, "%{$term}%")
+            ->forLocale(app()->getLocale())
             ->orderBy('name')
             ->limit(8);
     }
 
     public function scopeByCategory(Builder $query, string $category): Builder
     {
-        return $query->where('category', $category)->orderBy('name');
+        return $query->where('category', $category)
+            ->forLocale(app()->getLocale())
+            ->orderBy('name');
+    }
+
+    /**
+     * Restrict to rows tagged with the given locale, plus untagged rows so
+     * pre-locale data still appears.
+     */
+    public function scopeForLocale(Builder $query, string $locale): Builder
+    {
+        return $query->where(fn (Builder $q) => $q->where('locale', $locale)->orWhereNull('locale'));
     }
 
     /**
