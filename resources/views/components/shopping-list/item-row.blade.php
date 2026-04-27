@@ -4,7 +4,6 @@
 ])
 
 @php
-    $storeEnum = $item['preferred_store'] ? \App\Support\Stores::tryFrom($item['preferred_store']) : null;
     $quantityLabel = rtrim(rtrim(number_format((float) $item['quantity'], 2, '.', ''), '0'), '.') . ' ' . $item['unit'];
 @endphp
 
@@ -53,12 +52,6 @@
                 </div>
             @else
                 <span class="text-[#9b9080] list-text-sm">{{ $quantityLabel }}</span>
-            @endif
-            @if($storeEnum)
-                <span class="flex items-center gap-1 text-[#6b6055] list-text-sm min-w-0">
-                    <span class="size-2 rounded-full shrink-0" style="background-color: {{ $storeEnum->color() }}"></span>
-                    <span class="truncate">{{ __('app.usually', ['store' => $storeEnum->label()]) }}</span>
-                </span>
             @endif
         </footer>
     </article>
