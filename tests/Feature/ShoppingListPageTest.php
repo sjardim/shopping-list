@@ -535,3 +535,94 @@ test('shared mode cannot quick-add items', function () {
 
     expect($list->fresh()->items()->count())->toBe(0);
 });
+
+// — Quantity stepper —
+
+test('owner can increment quantity by 1 for unit-based items', function () {
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+    $item = ShoppingListItem::factory()->for($list, 'list')->create([
+        'quantity' => 1,
+        'unit' => 'un',
+    ]);
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('incrementQuantity', $item->id);
+
+    expect($item->fresh()->quantity)->toBe('2.00');
+});
+
+test('owner can decrement quantity by 1 for unit-based items', function () {
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+    $item = ShoppingListItem::factory()->for($list, 'list')->create([
+        'quantity' => 3,
+        'unit' => 'un',
+    ]);
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('decrementQuantity', $item->id);
+
+    expect($item->fresh()->quantity)->toBe('2.00');
+});
+
+test('decrement clamps at the unit step (cannot go to zero)', function () {
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+    $item = ShoppingListItem::factory()->for($list, 'list')->create([
+        'quantity' => 1,
+        'unit' => 'un',
+    ]);
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('decrementQuantity', $item->id);
+
+    expect($item->fresh()->quantity)->toBe('1.00');
+});
+
+test('increment uses 0.1 step for kg/l weight units', function () {
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+    $item = ShoppingListItem::factory()->for($list, 'list')->create([
+        'quantity' => 1,
+        'unit' => 'kg',
+    ]);
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('incrementQuantity', $item->id);
+
+    expect($item->fresh()->quantity)->toBe('1.10');
+});
+
+test('increment uses 50 step for g/ml gram units', function () {
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+    $item = ShoppingListItem::factory()->for($list, 'list')->create([
+        'quantity' => 100,
+        'unit' => 'g',
+    ]);
+
+    Livewire::actingAs($user)
+        ->test(ShoppingListPage::class)
+        ->call('incrementQuantity', $item->id);
+
+    expect($item->fresh()->quantity)->toBe('150.00');
+});
+
+test('shared mode cannot change quantity', function () {
+    $user = User::factory()->create();
+    $list = ShoppingList::factory()->for($user)->create();
+    $item = ShoppingListItem::factory()->for($list, 'list')->create([
+        'quantity' => 2,
+        'unit' => 'un',
+    ]);
+
+    Livewire::test(ShoppingListPage::class, ['share_token' => $list->share_token])
+        ->call('incrementQuantity', $item->id);
+
+    expect($item->fresh()->quantity)->toBe('2.00');
+});

@@ -38,6 +38,11 @@
     line-height: 1.4;
 }
 
+@utility list-text-xs {
+    font-size: calc(0.6875rem * var(--list-scale));
+    line-height: 1.25;
+}
+
 /* High-contrast mode: darker muted text and stronger borders. */
 [data-contrast="high"] .text-\[\#6b6055\] { color: #2a2419; }
 [data-contrast="high"] .text-\[\#9b9080\] { color: #3a3328; }

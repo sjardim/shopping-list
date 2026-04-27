@@ -171,7 +171,7 @@
     @endphp
 
     @if($total > 0)
-        <div class="mx-5 rounded-3xl p-5" style="background-color: #2f7d4f;">
+        <div class="mx-5 rounded-xl p-5" style="background-color: #2f7d4f;">
             <p class="text-[10px] font-bold uppercase tracking-widest text-white/60">{{ __('app.shopping_now') }}</p>
 
             <div class="flex items-baseline gap-2 mt-1">
@@ -234,7 +234,7 @@
                 wire:change="updateNotes"
                 placeholder="{{ __('app.notes_placeholder') }}"
                 rows="2"
-                class="w-full bg-white/60 rounded-2xl pl-4 pr-12 py-2 text-sm text-[#1a1a1a] placeholder-[#b0a99a] outline-none resize-none border border-[#ede8df] focus:border-[#2f7d4f] transition-colors"
+                class="w-full bg-white/60 rounded-lg pl-4 pr-12 py-2 text-sm text-[#1a1a1a] placeholder-[#b0a99a] outline-none resize-none border border-[#ede8df] focus:border-[#2f7d4f] transition-colors"
             ></textarea>
             <span
                 x-cloak
@@ -251,7 +251,7 @@
                 x-show="supported"
                 x-on:click="toggle"
                 x-bind:class="recording ? 'bg-[#e53935] text-white animate-pulse' : 'bg-[#f4f0e8] text-[#1a1a1a] hover:bg-[#ede8df]'"
-                class="absolute bottom-2 right-2 size-7 rounded-lg flex items-center justify-center transition-colors tap"
+                class="absolute bottom-2 right-2 size-7 rounded-sm flex items-center justify-center transition-colors tap"
                 aria-label="{{ __('app.start_voice_input') }}"
                 data-voice-toggle
             >
@@ -261,7 +261,7 @@
     </div>
 
     {{-- List body --}}
-    <main class="flex-1 px-5 pb-32 mt-3 space-y-6">
+    <main class="flex-1 px-5 pb-48 mt-3 space-y-6">
 
         @if($total === 0)
             <div class="mt-16 text-center text-[#6b6055] fade-in-up">
@@ -288,7 +288,7 @@
                         <span>{{ $categoryEnum?->emoji() }}</span>
                         <span>{{ $categoryEnum?->label() ?? $category }}</span>
                     </h2>
-                    <div class="bg-white rounded-3xl overflow-hidden divide-y divide-[#f4f0e8]">
+                    <div class="bg-white rounded-xl overflow-hidden divide-y divide-[#f4f0e8]">
                         @foreach($items as $item)
                             @php $storeEnum = $item['preferred_store'] ? \App\Support\Stores::tryFrom($item['preferred_store']) : null; @endphp
                             <div
@@ -300,29 +300,50 @@
                                 {{-- Square checkbox --}}
                                 <button
                                     x-on:click="navigator.vibrate?.(8); window.lista?.sounds?.toggle(); sliding = true; setTimeout(() => $wire.toggleItem({{ $item['id'] }}), 200)"
-                                    class="shrink-0 size-6 rounded-lg border-2 border-[#d5cdbc] hover:border-[#2f7d4f] transition-colors tap"
+                                    class="shrink-0 size-6 rounded-sm border-2 border-[#d5cdbc] hover:border-[#2f7d4f] transition-colors tap"
                                     aria-label="{{ __('app.mark_bought', ['name' => $item['name']]) }}"
                                 ></button>
 
                                 {{-- Emoji container --}}
-                                <div class="shrink-0 size-10 rounded-xl bg-[#f4f0e8] flex items-center justify-center text-lg">
+                                <div class="shrink-0 size-10 rounded-md bg-[#f4f0e8] flex items-center justify-center text-lg">
                                     {{ $item['emoji'] ?: '🛒' }}
                                 </div>
 
-                                {{-- Name + store --}}
-                                <div class="flex-1 min-w-0">
-                                    <p class="font-semibold text-[#1a1a1a] list-text">{{ $item['name'] }}</p>
-                                    @if($storeEnum)
-                                        <p class="flex items-center gap-1 text-[#6b6055] mt-0.5 list-text-sm">
-                                            <span class="size-2 rounded-full shrink-0" style="background-color: {{ $storeEnum->color() }}"></span>
-                                            {{ __('app.usually', ['store' => $storeEnum->label()]) }}
-                                        </p>
-                                    @else
-                                        <p class="text-[#9b9080] mt-0.5 list-text-sm">
-                                            {{ rtrim(rtrim(number_format((float)$item['quantity'], 2, '.', ''), '0'), '.') }} {{ $item['unit'] }}
-                                        </p>
-                                    @endif
-                                </div>
+                                {{-- Name + stepper + store --}}
+                                <article class="flex-1 min-w-0">
+                                    <header class="flex items-center justify-between gap-2 flex-wrap">
+                                        <p class="font-semibold text-[#1a1a1a] list-text">{{ $item['name'] }}</p>                                     
+                                    </header>
+                                    <footer class="flex items-center gap-2 mt-1 flex-wrap">
+                                        @if($mode === 'owner')
+                                            <div class="flex items-center gap-1">
+                                                <button
+                                                    type="button"
+                                                    wire:click="decrementQuantity({{ $item['id'] }})"
+                                                    class="size-6 rounded-full bg-[#f4f0e8] hover:bg-[#e0d9cc] flex items-center justify-center text-[#1a1a1a] tap"
+                                                    aria-label="{{ __('app.decrease_quantity', ['name' => $item['name']]) }}"
+                                                >
+                                                    <flux:icon name="minus" class="size-3" />
+                                                </button>
+                                                <span class="list-text-sm font-semibold text-[#1a1a1a] min-w-[2.75rem] text-center tabular-nums">
+                                                    {{ rtrim(rtrim(number_format((float)$item['quantity'], 2, '.', ''), '0'), '.') }} {{ $item['unit'] }}
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    wire:click="incrementQuantity({{ $item['id'] }})"
+                                                    class="size-6 rounded-full bg-[#f4f0e8] hover:bg-[#e0d9cc] flex items-center justify-center text-[#1a1a1a] tap"
+                                                    aria-label="{{ __('app.increase_quantity', ['name' => $item['name']]) }}"
+                                                >
+                                                    <flux:icon name="plus" class="size-3" />
+                                                </button>
+                                            </div>
+                                        @else
+                                            <span class="text-[#9b9080] list-text-sm">
+                                                {{ rtrim(rtrim(number_format((float)$item['quantity'], 2, '.', ''), '0'), '.') }} {{ $item['unit'] }}
+                                            </span>
+                                        @endif                                       
+                                    </footer>
+                                </article>
 
                                 {{-- Price + remove (owner only) --}}
                                 @if($mode === 'owner')
@@ -360,7 +381,7 @@
                         <span>✓</span>
                         <span>{{ __('app.in_cart') }}</span>
                     </h2>
-                    <div class="bg-white/60 rounded-3xl overflow-hidden divide-y divide-[#f4f0e8]">
+                    <div class="bg-white/60 rounded-xl overflow-hidden divide-y divide-[#f4f0e8]">
                         @foreach($this->itemsByCategory['bought'] as $item)
                             <div
                                 wire:key="bought-{{ $item['id'] }}"
@@ -371,14 +392,14 @@
                                 {{-- Filled checkbox --}}
                                 <button
                                     x-on:click="navigator.vibrate?.(8); window.lista?.sounds?.toggle(); sliding = true; setTimeout(() => $wire.toggleItem({{ $item['id'] }}), 200)"
-                                    class="shrink-0 size-6 rounded-lg bg-[#2f7d4f] flex items-center justify-center hover:bg-[#256b41] transition-colors tap"
+                                    class="shrink-0 size-6 rounded-sm bg-[#2f7d4f] flex items-center justify-center hover:bg-[#256b41] transition-colors tap"
                                     aria-label="{{ __('app.mark_unbought', ['name' => $item['name']]) }}"
                                 >
                                     <flux:icon name="check" class="size-3.5 text-white" />
                                 </button>
 
                                 {{-- Emoji --}}
-                                <div class="shrink-0 size-10 rounded-xl bg-[#f4f0e8]/60 flex items-center justify-center text-lg opacity-50">
+                                <div class="shrink-0 size-10 rounded-md bg-[#f4f0e8]/60 flex items-center justify-center text-lg opacity-50">
                                     {{ $item['emoji'] ?: '🛒' }}
                                 </div>
 
@@ -420,7 +441,7 @@
                     x-transition:enter="transition ease-out duration-100"
                     x-transition:enter-start="opacity-0 translate-y-1"
                     x-transition:enter-end="opacity-100 translate-y-0"
-                    class="mb-2 bg-white rounded-2xl shadow-lg border border-[#ede8df] overflow-hidden"
+                    class="mb-2 bg-white rounded-lg shadow-lg border border-[#ede8df] overflow-hidden"
                 >
                     @foreach($this->catalogSuggestions as $suggestion)
                         @php $storeEnum = $suggestion['preferred_store'] ? \App\Support\Stores::tryFrom($suggestion['preferred_store']) : null; @endphp
@@ -442,7 +463,7 @@
             <form
                 wire:submit="quickAdd"
                 x-data="voiceInput('{{ str_replace('_', '-', app()->getLocale()) }}')"
-                class="flex gap-2 bg-white rounded-2xl shadow-lg shadow-black/5 border border-[#ede8df] px-4 py-2"
+                class="flex gap-2 bg-white rounded-lg shadow-lg shadow-black/5 border border-[#ede8df] px-4 py-2"
             >
                 <input
                     wire:model.live.debounce.300ms="quickAddName"
@@ -459,7 +480,7 @@
                     x-show="supported"
                     x-on:click="toggle"
                     x-bind:class="recording ? 'bg-[#e53935] text-white animate-pulse' : 'bg-[#f4f0e8] text-[#1a1a1a] hover:bg-[#ede8df]'"
-                    class="shrink-0 size-8 rounded-xl flex items-center justify-center transition-colors tap"
+                    class="shrink-0 size-8 rounded-md flex items-center justify-center transition-colors tap"
                     aria-label="{{ __('app.start_voice_input') }}"
                     data-voice-toggle
                 >
@@ -467,7 +488,7 @@
                 </button>
                 <button
                     type="submit"
-                    class="shrink-0 size-8 rounded-xl bg-[#1a1a1a] text-white flex items-center justify-center hover:bg-[#333] transition-colors tap"
+                    class="shrink-0 size-8 rounded-md bg-[#1a1a1a] text-white flex items-center justify-center hover:bg-[#333] transition-colors tap"
                     aria-label="{{ __('app.add_item') }}"
                 >
                     <flux:icon name="plus" class="size-4" />
@@ -495,6 +516,12 @@
                             <span>{{ $editing->emoji ?: '🛒' }}</span>
                             <span>{{ $editing->name }}</span>
                         </flux:heading>
+                        @if($storeEnum)
+                            <span class="flex items-center gap-1 text-[#6b6055] list-text-sm min-w-0">
+                                <span class="size-2 rounded-full shrink-0" style="background-color: {{ $storeEnum->color() }}"></span>
+                                <span class="truncate">{{ __('app.usually', ['store' => $storeEnum->label()]) }}</span>
+                            </span>
+                        @endif
                         <flux:subheading>{{ __('app.set_price_prompt', ['name' => $editing->name, 'currency' => config('lista.currency.symbol')]) }}</flux:subheading>
                     </div>
 
@@ -506,7 +533,7 @@
                     @if($this->priceHistory->isNotEmpty())
                         <div class="space-y-2">
                             <p class="text-[10px] font-bold uppercase tracking-widest text-[#6b6055]">{{ __('app.price_history') }}</p>
-                            <div class="rounded-xl border border-[#ede8df] divide-y divide-[#f4f0e8] overflow-hidden">
+                            <div class="rounded-md border border-[#ede8df] divide-y divide-[#f4f0e8] overflow-hidden">
                                 @foreach($this->priceHistory as $entry)
                                     @php $storeEnum = $entry->store ? \App\Support\Stores::tryFrom($entry->store) : null; @endphp
                                     <div class="flex items-center justify-between gap-3 px-3 py-2 text-sm">

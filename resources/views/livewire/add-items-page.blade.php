@@ -63,7 +63,7 @@
                                     wire:key="catalog-{{ $item['id'] }}"
                                     wire:click="toggleCatalogItem({{ $item['id'] }})"
                                     aria-pressed="{{ $isSelected ? 'true' : 'false' }}"
-                                    class="relative flex flex-col items-center justify-between gap-1 p-3 rounded-2xl border transition-colors aspect-square tap
+                                    class="relative flex flex-col items-center justify-between gap-1 p-3 rounded-lg border transition-colors aspect-square tap
                                         {{ $isSelected
                                             ? 'bg-[#e3ede7] border-[#2f7d4f]/25'
                                             : 'bg-white border-[#f0ece3]' }}"
@@ -79,7 +79,7 @@
                                     <span class="text-3xl mt-1">{{ $item['emoji'] ?: '🛒' }}</span>
 
                                     {{-- Name --}}
-                                    <span class="text-[11px] font-medium text-center text-[#1a1a1a] leading-tight line-clamp-2">{{ $item['name'] }}</span>
+                                    <span class="list-text-xs font-medium text-center text-[#1a1a1a] line-clamp-2">{{ $item['name'] }}</span>
 
                                     {{-- Store dot --}}
                                     @if($storeEnum)
@@ -100,7 +100,7 @@
             <div class="space-y-3 mt-4">
                 {{-- User-saved recipes --}}
                 @foreach($this->userRecipes as $recipe)
-                    <div wire:key="recipe-{{ $recipe->id }}" class="bg-white rounded-2xl px-4 py-3 shadow-sm fade-in-up border border-[#e3ede7]">
+                    <div wire:key="recipe-{{ $recipe->id }}" class="bg-white rounded-lg px-4 py-3 shadow-sm fade-in-up border border-[#e3ede7]">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <span class="text-2xl">{{ $recipe->emoji }}</span>
@@ -144,7 +144,7 @@
 
                 {{-- Built-in bundles --}}
                 @foreach($this->mealBundles as $key => $bundle)
-                    <div wire:key="bundle-{{ $key }}" class="bg-white rounded-2xl px-4 py-3 shadow-sm fade-in-up">
+                    <div wire:key="bundle-{{ $key }}" class="bg-white rounded-lg px-4 py-3 shadow-sm fade-in-up">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <span class="text-2xl">{{ $bundle['emoji'] }}</span>

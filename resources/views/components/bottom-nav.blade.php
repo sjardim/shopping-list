@@ -1,6 +1,6 @@
 @props(['activeTab' => 'list', 'itemCount' => 0])
 
-<nav class="fixed bottom-0 left-0 right-0 bg-[#f7f3ec] border-t border-[#e0d9cc] rounded-t-3xl px-6 py-3 z-50 shadow-[0_-4px_24px_rgba(0,0,0,0.06)]">
+<nav class="fixed bottom-0 left-0 right-0 bg-[#f7f3ec] border-t border-[#e0d9cc] rounded-t-xl px-6 py-3 z-50 shadow-[0_-4px_24px_rgba(0,0,0,0.06)]">
     <div class="flex items-center justify-between">
         {{-- List tab --}}
         <a href="{{ route('home') }}" class="flex items-center justify-center tap" aria-label="{{ __('app.nav_list') }}" @if($activeTab === 'list') aria-current="page" @endif>

@@ -8,7 +8,7 @@
             type="button"
             x-on:click.stop="$store.prefs.setUiScale({{ $opt['v'] }})"
             x-bind:class="$store.prefs.uiScale === {{ $opt['v'] }} ? 'bg-[#1a1a1a] text-white' : 'bg-[#f4f0e8] text-[#1a1a1a]'"
-            class="flex-1 py-1.5 rounded-lg font-semibold tap {{ $opt['size'] }}"
+            class="flex-1 py-1.5 rounded-sm font-semibold tap {{ $opt['size'] }}"
             aria-label="{{ __('app.text_size_option', ['scale' => (string) $opt['v']]) }}"
         >A</button>
     @endforeach

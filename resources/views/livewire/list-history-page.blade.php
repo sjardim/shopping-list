@@ -16,7 +16,7 @@
         @else
             <div class="space-y-3">
                 @foreach($this->completedLists as $list)
-                    <div wire:key="history-{{ $list->id }}" class="bg-white rounded-2xl px-4 py-3 shadow-sm fade-in-up">
+                    <div wire:key="history-{{ $list->id }}" class="bg-white rounded-lg px-4 py-3 shadow-sm fade-in-up">
                         <div class="flex items-start justify-between gap-2">
                             <div class="flex items-center gap-2 min-w-0">
                                 @if($list->store)
