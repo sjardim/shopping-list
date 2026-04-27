@@ -29,9 +29,8 @@ class CatalogItem extends Model
     }
 
     /**
-     * Search by name using case-insensitive matching, scoped to the current
-     * locale (with rows lacking a locale tag included as fallback).
-     * Uses ILIKE on PostgreSQL; falls back to LIKE on SQLite.
+     * Case-insensitive name search scoped to the current app locale.
+     * Uses ILIKE on PostgreSQL, LIKE on SQLite.
      */
     public function scopeSearch(Builder $query, string $term): Builder
     {
@@ -50,13 +49,9 @@ class CatalogItem extends Model
             ->orderBy('name');
     }
 
-    /**
-     * Restrict to rows tagged with the given locale, plus untagged rows so
-     * pre-locale data still appears.
-     */
     public function scopeForLocale(Builder $query, string $locale): Builder
     {
-        return $query->where(fn (Builder $q) => $q->where('locale', $locale)->orWhereNull('locale'));
+        return $query->where('locale', $locale);
     }
 
     /**

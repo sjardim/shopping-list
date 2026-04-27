@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file. Format foll
 
 - **Per item quantity stepper.** Each list row now shows a `−` and `+` pair around the quantity. Steps are unit aware: `0.1` for kg/l, `50` for g/ml, `1` for everything else. Decrement clamps at the step so a row never reaches zero. Owner only; shared mode still shows the static quantity.
 - **`ItemQuantityChanged` broadcast event.** Stepper edits now ride the same Reverb channel as toggle, add, and remove. The shared user sees quantity changes in real time with the usual ping toast.
-- **Catalog `locale` column.** Each catalog row is tagged with the locale that seeded it (`en`, `en_GB`, `pt_PT`, `pt_BR`, `es`). New `forLocale($locale)` scope on `CatalogItem`. `search()` and `byCategory()` now filter by the current app locale, with rows lacking a locale tag included as a graceful fallback for legacy data. Unblocks shipping multiple locales side by side.
+- **Catalog `locale` column** (NOT NULL). Each catalog row is tagged with the locale that seeded it (`en`, `en_GB`, `pt_PT`, `pt_BR`, `es`). New `forLocale($locale)` scope on `CatalogItem`. `search()` and `byCategory()` now filter strictly by the current app locale. Unblocks shipping multiple locales side by side.
 - **`PriceHistoryService`** extracted from `ShoppingListPage` to make the top-10 historical-price query reusable and testable in isolation.
 - **`HandlesQuantity` trait** holds the stepper actions to keep `ShoppingListPage` cohesive.
 - **8 anonymous Blade components under `components/shopping-list/`** (`header`, `progress-card`, `notes-input`, `item-row`, `bought-row`, `quick-add`, `price-modal`, `save-recipe-modal`). The page view shrunk from ~600 lines to ~85.

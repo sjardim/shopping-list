@@ -17,16 +17,6 @@ test('forLocale returns rows tagged with the given locale', function () {
     expect($matches->pluck('name')->all())->toBe(['Banana']);
 });
 
-test('forLocale also returns rows without a locale tag (legacy fallback)', function () {
-    CatalogItem::factory()->create(['name' => 'Apple', 'locale' => 'en']);
-    CatalogItem::factory()->create(['name' => 'Plátano', 'locale' => 'es']);
-    CatalogItem::factory()->create(['name' => 'Untagged', 'locale' => null]);
-
-    $matches = CatalogItem::query()->forLocale('en')->orderBy('name')->get();
-
-    expect($matches->pluck('name')->all())->toBe(['Apple', 'Untagged']);
-});
-
 test('search filters by current locale', function () {
     CatalogItem::factory()->create(['name' => 'Banana', 'locale' => 'en']);
     CatalogItem::factory()->create(['name' => 'Banana', 'locale' => 'pt_PT']);

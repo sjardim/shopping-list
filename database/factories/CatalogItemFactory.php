@@ -24,6 +24,7 @@ class CatalogItemFactory extends Factory
             'emoji' => '🛒',
             'category' => $this->faker->randomElement(['fruta', 'legumes', 'lacticinios', 'carne', 'despensa']),
             'preferred_store' => null,
+            'locale' => 'pt_PT',
             'default_unit' => $this->faker->randomElement(['un', 'kg', 'g', 'l']),
             'default_quantity' => $this->faker->randomFloat(2, 0.5, 3),
         ];
