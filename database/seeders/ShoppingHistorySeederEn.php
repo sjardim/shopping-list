@@ -29,7 +29,7 @@ class ShoppingHistorySeederEn extends BaseShoppingHistorySeeder
     {
         return [
             ['name' => 'Razor blades', 'emoji' => '🪒', 'category' => 'higiene', 'unit' => 'un', 'quantity' => 1],
-            ['name' => 'AA batteries', 'emoji' => '🔋', 'category' => 'casa', 'unit' => 'pacote', 'quantity' => 1],
+            ['name' => 'AA batteries', 'emoji' => '🔋', 'category' => 'casa', 'unit' => 'pack', 'quantity' => 1],
             ['name' => 'Birthday card', 'emoji' => '🎂', 'category' => 'casa', 'unit' => 'un', 'quantity' => 1],
             ['name' => 'Flowers', 'emoji' => '💐', 'category' => 'casa', 'unit' => 'un', 'quantity' => 1],
             ['name' => 'Bag of ice', 'emoji' => '🧊', 'category' => 'bebidas', 'unit' => 'kg', 'quantity' => 2],

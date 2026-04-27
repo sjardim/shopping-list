@@ -29,7 +29,7 @@ class ShoppingHistorySeederEs extends BaseShoppingHistorySeeder
     {
         return [
             ['name' => 'Cuchillas de afeitar', 'emoji' => '🪒', 'category' => 'higiene', 'unit' => 'un', 'quantity' => 1],
-            ['name' => 'Pilas AA', 'emoji' => '🔋', 'category' => 'casa', 'unit' => 'pacote', 'quantity' => 1],
+            ['name' => 'Pilas AA', 'emoji' => '🔋', 'category' => 'casa', 'unit' => 'paquete', 'quantity' => 1],
             ['name' => 'Tarjeta de cumpleaños', 'emoji' => '🎂', 'category' => 'casa', 'unit' => 'un', 'quantity' => 1],
             ['name' => 'Flores', 'emoji' => '💐', 'category' => 'casa', 'unit' => 'un', 'quantity' => 1],
             ['name' => 'Bolsa de hielo', 'emoji' => '🧊', 'category' => 'bebidas', 'unit' => 'kg', 'quantity' => 2],

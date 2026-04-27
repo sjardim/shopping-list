@@ -67,9 +67,9 @@ class CatalogItemSeederEn extends Seeder
             // Fish & seafood
             ['name' => 'Cod', 'emoji' => '🐟', 'category' => 'peixe', 'preferred_store' => 'whole_foods', 'default_unit' => 'kg', 'default_quantity' => 0.5],
             ['name' => 'Salmon', 'emoji' => '🐟', 'category' => 'peixe', 'preferred_store' => 'whole_foods', 'default_unit' => 'g', 'default_quantity' => 400],
-            ['name' => 'Canned tuna', 'emoji' => '🐟', 'category' => 'peixe', 'preferred_store' => 'target', 'default_unit' => 'lata', 'default_quantity' => 3],
+            ['name' => 'Canned tuna', 'emoji' => '🐟', 'category' => 'peixe', 'preferred_store' => 'target', 'default_unit' => 'can', 'default_quantity' => 3],
             ['name' => 'Shrimp', 'emoji' => '🦐', 'category' => 'peixe', 'preferred_store' => 'whole_foods', 'default_unit' => 'g', 'default_quantity' => 300],
-            ['name' => 'Sardines', 'emoji' => '🐟', 'category' => 'peixe', 'preferred_store' => 'trader_joes', 'default_unit' => 'lata', 'default_quantity' => 2],
+            ['name' => 'Sardines', 'emoji' => '🐟', 'category' => 'peixe', 'preferred_store' => 'trader_joes', 'default_unit' => 'can', 'default_quantity' => 2],
 
             // Bakery
             ['name' => 'Bread loaf', 'emoji' => '🍞', 'category' => 'padaria', 'preferred_store' => null, 'default_unit' => 'un', 'default_quantity' => 1],
@@ -77,8 +77,8 @@ class CatalogItemSeederEn extends Seeder
             ['name' => 'Baguette', 'emoji' => '🥖', 'category' => 'padaria', 'preferred_store' => null, 'default_unit' => 'un', 'default_quantity' => 2],
             ['name' => 'Bagels', 'emoji' => '🥯', 'category' => 'padaria', 'preferred_store' => 'trader_joes', 'default_unit' => 'un', 'default_quantity' => 6],
             ['name' => 'Croissant', 'emoji' => '🥐', 'category' => 'padaria', 'preferred_store' => 'aldi', 'default_unit' => 'un', 'default_quantity' => 4],
-            ['name' => 'Crackers', 'emoji' => '🍘', 'category' => 'padaria', 'preferred_store' => 'target', 'default_unit' => 'pacote', 'default_quantity' => 1],
-            ['name' => 'Tortillas', 'emoji' => '🫓', 'category' => 'padaria', 'preferred_store' => 'walmart', 'default_unit' => 'pacote', 'default_quantity' => 1],
+            ['name' => 'Crackers', 'emoji' => '🍘', 'category' => 'padaria', 'preferred_store' => 'target', 'default_unit' => 'pack', 'default_quantity' => 1],
+            ['name' => 'Tortillas', 'emoji' => '🫓', 'category' => 'padaria', 'preferred_store' => 'walmart', 'default_unit' => 'pack', 'default_quantity' => 1],
 
             // Beverages
             ['name' => 'Bottled water', 'emoji' => '💧', 'category' => 'bebidas', 'preferred_store' => 'target', 'default_unit' => 'l', 'default_quantity' => 6],
@@ -96,9 +96,9 @@ class CatalogItemSeederEn extends Seeder
             ['name' => 'Spaghetti', 'emoji' => '🍝', 'category' => 'despensa', 'preferred_store' => 'aldi', 'default_unit' => 'g', 'default_quantity' => 500],
             ['name' => 'Tomato sauce', 'emoji' => '🍅', 'category' => 'despensa', 'preferred_store' => 'walmart', 'default_unit' => 'ml', 'default_quantity' => 400],
             ['name' => 'Chocolate', 'emoji' => '🍫', 'category' => 'despensa', 'preferred_store' => 'aldi', 'default_unit' => 'un', 'default_quantity' => 1],
-            ['name' => 'Cookies', 'emoji' => '🍪', 'category' => 'despensa', 'preferred_store' => 'target', 'default_unit' => 'pacote', 'default_quantity' => 1],
-            ['name' => 'Black beans', 'emoji' => '🫘', 'category' => 'despensa', 'preferred_store' => 'walmart', 'default_unit' => 'lata', 'default_quantity' => 2],
-            ['name' => 'Chickpeas', 'emoji' => '🫘', 'category' => 'despensa', 'preferred_store' => 'walmart', 'default_unit' => 'lata', 'default_quantity' => 2],
+            ['name' => 'Cookies', 'emoji' => '🍪', 'category' => 'despensa', 'preferred_store' => 'target', 'default_unit' => 'pack', 'default_quantity' => 1],
+            ['name' => 'Black beans', 'emoji' => '🫘', 'category' => 'despensa', 'preferred_store' => 'walmart', 'default_unit' => 'can', 'default_quantity' => 2],
+            ['name' => 'Chickpeas', 'emoji' => '🫘', 'category' => 'despensa', 'preferred_store' => 'walmart', 'default_unit' => 'can', 'default_quantity' => 2],
             ['name' => 'Salt', 'emoji' => '🧂', 'category' => 'despensa', 'preferred_store' => null, 'default_unit' => 'g', 'default_quantity' => 500],
             ['name' => 'Sugar', 'emoji' => '🍬', 'category' => 'despensa', 'preferred_store' => null, 'default_unit' => 'kg', 'default_quantity' => 1],
             ['name' => 'Flour', 'emoji' => '🌾', 'category' => 'despensa', 'preferred_store' => 'walmart', 'default_unit' => 'kg', 'default_quantity' => 1],
@@ -112,7 +112,7 @@ class CatalogItemSeederEn extends Seeder
             ['name' => 'Fabric softener', 'emoji' => '🧴', 'category' => 'limpeza', 'preferred_store' => 'walmart', 'default_unit' => 'l', 'default_quantity' => 1],
             ['name' => 'Toilet paper', 'emoji' => '🧻', 'category' => 'limpeza', 'preferred_store' => 'target', 'default_unit' => 'un', 'default_quantity' => 12],
             ['name' => 'Sponges', 'emoji' => '🧽', 'category' => 'limpeza', 'preferred_store' => 'walmart', 'default_unit' => 'un', 'default_quantity' => 4],
-            ['name' => 'Trash bags', 'emoji' => '🗑️', 'category' => 'limpeza', 'preferred_store' => 'target', 'default_unit' => 'rolo', 'default_quantity' => 1],
+            ['name' => 'Trash bags', 'emoji' => '🗑️', 'category' => 'limpeza', 'preferred_store' => 'target', 'default_unit' => 'roll', 'default_quantity' => 1],
             ['name' => 'All-purpose cleaner', 'emoji' => '🧹', 'category' => 'limpeza', 'preferred_store' => 'target', 'default_unit' => 'un', 'default_quantity' => 1],
 
             // Personal care
@@ -122,7 +122,7 @@ class CatalogItemSeederEn extends Seeder
             ['name' => 'Toothbrush', 'emoji' => '🪥', 'category' => 'higiene', 'preferred_store' => null, 'default_unit' => 'un', 'default_quantity' => 2],
             ['name' => 'Deodorant', 'emoji' => '🧴', 'category' => 'higiene', 'preferred_store' => 'target', 'default_unit' => 'un', 'default_quantity' => 1],
             ['name' => 'Moisturizer', 'emoji' => '🧴', 'category' => 'higiene', 'preferred_store' => 'whole_foods', 'default_unit' => 'ml', 'default_quantity' => 200],
-            ['name' => 'Pads', 'emoji' => '🩸', 'category' => 'higiene', 'preferred_store' => 'target', 'default_unit' => 'pacote', 'default_quantity' => 1],
+            ['name' => 'Pads', 'emoji' => '🩸', 'category' => 'higiene', 'preferred_store' => 'target', 'default_unit' => 'pack', 'default_quantity' => 1],
         ];
 
         foreach ($items as $item) {

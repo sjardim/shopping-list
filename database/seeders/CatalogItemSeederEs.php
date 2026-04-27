@@ -85,7 +85,7 @@ class CatalogItemSeederEs extends Seeder
             ['name' => 'Pan de molde', 'emoji' => '🍞', 'category' => 'padaria', 'preferred_store' => 'mercadona', 'default_unit' => 'un', 'default_quantity' => 1],
             ['name' => 'Pan integral', 'emoji' => '🍞', 'category' => 'padaria', 'preferred_store' => 'mercadona', 'default_unit' => 'un', 'default_quantity' => 1],
             ['name' => 'Croissant', 'emoji' => '🥐', 'category' => 'padaria', 'preferred_store' => 'mercadona', 'default_unit' => 'un', 'default_quantity' => 4],
-            ['name' => 'Magdalenas', 'emoji' => '🧁', 'category' => 'padaria', 'preferred_store' => 'mercadona', 'default_unit' => 'pacote', 'default_quantity' => 1],
+            ['name' => 'Magdalenas', 'emoji' => '🧁', 'category' => 'padaria', 'preferred_store' => 'mercadona', 'default_unit' => 'paquete', 'default_quantity' => 1],
 
             // Bebidas
             ['name' => 'Agua mineral', 'emoji' => '💧', 'category' => 'bebidas', 'preferred_store' => 'alcampo', 'default_unit' => 'l', 'default_quantity' => 6],
@@ -103,7 +103,7 @@ class CatalogItemSeederEs extends Seeder
             ['name' => 'Espaguetis', 'emoji' => '🍝', 'category' => 'despensa', 'preferred_store' => 'dia', 'default_unit' => 'g', 'default_quantity' => 500],
             ['name' => 'Tomate frito', 'emoji' => '🍅', 'category' => 'despensa', 'preferred_store' => 'mercadona', 'default_unit' => 'g', 'default_quantity' => 350],
             ['name' => 'Chocolate', 'emoji' => '🍫', 'category' => 'despensa', 'preferred_store' => 'mercadona', 'default_unit' => 'un', 'default_quantity' => 1],
-            ['name' => 'Galletas', 'emoji' => '🍪', 'category' => 'despensa', 'preferred_store' => 'mercadona', 'default_unit' => 'pacote', 'default_quantity' => 1],
+            ['name' => 'Galletas', 'emoji' => '🍪', 'category' => 'despensa', 'preferred_store' => 'mercadona', 'default_unit' => 'paquete', 'default_quantity' => 1],
             ['name' => 'Garbanzos', 'emoji' => '🫘', 'category' => 'despensa', 'preferred_store' => 'mercadona', 'default_unit' => 'lata', 'default_quantity' => 2],
             ['name' => 'Lentejas', 'emoji' => '🫘', 'category' => 'despensa', 'preferred_store' => 'mercadona', 'default_unit' => 'kg', 'default_quantity' => 1],
             ['name' => 'Judías blancas', 'emoji' => '🫘', 'category' => 'despensa', 'preferred_store' => 'mercadona', 'default_unit' => 'lata', 'default_quantity' => 2],
@@ -121,7 +121,7 @@ class CatalogItemSeederEs extends Seeder
             ['name' => 'Suavizante', 'emoji' => '🧴', 'category' => 'limpeza', 'preferred_store' => 'alcampo', 'default_unit' => 'l', 'default_quantity' => 1],
             ['name' => 'Papel higiénico', 'emoji' => '🧻', 'category' => 'limpeza', 'preferred_store' => 'alcampo', 'default_unit' => 'un', 'default_quantity' => 12],
             ['name' => 'Estropajos', 'emoji' => '🧽', 'category' => 'limpeza', 'preferred_store' => 'dia', 'default_unit' => 'un', 'default_quantity' => 4],
-            ['name' => 'Bolsas de basura', 'emoji' => '🗑️', 'category' => 'limpeza', 'preferred_store' => 'mercadona', 'default_unit' => 'rolo', 'default_quantity' => 1],
+            ['name' => 'Bolsas de basura', 'emoji' => '🗑️', 'category' => 'limpeza', 'preferred_store' => 'mercadona', 'default_unit' => 'rollo', 'default_quantity' => 1],
             ['name' => 'Limpiador multiusos', 'emoji' => '🧹', 'category' => 'limpeza', 'preferred_store' => 'mercadona', 'default_unit' => 'un', 'default_quantity' => 1],
 
             // Higiene personal
@@ -131,7 +131,7 @@ class CatalogItemSeederEs extends Seeder
             ['name' => 'Cepillo de dientes', 'emoji' => '🪥', 'category' => 'higiene', 'preferred_store' => null, 'default_unit' => 'un', 'default_quantity' => 2],
             ['name' => 'Desodorante', 'emoji' => '🧴', 'category' => 'higiene', 'preferred_store' => 'mercadona', 'default_unit' => 'un', 'default_quantity' => 1],
             ['name' => 'Crema hidratante', 'emoji' => '🧴', 'category' => 'higiene', 'preferred_store' => 'mercadona', 'default_unit' => 'ml', 'default_quantity' => 200],
-            ['name' => 'Compresas', 'emoji' => '🩸', 'category' => 'higiene', 'preferred_store' => 'mercadona', 'default_unit' => 'pacote', 'default_quantity' => 1],
+            ['name' => 'Compresas', 'emoji' => '🩸', 'category' => 'higiene', 'preferred_store' => 'mercadona', 'default_unit' => 'paquete', 'default_quantity' => 1],
         ];
 
         foreach ($items as $item) {
