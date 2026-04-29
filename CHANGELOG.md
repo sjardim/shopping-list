@@ -4,42 +4,42 @@ All notable changes to this project will be documented in this file. Format foll
 
 ## 1.3.0 (2026-04-29)
 
-This release acts on the post 1.2.0 six hats audit (see [ROADMAP.md](ROADMAP.md)). The headline trio: a per item quantity stepper that broadcasts in real time, a major page decomposition (the home view shrunk from about 600 lines to 85 by extracting eight anonymous Blade components), and a catalog `locale` column that stops the seeder divergence bleed. Then a string of fixes that came out of using the result: a price history that actually surfaces past purchases, an auto learner that no longer demands four buys, an explicit preferred store picker, real time sync gated behind a single env flag, and accessibility tweaks driven by real complaints (medium text size now affects item rows; max text size hides emojis to claim space). The release closes with a multi page user guide under `docs/`.
+This release acts on the post-1.2.0 six-hats audit (see [ROADMAP.md](ROADMAP.md)). The headline trio: a per-item quantity stepper that broadcasts in real time, a major page decomposition (the home view shrunk from about 600 lines to 85 by extracting eight anonymous Blade components), and a catalog `locale` column that stops the seeder-divergence bleed. Then a string of fixes that came out of using the result: a price history that actually surfaces past purchases, an auto-learner that no longer demands four buys, an explicit preferred-store picker, real-time sync gated behind a single env flag, and accessibility tweaks driven by real complaints (medium text size now affects item rows; max text size hides emojis to claim space). The release closes with a multi-page user guide under `docs/`.
 
 ### Added
 
-- **Per item quantity stepper.** Each list row shows a minus and plus pair around the quantity. Steps are unit aware: 0.1 for kg or l, 50 for g or ml, 1 for everything else. Decrement clamps at the step so a row never reaches zero. Owner only; shared mode still shows the static quantity.
-- **`ItemQuantityChanged` broadcast event.** Stepper edits ride the same Reverb channel as toggle, add, and remove. The shared user sees quantity changes in real time with the usual ping toast.
-- **Catalog `locale` column** (NOT NULL). Each catalog row is tagged with the locale that seeded it (`en`, `en_GB`, `pt_PT`, `pt_BR`, `es`). New `forLocale($locale)` scope on `CatalogItem`. `search()` and `byCategory()` filter strictly by the current app locale. Unblocks shipping multiple locales side by side.
-- **`PriceHistoryService`** extracted from `ShoppingListPage` to make the top 10 historical price query reusable and testable in isolation.
-- **`HandlesQuantity` trait** holds the stepper actions to keep `ShoppingListPage` cohesive.
-- **8 anonymous Blade components under `components/shopping-list/`** (`header`, `progress-card`, `notes-input`, `item-row`, `bought-row`, `quick-add`, `price-modal`, `save-recipe-modal`). The page view shrunk from about 600 lines to 85.
-- **Manual preferred store picker** in the price modal. Replaces the old conditional "Always at <store>" button with a row of pills covering every store in the active region plus a "No store" option. Current preference is highlighted in the brand colour. Tap any pill to flip the catalog item's preferred store immediately.
-- **Auto learner now triggered by `setItemPrice`.** Setting a price on the active list contributes to the count, so users who do not tick items off still build the preferred store signal.
-- **Reverb opt in env flag** (`REVERB_ENABLED`, surfaced to the front end as `VITE_REVERB_ENABLED`). When false (default), the backend skips `broadcast()` and the front end skips Echo init, so a fresh clone boots quietly. Documented in `.env.example` and `config/lista.php`.
-- **`ROADMAP.md`** capturing a six hats audit of v1.2.0 plus the prioritised follow ups behind this release.
-- **`docs/` user guide.** Eight markdown files split by topic with `docs/README.md` as the quick start index. Covers the active list, catalog and recipes, sharing and Reverb, history and export, accessibility, admin and setup, and architecture.
+- **Per-item quantity stepper.** Each list row shows a minus and plus pair around the quantity. Steps are unit-aware: 0.1 for kg/l, 50 for g/ml, 1 for everything else. Decrement clamps at the step so a row never reaches zero. Owner only; shared mode shows the static quantity.
+- **`ItemQuantityChanged` broadcast event.** Stepper edits ride the same Reverb channel as toggle, add, and remove. Shared user sees quantity changes in real time with the usual ping toast.
+- **Catalog `locale` column** (NOT NULL). Each catalog row tagged with the locale that seeded it (`en`, `en_GB`, `pt_PT`, `pt_BR`, `es`). New `forLocale($locale)` scope on `CatalogItem`. `search()` and `byCategory()` filter strictly by current app locale. Unblocks shipping multiple locales side by side.
+- **`PriceHistoryService`** extracted from `ShoppingListPage`. Top-10 historical-price query is now reusable and testable in isolation.
+- **`HandlesQuantity` trait** holds the stepper actions.
+- **8 anonymous Blade components under `components/shopping-list/`** (`header`, `progress-card`, `notes-input`, `item-row`, `bought-row`, `quick-add`, `price-modal`, `save-recipe-modal`). Page view dropped from ~600 to ~85 lines.
+- **Manual preferred-store picker** in the price modal. Row of pills covering every store in the active region plus "No store". Current preference highlighted in brand colour. Tap any pill to flip immediately.
+- **Auto-learner triggered by `setItemPrice`.** Setting a price contributes to the count, so users who don't tick items off still build the preferred-store signal.
+- **Reverb opt-in env flag** (`REVERB_ENABLED`, exposed as `VITE_REVERB_ENABLED`). When false (default), backend skips `broadcast()` and front end skips Echo init. Fresh clones boot quietly.
+- **`ROADMAP.md`** with a six-hats audit of v1.2.0 plus the prioritised follow-ups.
+- **`docs/` user guide.** Eight markdown files split by topic, with `docs/README.md` as the quick-start index. Covers the active list, catalog and recipes, sharing and Reverb, history and export, accessibility, admin and setup, architecture, and how to add catalog items in production.
 
 ### Changed
 
-- **Halved every non `rounded-full` corner radius across the UI.** Cards, stepper buttons, modal panels, and bottom nav read tighter on mobile.
-- **Catalog item labels in the Add Items grid use the new `list-text-xs` utility** so they respect the user's text size preferences (both `--ui-scale` and `--list-scale`).
-- **`list-text` and `list-text-sm` utilities switched from raw px to rem.** The medium text size button (UI scale 1.12) now bumps item labels too instead of waiting for the listScale toggle to kick in at 1.2.
-- **Localised unit strings in the EN, GB, and ES seeders.** `pacote` becomes `pack` (EN/GB) or `paquete` (ES). `lata` becomes `can` (EN/GB). `rolo` becomes `roll` (EN/GB) or `rollo` (ES). Stops Portuguese unit names leaking into English and Spanish stores.
-- **`DatabaseSeeder` now picks the catalog and history seeder pair from `config('app.locale')` and `config('lista.stores.region')`.** Previously hardcoded to the EN catalog plus the PT history regardless of env. Combined with the new locale filter, the search field stayed empty for any locale other than English on a fresh seed.
-- **Preferred store auto learner threshold lowered from `> 3` to `>= 3`** and the count now includes priced rows (not just `is_bought=true`).
-- **Item row dropped the "usually <store>" hint.** The same information lives in the price modal where it has more room. The row reads tighter on a 390 pixel viewport.
-- **Item emoji hides automatically at the maximum text size**, freeing horizontal space for the name and stepper.
+- **Halved every non-`rounded-full` corner radius across the UI.** Cards, stepper buttons, modal panels, and bottom nav read tighter on mobile.
+- **Catalog item labels in the Add Items grid use the new `list-text-xs` utility** so they respect the user's text-size preferences (both `--ui-scale` and `--list-scale`).
+- **`list-text` and `list-text-sm` utilities switched from raw px to rem.** Medium text-size button (UI scale 1.12) now bumps item labels too, instead of waiting for the listScale toggle to kick in at 1.2.
+- **Localised unit strings in EN, GB, and ES seeders.** `pacote` → `pack` (EN/GB) or `paquete` (ES). `lata` → `can` (EN/GB). `rolo` → `roll` (EN/GB) or `rollo` (ES).
+- **`DatabaseSeeder` picks the catalog and history seeder pair from `config('app.locale')` and `config('lista.stores.region')`.** Previously hardcoded to EN catalog + PT history regardless of env.
+- **Preferred-store auto-learner threshold lowered from `> 3` to `>= 3`** and now counts priced rows (not just `is_bought=true`).
+- **Item row dropped the "usually <store>" hint.** Same info lives in the price modal, where it has more room.
+- **Item emoji hides automatically at the maximum text size**, freeing horizontal space for name + stepper.
 
 ### Fixed
 
-- **Price history no longer hides the user's own past purchases.** The query previously excluded `id != $item->id` and required `is_bought=true`, which meant Undo Finish Trip and any priced but unticked rows returned an empty list. Both filters dropped; `whereNotNull('price')` is enough. Order falls back to `updated_at` when `bought_at` is null so the modal still sorts most recent first.
-- **Reverb is no longer noisy when off.** The front end no longer tries to open a WebSocket unless `VITE_REVERB_ENABLED === 'true'`, and the backend trait no longer calls `broadcast()` unless `config('lista.reverb.enabled')` is true. No more "WebSocket connection failed" spam in the console on a fresh clone.
-- **Search field returned zero rows on a fresh PT install.** Caused by the EN catalog being seeded into a PT app. Fixed in `DatabaseSeeder`.
+- **Price history no longer hides the user's own past purchases.** Query previously excluded `id != $item->id` and required `is_bought=true`, so Undo Finish Trip and any priced-but-unticked rows returned empty. Both filters dropped; `whereNotNull('price')` is enough. Order falls back to `updated_at` when `bought_at` is null.
+- **Reverb is no longer noisy when off.** Front end skips WebSocket open unless `VITE_REVERB_ENABLED === 'true'`. Backend trait skips `broadcast()` unless `config('lista.reverb.enabled')` is true. No more "WebSocket connection failed" spam in console on a fresh clone.
+- **Search field returned zero rows on a fresh PT install.** Caused by EN catalog being seeded into a PT app. Fixed in `DatabaseSeeder`.
 
 ### Tests
 
-115 passing, 189 assertions (up from 96/163 in 1.2.0). New coverage for the quantity stepper (six tests), the `ItemQuantityChanged` broadcast (three tests), the catalog locale scopes (four tests), the price history flow after Undo Finish Trip and Repeat (three tests), and the preferred store manual override and auto sync (three tests).
+115 passing, 189 assertions (up from 96/163 in 1.2.0). New coverage for the quantity stepper (six tests), the `ItemQuantityChanged` broadcast (three tests), the catalog locale scopes (four tests), the price-history flow after Undo Finish Trip and Repeat (three tests), and the preferred-store manual override and auto-sync (three tests).
 
 ## 1.2.0 — Mise en Place (2026-04-24)
 
