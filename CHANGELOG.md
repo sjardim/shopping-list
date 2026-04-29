@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## 1.3.0 (2026-04-28)
+## 1.3.0 (2026-04-29)
 
 This release acts on the post 1.2.0 six hats audit (see [ROADMAP.md](ROADMAP.md)). The headline trio: a per item quantity stepper that broadcasts in real time, a major page decomposition (the home view shrunk from about 600 lines to 85 by extracting eight anonymous Blade components), and a catalog `locale` column that stops the seeder divergence bleed. Then a string of fixes that came out of using the result: a price history that actually surfaces past purchases, an auto learner that no longer demands four buys, an explicit preferred store picker, real time sync gated behind a single env flag, and accessibility tweaks driven by real complaints (medium text size now affects item rows; max text size hides emojis to claim space). The release closes with a multi page user guide under `docs/`.
 
